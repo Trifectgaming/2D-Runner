@@ -25,7 +25,7 @@ public class ShotManager : BlockManager {
         clickPlane.Raycast(ray, out hitDistance);
         var direction = (ray.GetPoint(hitDistance) - _transform.position).normalized;
         _transform.localPosition = (_transform.localPosition + direction).normalized;
-        Debug.Log(direction);
+        //Debug.Log(direction);
         if (Input.GetButtonDown("Fire1"))
 	    {
 	        if (objectQueue.Peek() != null)

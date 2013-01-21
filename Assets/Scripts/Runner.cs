@@ -4,16 +4,20 @@ using System.Collections;
 public class Runner : MonoBehaviour {
     private Transform _transform;
     public float acceleration;
+    public float maxSpeed;
     public Vector3 jumpVelocity;
     public Vector3 boostVelocity;
     public float gameOverY;
-
+    public float currentSpeed = 0;
+    public float runSpeed = 1.8f;
+    
     private bool touchingPlatform;
     private Rigidbody _rigidBody;
     private Vector3 _startPosition;
     private static float _distanceTraveled;
     private static int _boosts;
-
+    private OTAnimatingSprite _sprite;
+    
     public static float DistanceTraveled
     {
         get { return _distanceTraveled; }
@@ -52,7 +56,7 @@ public class Runner : MonoBehaviour {
         Boosts = 0;
         DistanceTraveled = 0f;
         _transform.localPosition = _startPosition;
-        renderer.enabled = true;
+        //renderer.enabled = true;
         _rigidBody.isKinematic = false;
         enabled = true;
     }
@@ -64,12 +68,19 @@ public class Runner : MonoBehaviour {
         Boosts = 0;
         _startPosition = _transform.localPosition;
         _rigidBody.isKinematic = true;
-        renderer.enabled = false;
+        _sprite = GetComponentInChildren<OTAnimatingSprite>();
+        //renderer.enabled = false;
     }
 
     // Update is called once per frame
 	void Update ()
 	{
+	    if (Input.GetButtonDown("Jump") || touchingPlatform == false)
+	    {
+            if (_sprite.animationFrameset != "Jump")
+                _sprite.Play("Jump");
+	    }
+
 	    if (Input.GetButtonDown("Jump"))
 	    {
 	        if (touchingPlatform)
@@ -81,6 +92,21 @@ public class Runner : MonoBehaviour {
                 _rigidBody.AddForce(boostVelocity, ForceMode.VelocityChange);
                 Boosts--;
             }
+            
+	    }
+	    else
+	    {
+	        if (touchingPlatform)
+	        {
+	            if (currentSpeed >= runSpeed && _sprite.animationFrameset != "Run")
+	            {
+	                _sprite.Play("Run");
+	            }
+	            else if (currentSpeed < runSpeed && _sprite.animationFrameset != "Walk")
+	            {
+	                _sprite.Play("Walk");
+	            }
+	        }
 	    }
 	    
         DistanceTraveled = transform.localPosition.x;
@@ -94,9 +120,10 @@ public class Runner : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if (touchingPlatform)
+        currentSpeed = _rigidBody.velocity.x;
+        if (touchingPlatform && currentSpeed < maxSpeed)
         {
-            _rigidBody.AddForce(acceleration, 0f,0f, ForceMode.Acceleration);
+            _rigidBody.AddForce(acceleration, 0f, 0f, ForceMode.Force);
         }
     }
 
