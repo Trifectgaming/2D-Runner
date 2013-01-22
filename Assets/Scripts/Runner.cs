@@ -69,6 +69,7 @@ public class Runner : MonoBehaviour {
         _startPosition = _transform.localPosition;
         _rigidBody.isKinematic = true;
         _sprite = GetComponentInChildren<OTAnimatingSprite>();
+        OnGameStart(new GameStartMessage());
         //renderer.enabled = false;
     }
 
