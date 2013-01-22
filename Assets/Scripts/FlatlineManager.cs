@@ -13,7 +13,7 @@ public class FlatlineManager : RecyclingBlockManager
     {
         base.OnRecycle(block, scale, position);
 
-        nextPosition.x += scale.x;
+        nextPosition.x += (scale.x);
     }
 
     void OnDrawGizmo()
