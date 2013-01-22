@@ -126,6 +126,10 @@ public class Runner : MonoBehaviour {
         {
             _rigidBody.AddForce(acceleration, 0f, 0f, ForceMode.Force);
         }
+        if (touchingPlatform && currentSpeed > maxSpeed)
+        {
+            _rigidBody.AddForce(-acceleration, 0f, 0f, ForceMode.Force);
+        }
     }
 
     void OnCollisionEnter()

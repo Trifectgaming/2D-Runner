@@ -16,6 +16,6 @@ public class VerticalLineManager : RecyclingBlockManager
 
         nextPosition.x += (scale.x + gap);
 
-        Debug.Log(nextPosition);
+        //Debug.Log(nextPosition);
     }
 }
