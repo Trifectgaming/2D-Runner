@@ -10,14 +10,15 @@ public class Runner : MonoBehaviour {
     public float gameOverY;
     public float currentSpeed = 0;
     public float runSpeed = 1.8f;
-    
+    public float time = 1;
+
     private bool touchingPlatform;
     private Rigidbody _rigidBody;
     private Vector3 _startPosition;
     private static float _distanceTraveled;
     private static int _boosts;
     private OTAnimatingSprite _sprite;
-    
+
     public static float DistanceTraveled
     {
         get { return _distanceTraveled; }
@@ -76,6 +77,8 @@ public class Runner : MonoBehaviour {
     // Update is called once per frame
 	void Update ()
 	{
+	    Time.timeScale = time;
+
 	    if (Input.GetButtonDown("Jump") || touchingPlatform == false)
 	    {
             if (_sprite.animationFrameset != "Jump")
