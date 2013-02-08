@@ -1,7 +1,8 @@
+using Assets.Scripts;
 using UnityEngine;
 using System.Collections;
 
-public class Runner : MonoBehaviour {
+public abstract class Runner : MonoBehaviour {
     private Transform _transform;
     public float acceleration;
     public float maxSpeed;
@@ -17,7 +18,7 @@ public class Runner : MonoBehaviour {
     private Vector3 _startPosition;
     private static float _distanceTraveled;
     private static int _boosts;
-    private OTAnimatingSprite _sprite;
+    private IAnimatingSprite _sprite;
 
     public static float DistanceTraveled
     {
@@ -69,10 +70,12 @@ public class Runner : MonoBehaviour {
         Boosts = 0;
         _startPosition = _transform.localPosition;
         _rigidBody.isKinematic = true;
-        _sprite = GetComponentInChildren<OTAnimatingSprite>();
+        _sprite = GetSprite();
         OnGameStart(new GameStartMessage());
         //renderer.enabled = false;
     }
+
+    protected abstract IAnimatingSprite GetSprite();
 
     // Update is called once per frame
 	void Update ()
@@ -81,7 +84,7 @@ public class Runner : MonoBehaviour {
 
 	    if (Input.GetButtonDown("Jump") || touchingPlatform == false)
 	    {
-            if (_sprite.animationFrameset != "Jump")
+            if (_sprite.CurrentAnimation != "Jump")
                 _sprite.Play("Jump");
 	    }
 
@@ -102,11 +105,11 @@ public class Runner : MonoBehaviour {
 	    {
 	        if (touchingPlatform)
 	        {
-	            if (currentSpeed >= runSpeed && _sprite.animationFrameset != "Run")
+	            if (currentSpeed >= runSpeed && _sprite.CurrentAnimation != "Run")
 	            {
 	                _sprite.Play("Run");
 	            }
-	            else if (currentSpeed < runSpeed && _sprite.animationFrameset != "Walk")
+	            else if (currentSpeed < runSpeed && _sprite.CurrentAnimation != "Walk")
 	            {
 	                _sprite.Play("Walk");
 	            }
