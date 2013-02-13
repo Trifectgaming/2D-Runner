@@ -12,7 +12,7 @@ public class BlockManager : MonoBehaviour
         objectQueue = new Queue<Transform>(numberOfObjects);
         for (int i = 0; i < numberOfObjects; i++)
         {
-            objectQueue.Enqueue((Transform)Instantiate(prefab, new Vector3(0f, 0f, -100f), Quaternion.identity));
+            objectQueue.Enqueue((Transform)Instantiate(prefab, new Vector3(0f, 0f, -100f), prefab.rotation));
         }
         enabled = false;
     }
