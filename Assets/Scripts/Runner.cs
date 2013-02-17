@@ -4,14 +4,14 @@ using System.Collections;
 
 public abstract class Runner : MonoBehaviour {
     private Transform _transform;
-    public float acceleration;
-    public float maxSpeed;
     public Vector3 jumpVelocity;
     public Vector3 boostVelocity;
     public float gameOverY;
     public float currentSpeed = 0;
-    public float runSpeed = 1.8f;
     public float time = 1;
+    public RunnerMotor motor = new RunnerMotor();
+    public RunnerInput inputController = new KeyboardRunnerInput();
+    public RunnerStateMachine runnerStateMachine = new RunnerStateMachine();
 
     private bool touchingPlatform;
     private Rigidbody _rigidBody;
@@ -58,12 +58,10 @@ public abstract class Runner : MonoBehaviour {
         Boosts = 0;
         DistanceTraveled = 0f;
         _transform.localPosition = _startPosition;
-        //renderer.enabled = true;
         _rigidBody.isKinematic = false;
         enabled = true;
     }
 
-    // Use this for initialization
     private void Start()
     {
         DistanceTraveled = 0f;
@@ -72,78 +70,53 @@ public abstract class Runner : MonoBehaviour {
         _rigidBody.isKinematic = true;
         _sprite = GetSprite();
         OnGameStart(new GameStartMessage());
-        //renderer.enabled = false;
     }
 
     protected abstract IAnimatingSprite GetSprite();
 
-    // Update is called once per frame
 	void Update ()
 	{
 	    Time.timeScale = time;
-
-	    if (Input.GetButtonDown("Jump") || touchingPlatform == false)
-	    {
-            if (_sprite.CurrentAnimation != "Jump")
-                _sprite.Play("Jump");
-	    }
-
-	    if (Input.GetButtonDown("Jump"))
-	    {
-	        if (touchingPlatform)
-	        {
-	            _rigidBody.AddForce(jumpVelocity, ForceMode.VelocityChange);
-	        }
-            else if (Boosts > 0)
-            {
-                _rigidBody.AddForce(boostVelocity, ForceMode.VelocityChange);
-                Boosts--;
-            }
-            
-	    }
-	    else
-	    {
-	        if (touchingPlatform)
-	        {
-	            if (currentSpeed >= runSpeed && _sprite.CurrentAnimation != "Run")
-	            {
-	                _sprite.Play("Run");
-	            }
-	            else if (currentSpeed < runSpeed && _sprite.CurrentAnimation != "Walk")
-	            {
-	                _sprite.Play("Walk");
-	            }
-	        }
-	    }
-	    
         DistanceTraveled = transform.localPosition.x;
-        //Debug.Log("Distance Traveled " + distanceTraveled);
-
+        runnerStateMachine.Transition(inputController.Update(), touchingPlatform, _rigidBody.velocity);
+        switch (runnerStateMachine.currentState)
+        {
+            case RunnerState.Walking:
+                ChangeAnimation("Walk");
+                break;
+            case RunnerState.Running:
+                ChangeAnimation("Run");
+                break;
+            case RunnerState.Jumping:
+                ChangeAnimation("Jump");
+                break;
+        }
+        
         if (transform.localPosition.y < gameOverY)
         {
             Messenger.Default.Send(new GameOverMessage());
         }
 	}
 
+    private void ChangeAnimation(string anim)
+    {
+        if (_sprite.CurrentAnimation != anim)
+            _sprite.Play(anim);
+    }
+
     void FixedUpdate()
     {
         currentSpeed = _rigidBody.velocity.x;
-        if (touchingPlatform && currentSpeed < maxSpeed)
-        {
-            _rigidBody.AddForce(acceleration, 0f, 0f, ForceMode.Force);
-        }
-        if (touchingPlatform && currentSpeed > maxSpeed)
-        {
-            _rigidBody.AddForce(-acceleration, 0f, 0f, ForceMode.Force);
-        }
+
+        motor.Move(runnerStateMachine.currentState, _rigidBody);        
     }
 
-    void OnCollisionEnter()
+    void OnCollisionEnter(Collision collision)
     {
         touchingPlatform = true;
     }
 
-    void OnCollisionExit()
+    void OnCollisionExit(Collision collision)
     {
         touchingPlatform = false;
     }
