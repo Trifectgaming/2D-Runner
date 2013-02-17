@@ -16,7 +16,7 @@ public class FollowCamera : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void LateUpdate () {
         _myTransform.position = new Vector3(_chaseeTransform.position.x + offset.x, _chaseeTransform.position.y + offset.y, _myTransform.position.z + offset.z);
 	}
 }
