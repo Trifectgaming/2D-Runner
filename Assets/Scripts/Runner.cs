@@ -12,13 +12,16 @@ public abstract class Runner : MonoBehaviour {
     public RunnerMotor motor = new RunnerMotor();
     public RunnerInput inputController = new KeyboardRunnerInput();
     public RunnerStateMachine runnerStateMachine = new RunnerStateMachine();
-
+    public float maxSpeed = 20;
+    public float acceleration = 5;
+    
     private bool touchingPlatform;
     private Rigidbody _rigidBody;
     private Vector3 _startPosition;
     private static float _distanceTraveled;
     private static int _boosts;
     private IAnimatingSprite _sprite;
+    
 
     public static float DistanceTraveled
     {
@@ -43,6 +46,8 @@ public abstract class Runner : MonoBehaviour {
     {
         _transform = transform;
         _rigidBody = rigidbody;
+        runnerStateMachine.Initialize();
+        motor.Initialize();
         Messenger.Default.Register<GameStartMessage>(this, OnGameStart);
         Messenger.Default.Register<GameOverMessage>(this, OnGameOver);
     }
@@ -62,7 +67,7 @@ public abstract class Runner : MonoBehaviour {
         enabled = true;
     }
 
-    private void Start()
+    void Start()
     {
         DistanceTraveled = 0f;
         Boosts = 0;
@@ -70,33 +75,50 @@ public abstract class Runner : MonoBehaviour {
         _rigidBody.isKinematic = true;
         _sprite = GetSprite();
         OnGameStart(new GameStartMessage());
+        //StartCoroutine(DoProcessState());
     }
 
     protected abstract IAnimatingSprite GetSprite();
+    private IEnumerator DoProcessState()
+    {
+        while (true)
+        {
+            yield return new WaitForFixedUpdate();
+            ProcessState();
+        }
+    }
 
-	void Update ()
-	{
-	    Time.timeScale = time;
-        DistanceTraveled = transform.localPosition.x;
-        runnerStateMachine.Transition(inputController.Update(), touchingPlatform, _rigidBody.velocity);
+    private void ProcessState()
+    {
+
+        Time.timeScale = time;
+        DistanceTraveled = _transform.localPosition.x;
+        runnerStateMachine.Transition(inputController.state, touchingPlatform, _rigidBody.velocity);
         switch (runnerStateMachine.currentState)
         {
             case RunnerState.Walking:
-                ChangeAnimation("Walk");
+                {
+                    ChangeAnimation("Walk");
+                }
                 break;
             case RunnerState.Running:
-                ChangeAnimation("Run");
+                {
+                    ChangeAnimation("Run");
+                }
                 break;
             case RunnerState.Jumping:
-                ChangeAnimation("Jump");
+                {
+                    ChangeAnimation("Jump");
+                }
                 break;
         }
-        
-        if (transform.localPosition.y < gameOverY)
-        {
-            Messenger.Default.Send(new GameOverMessage());
-        }
-	}
+    }
+
+    void Update()
+    {
+        inputController.Update();
+        ProcessState();
+    }
 
     private void ChangeAnimation(string anim)
     {
@@ -107,11 +129,23 @@ public abstract class Runner : MonoBehaviour {
     void FixedUpdate()
     {
         currentSpeed = _rigidBody.velocity.x;
-
-        motor.Move(runnerStateMachine.currentState, _rigidBody);        
+        Debug.Log("Process Queue Contains " + runnerStateMachine.StateProcessQueue.Count);
+        RunnerState lastState = RunnerState.None;
+        while (runnerStateMachine.StateProcessQueue.Count > 0)
+        {
+            var queuedState = runnerStateMachine.StateProcessQueue.Dequeue();
+            if (queuedState != lastState)
+                motor.Move(queuedState, _rigidBody);
+            lastState = queuedState;
+        }
     }
 
     void OnCollisionEnter(Collision collision)
+    {
+        touchingPlatform = true;
+    }
+
+    void OnCollisionStay(Collision collision)
     {
         touchingPlatform = true;
     }

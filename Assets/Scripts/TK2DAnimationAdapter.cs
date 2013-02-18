@@ -9,7 +9,14 @@ namespace Assets.Scripts
             _sprite = sprite;
         }
 
-        public string CurrentAnimation { get { return _sprite.CurrentClip.name; } }
+        public string CurrentAnimation
+        {
+            get
+            {
+                return _sprite.CurrentClip != null ? _sprite.CurrentClip.name : null;
+            }
+        }
+
         public void Play(string animationName) { _sprite.Play(animationName); }
     }
 }

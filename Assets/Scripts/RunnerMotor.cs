@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts;
 using UnityEngine;
 using System.Collections;
 
@@ -18,13 +20,24 @@ public class Motor
 public class RunnerMotor
 {
     public Motor[] Motors;
+    private Dictionary<RunnerState, Motor> _motorCache;
+
+    public void Initialize()
+    {
+        _motorCache = new Dictionary<RunnerState, Motor>(Motors.Length);
+        foreach (var motor in Motors)
+        {
+            _motorCache.Add(motor.Type, motor);
+        }
+    }
 
     public void Move(RunnerState runnerState, Rigidbody rigidbody)
     {
-        if (Motors != null)
+        if (_motorCache != null)
         {
-            var motor = Motors.FirstOrDefault(m => m.Type == runnerState);
-            if (motor != null)
+            Motor motor;
+            var found = _motorCache.TryGetValue(runnerState, out motor);
+            if (found)
             {
                 if (rigidbody.velocity.x < motor.maxVelocity)
                 {
@@ -36,68 +49,9 @@ public class RunnerMotor
                 }
             }
         }
-    }
-}
-
-[Serializable]
-public class StateTransition
-{
-    public RunnerState currentState;
-    public InputState command;
-    public bool below;
-    public bool above;
-    public bool front;
-    public bool behind;
-    public float minSpeedX = float.NegativeInfinity;
-    public float minSpeedY = float.NegativeInfinity;
-    public float maxSpeedX = float.PositiveInfinity;
-    public float maxSpeedY = float.PositiveInfinity;
-}
-
-[Serializable]
-public class StateTranitionTo
-{
-    public StateTransition currentState;
-    public RunnerState nextState;
-}
-
-[Serializable]
-public class RunnerStateMachine
-{
-    public RunnerState currentState = RunnerState.Running;
-    public StateTranitionTo[] transitions;
-
-    public RunnerState Transition(InputState action, bool touchingPlatform, Vector3 currentVelocity)
-    {
-        if (transitions != null)
+        else
         {
-            var allowedTransition = transitions.FirstOrDefault(t =>
-                t.currentState.currentState == currentState &&
-                t.currentState.command == action &&
-                t.currentState.below == touchingPlatform &&
-                (currentVelocity.x > t.currentState.minSpeedX) && (t.currentState.maxSpeedX > currentVelocity.x)
-                );
-            if (allowedTransition != null)
-            {
-                currentState = allowedTransition.nextState;
-            }
+            Debug.LogError("Motor is not initialized!");            
         }
-        
-        return currentState;
     }
-}
-
-public enum RunnerState
-{
-    Walking,
-    Running,
-    Jumping,
-    Jumped,
-    Diving,
-    Dived,
-    Backflipping,
-    Backflipped,
-    Sliding,
-    Slid,
-    Falling
 }
