@@ -90,7 +90,6 @@ public abstract class Runner : MonoBehaviour {
 
     private void ProcessState()
     {
-
         Time.timeScale = time;
         DistanceTraveled = _transform.localPosition.x;
         runnerStateMachine.Transition(inputController.state, touchingPlatform, _rigidBody.velocity);

@@ -1,83 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
-    [Serializable]
-    public struct CollisionInfo
-    {
-        public static readonly CollisionInfo Empty = new CollisionInfo();
-        public bool Above;
-        public bool Below;
-        public bool Left;
-        public bool Right;
-    }
-
-    [Serializable]
-    public struct SpeedInfo
-    {
-        public static readonly SpeedInfo Empty = new SpeedInfo();
-        public float? minX;
-        public float? minY;
-        public float? maxX;
-        public float? maxY;
-    }
-
-    [Serializable]
-    public class RunnerFSM
-    {
-        public RunnerState currentState = RunnerState.None;
-        public Vector3 velocity;
-        public CollisionInfo contacts;
-        public string lastTransition;
-        public float lastTransitionChange;
-        public float transitionExpirationTime;
-        public TransitionInfo[] allTransitions;
-        public Queue<RunnerState> StateProcessQueue = new Queue<RunnerState>();
-
-        private readonly Dictionary<RunnerState, Dictionary<InputState, List<TransitionInfo>>> _availableTransitions =
-            new Dictionary<RunnerState, Dictionary<InputState, List<TransitionInfo>>>();
-
-        public RunnerFSM()
-        {
-            var runnerStates = Enum.GetValues(typeof(RunnerState)).Cast<RunnerState>().ToArray();
-            var inputStates = Enum.GetValues(typeof(InputState)).Cast<InputState>().ToArray();
-            foreach (var runnerState in runnerStates)
-            {
-                var runnersActions = new Dictionary<InputState, List<TransitionInfo>>();
-                _availableTransitions.Add(runnerState, runnersActions);
-                foreach (var inputState in inputStates)
-                {
-                    var actionTransitions = new List<TransitionInfo>();
-                    runnersActions.Add(inputState, actionTransitions);
-                }
-            }
-        }
-
-        public RunnerFSM AddTransition(RunnerState forState, InputState inputState)
-        {
-
-            return this;
-        }
-
-        public RunnerState Transition(InputState input, CollisionInfo collisionInfo, Rigidbody rigidbody)
-        {
-            return currentState;
-        }
-    }
-
-    [Serializable]
-    public class TransitionInfo
-    {
-        public string TransitionName;
-        public CollisionInfo CollisionRequirements;
-        public SpeedInfo VelocityRequirements;
-        public float MinTransitionTime;
-    }
-
-
     [Serializable]
     public class RunnerStateMachine
     {
