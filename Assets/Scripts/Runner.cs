@@ -11,7 +11,7 @@ public abstract class Runner : MonoBehaviour {
     public float time = 1;
     public RunnerMotor motor = new RunnerMotor();
     public RunnerInput inputController = new KeyboardRunnerInput();
-    public RunnerStateMachine runnerStateMachine = new RunnerStateMachine();
+    public RunnerFSM runnerStateMachine = new RunnerFSM();
     public float maxSpeed = 20;
     public float acceleration = 5;
     
@@ -92,7 +92,11 @@ public abstract class Runner : MonoBehaviour {
     {
         Time.timeScale = time;
         DistanceTraveled = _transform.localPosition.x;
-        runnerStateMachine.Transition(inputController.state, touchingPlatform, _rigidBody.velocity);
+        var collisionInfo = new CollisionInfo
+                                {
+                                    Below = touchingPlatform,
+                                };
+        runnerStateMachine.Transition(inputController.state, collisionInfo, _rigidBody);
         switch (runnerStateMachine.currentState)
         {
             case RunnerState.Walking:

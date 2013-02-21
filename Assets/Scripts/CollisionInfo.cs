@@ -3,7 +3,7 @@ using System;
 namespace Assets.Scripts
 {
     [Serializable]
-    public struct CollisionInfo
+    public class CollisionInfo : IEquatable<CollisionInfo>
     {
         public bool Equals(CollisionInfo other)
         {
@@ -20,16 +20,6 @@ namespace Assets.Scripts
                 hashCode = (hashCode*397) ^ Right.GetHashCode();
                 return hashCode;
             }
-        }
-
-        public static bool operator ==(CollisionInfo left, CollisionInfo right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(CollisionInfo left, CollisionInfo right)
-        {
-            return !left.Equals(right);
         }
 
         public static readonly CollisionInfo Empty = new CollisionInfo();

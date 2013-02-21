@@ -13,6 +13,8 @@ namespace Assets.Scripts
         Backflipped,
         Sliding,
         Slid,
-        Falling
+        Falling,
+        Dropping,
+        Dash,
     }
 }

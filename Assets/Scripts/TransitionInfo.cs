@@ -11,5 +11,6 @@ namespace Assets.Scripts
         public float ReuseTime;
         public float LastUseTime;
         public RunnerState NextState;
+        //public bool Locking;
     }
 }
