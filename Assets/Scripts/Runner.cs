@@ -42,7 +42,6 @@ public abstract class Runner : MonoBehaviour {
         _transform = transform;
         _rigidBody = rigidbody;
         runnerStateMachine.Initialize();
-        motor.Initialize();
         Messenger.Default.Register<GameStartMessage>(this, OnGameStart);
         Messenger.Default.Register<GameOverMessage>(this, OnGameOver);
     }
