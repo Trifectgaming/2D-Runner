@@ -23,23 +23,28 @@ public class RunningScore : MonoBehaviour
 	{
 	    _mesh = GetComponent<tk2dTextMesh>();
         _orthoSize = Camera.mainCamera.orthographicSize;
-	    UpdateTransform();
+	    StartCoroutine(UpdateTransform());
 	}
 
-    private void UpdateTransform()
+    private IEnumerator UpdateTransform()
     {
-        var resolution = Camera.mainCamera.GetScreenWidth() / Camera.mainCamera.GetScreenHeight();
-        _transform.localPosition = new Vector3(
-            -resolution * _orthoSize + offset.x,
-            _transform.localPosition.y + offset.y,
-            _transform.localPosition.z + offset.z);
+        while (true)
+        {
+            var resolution = Camera.mainCamera.GetScreenWidth()/Camera.mainCamera.GetScreenHeight();
+            _transform.localPosition = new Vector3(
+                -resolution*_orthoSize + offset.x,
+                _transform.localPosition.y + offset.y,
+                _transform.localPosition.z + offset.z);
+            _mesh.text = "Ran: " + Runner.DistanceTraveled.ToString("0000000");
+            _mesh.Commit();
+
+            yield return new WaitForSeconds(1f);
+        }
     }
 
     // Update is called once per frame
 	void Update ()
 	{
-        UpdateTransform();
-        _mesh.text = "Ran: " + Runner.DistanceTraveled.ToString("0000000");
-	    _mesh.Commit();
+        
 	}
 }

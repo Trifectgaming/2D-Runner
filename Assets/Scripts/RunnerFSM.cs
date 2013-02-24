@@ -158,19 +158,6 @@ namespace Assets.Scripts
                                                                    },
                                        NextState = RunnerState.Jumped,
                                    })
-                .AddTransition(StateMaster.AllRunnerStates, InputState.None,
-                               new TransitionInfo
-                                   {
-                                       CollisionRequirements = new CollisionInfo
-                                                                   {
-                                                                       Below = false,
-                                                                   },
-                                       VelocityRequirements = new SpeedInfo
-                                                                  {
-                                                                      minY = -1,
-                                                                  },
-                                       NextState = RunnerState.Falling,
-                                   })
                 .AddTransition(new[]
                                    {
                                        RunnerState.Jumped,
@@ -195,7 +182,20 @@ namespace Assets.Scripts
                                                                    {
                                                                        Below = false,
                                                                    },
-                                       NextState = RunnerState.Dropping
+                                       NextState = RunnerState.Dash
+                                   })
+                .AddTransition(StateMaster.AllRunnerStates, InputState.None,
+                               new TransitionInfo
+                                   {
+                                       CollisionRequirements = new CollisionInfo
+                                                                   {
+                                                                       Below = false,
+                                                                   },
+                                       VelocityRequirements = new SpeedInfo
+                                                                  {
+                                                                      minY = -1,
+                                                                  },
+                                       NextState = RunnerState.Falling,
                                    })
                 .Complete();
         }

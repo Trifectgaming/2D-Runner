@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
@@ -6,7 +7,8 @@ using System.Collections;
 public abstract class RunnerInput
 {
     public InputState state;
-    public InputState lastState; 
+    public InputState lastState;
+    public Queue<InputState> QueuedStates = new Queue<InputState>();
     public abstract InputState Update();
 }
 
@@ -46,9 +48,9 @@ public class KeyboardRunnerInput : RunnerInput
         }
         if (state != InputState.None)
         {
-            Debug.Log("Pressed " + state);
             lastState = state;
         }
+        QueuedStates.Enqueue(state);
         return state;
     }
 }

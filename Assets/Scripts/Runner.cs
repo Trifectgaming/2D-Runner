@@ -4,17 +4,12 @@ using System.Collections;
 
 public abstract class Runner : MonoBehaviour {
     private Transform _transform;
-    public Vector3 jumpVelocity;
-    public Vector3 boostVelocity;
     public float gameOverY;
-    public float currentSpeed = 0;
-    public float time = 1;
     public RunnerMotor motor = new RunnerMotor();
     public RunnerInput inputController = new KeyboardRunnerInput();
     public RunnerFSM runnerStateMachine = new RunnerFSM();
-    public float maxSpeed = 20;
-    public float acceleration = 5;
-    
+    public bool UseFixedStep = false;
+
     private bool touchingPlatform;
     private Rigidbody _rigidBody;
     private Vector3 _startPosition;
@@ -75,52 +70,48 @@ public abstract class Runner : MonoBehaviour {
         _rigidBody.isKinematic = true;
         _sprite = GetSprite();
         OnGameStart(new GameStartMessage());
-        //StartCoroutine(DoProcessState());
+        Debug.Log("Using Fixed Step " + UseFixedStep);
     }
 
     protected abstract IAnimatingSprite GetSprite();
-    private IEnumerator DoProcessState()
-    {
-        while (true)
-        {
-            yield return new WaitForFixedUpdate();
-            ProcessState();
-        }
-    }
 
     private void ProcessState()
     {
-        Time.timeScale = time;
-        DistanceTraveled = _transform.localPosition.x;
-        var collisionInfo = new CollisionInfo
-                                {
-                                    Below = touchingPlatform,
-                                };
-        runnerStateMachine.Transition(inputController.state, collisionInfo, _rigidBody);
-        switch (runnerStateMachine.currentState)
+        Debug.Log("Input Queue Contains " + inputController.QueuedStates.Count);
+        while (inputController.QueuedStates.Count > 0)
         {
-            case RunnerState.Walking:
-                {
-                    ChangeAnimation("Walk");
-                }
-                break;
-            case RunnerState.Running:
-                {
-                    ChangeAnimation("Run");
-                }
-                break;
-            case RunnerState.Jumping:
-                {
-                    ChangeAnimation("Jump");
-                }
-                break;
+            DistanceTraveled = _transform.localPosition.x;
+            var collisionInfo = new CollisionInfo
+                                    {
+                                        Below = touchingPlatform,
+                                    };
+            runnerStateMachine.Transition(inputController.QueuedStates.Dequeue(), collisionInfo, _rigidBody);
+            switch (runnerStateMachine.currentState)
+            {
+                case RunnerState.Walking:
+                    {
+                        ChangeAnimation("Walk");
+                    }
+                    break;
+                case RunnerState.Running:
+                    {
+                        ChangeAnimation("Run");
+                    }
+                    break;
+                case RunnerState.Jumping:
+                    {
+                        ChangeAnimation("Jump");
+                    }
+                    break;
+            }
         }
     }
 
     void Update()
     {
         inputController.Update();
-        ProcessState();
+        if (!UseFixedStep)
+            ProcessState();
     }
 
     private void ChangeAnimation(string anim)
@@ -131,7 +122,8 @@ public abstract class Runner : MonoBehaviour {
 
     void FixedUpdate()
     {
-        currentSpeed = _rigidBody.velocity.x;
+        if (UseFixedStep)
+            ProcessState();
         Debug.Log("Process Queue Contains " + runnerStateMachine.StateProcessQueue.Count);
         RunnerState lastState = RunnerState.None;
         while (runnerStateMachine.StateProcessQueue.Count > 0)
