@@ -70,6 +70,16 @@ public class RunnerMotor
                                                            }
                               },
                               {
+                                  RunnerState.GroundDash, new Motor
+                                                           {
+                                                               Type = RunnerState.GroundDash,
+                                                               acceleratingVelocity = new Vector3(20f, 0, 0),
+                                                               maxVelocity = 200,
+                                                               forceMode = ForceMode.VelocityChange,
+                                                               shouldDecelerate = false,
+                                                           }
+                              },
+                              {
                                   RunnerState.Sliding, new Motor
                                                            {
                                                                Type = RunnerState.Sliding,

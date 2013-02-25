@@ -1,3 +1,4 @@
+using System;
 using Assets.Scripts;
 using UnityEngine;
 using System.Collections;
@@ -85,24 +86,7 @@ public abstract class Runner : MonoBehaviour {
                                         Below = touchingPlatform,
                                     };
             runnerStateMachine.Transition(inputController.QueuedStates.Dequeue(), collisionInfo, _rigidBody);
-            switch (runnerStateMachine.currentState)
-            {
-                case RunnerState.Walking:
-                    {
-                        ChangeAnimation("Walk");
-                    }
-                    break;
-                case RunnerState.Running:
-                    {
-                        ChangeAnimation("Run");
-                    }
-                    break;
-                case RunnerState.Jumping:
-                    {
-                        ChangeAnimation("Jump");
-                    }
-                    break;
-            }
+            
         }
     }
 
@@ -112,13 +96,7 @@ public abstract class Runner : MonoBehaviour {
         if (!UseFixedStep)
             ProcessState();
     }
-
-    private void ChangeAnimation(string anim)
-    {
-        if (_sprite.CurrentAnimation != anim)
-            _sprite.Play(anim);
-    }
-
+    
     void FixedUpdate()
     {
         if (UseFixedStep)
@@ -152,5 +130,45 @@ public abstract class Runner : MonoBehaviour {
     public static void AddBoost()
     {
         Boosts++;
+    }
+}
+
+public class RunnerAnimation
+{
+    private IAnimatingSprite _sprite;
+
+    public void Initialize(IAnimatingSprite sprite)
+    {
+        _sprite = sprite;
+    }
+
+    public void Animate(RunnerState runnerState)
+    {
+        if (_sprite == null)
+            throw new InvalidOperationException("Animation must be initialized");
+        switch (runnerState)
+        {
+            case RunnerState.Walking:
+                {
+                    ChangeAnimation("Walk");
+                }
+                break;
+            case RunnerState.Running:
+                {
+                    ChangeAnimation("Run");
+                }
+                break;
+            case RunnerState.Jumping:
+                {
+                    ChangeAnimation("Jump");
+                }
+                break;
+        }
+    }
+
+    private void ChangeAnimation(string anim)
+    {
+        if (_sprite.CurrentAnimation != anim)
+            _sprite.Play(anim);
     }
 }

@@ -16,5 +16,6 @@ namespace Assets.Scripts
         Falling,
         Dropping,
         Dash,
+        GroundDash,
     }
 }

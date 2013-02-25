@@ -65,8 +65,6 @@ namespace Assets.Scripts
         public CollisionInfo contacts;
         public string chosenTransition;
         public string lastTransition;
-        public float lastTransitionChange;
-        public float transitionExpirationTime;
         [NonSerialized]
         public TransitionInfo[] allTransitions;
         public Queue<RunnerState> StateProcessQueue = new Queue<RunnerState>();
@@ -161,7 +159,8 @@ namespace Assets.Scripts
                 .AddTransition(new[]
                                    {
                                        RunnerState.Jumped,
-                                       RunnerState.Falling
+                                       RunnerState.Falling,
+                                       RunnerState.Dash,
                                    }, InputState.SwipeDown,
                                new TransitionInfo
                                    {
@@ -182,8 +181,36 @@ namespace Assets.Scripts
                                                                    {
                                                                        Below = false,
                                                                    },
+                                       ReuseTime = 3,
                                        NextState = RunnerState.Dash
                                    })
+                .AddTransition(new[]
+                                   {
+                                       RunnerState.Running,
+                                       RunnerState.Walking
+                                   }, InputState.SwipeRight,
+                               new TransitionInfo
+                                   {
+                                       CollisionRequirements = new CollisionInfo
+                                                                   {
+                                                                       Below = true,
+                                                                   },
+
+                                       ReuseTime = 10,
+                                       NextState = RunnerState.GroundDash
+                                   })
+                .AddTransition(new[]
+                                   {
+                                       RunnerState.GroundDash, 
+                                   }, InputState.None,
+                               new TransitionInfo
+                               {
+                                   CollisionRequirements = new CollisionInfo
+                                   {
+                                       Below = true,
+                                   },
+                                   NextState = RunnerState.Running
+                               })
                 .AddTransition(StateMaster.AllRunnerStates, InputState.None,
                                new TransitionInfo
                                    {
@@ -223,15 +250,14 @@ namespace Assets.Scripts
                 {
                     var firstMatchingTransition = inputTransitions
                         .FirstOrDefault(t => (t.CollisionRequirements ?? CollisionInfo.Empty).Equals(collisionInfo) &&
-                                             (t.LastUseTime - Time.time) <= t.ReuseTime &&
+                                             (t.LastUseTime - Time.time) <= 0 &&
                                              t.VelocityRequirements.Equals(rigidbody.velocity));
                     if (firstMatchingTransition != null)
                     {
                         lastTransition = currentState + "To" + firstMatchingTransition.NextState;
                         currentState = firstMatchingTransition.NextState;
                         chosenTransition = firstMatchingTransition.TransitionName;
-                        lastTransitionChange = Time.time;
-                        firstMatchingTransition.LastUseTime = transitionExpirationTime = Time.time + firstMatchingTransition.ReuseTime;
+                        firstMatchingTransition.Use();
                     }
                 }
             }

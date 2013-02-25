@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -12,5 +13,9 @@ namespace Assets.Scripts
         public float LastUseTime;
         public RunnerState NextState;
         //public bool Locking;
+        public void Use()
+        {
+            LastUseTime = Time.time + ReuseTime;
+        }
     }
 }
