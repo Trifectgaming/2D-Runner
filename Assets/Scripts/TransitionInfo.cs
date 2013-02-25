@@ -12,6 +12,8 @@ namespace Assets.Scripts
         public float ReuseTime;
         public float LastUseTime;
         public RunnerState NextState;
+        public RunnerEffect RechargeEffect;
+        public RunnerEffect TransitionEffect;
         //public bool Locking;
         public void Use()
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -71,9 +72,7 @@ namespace Assets.Scripts
 
         private readonly Dictionary<RunnerState, Dictionary<InputState, List<TransitionInfo>>> _availableTransitions =
             new Dictionary<RunnerState, Dictionary<InputState, List<TransitionInfo>>>();
-
-        private RunnerFSMContext _internalContext;
-
+        private Queue<TransitionInfo> _rechargingStates = new Queue<TransitionInfo>(); 
         public RunnerFSM()
         {
             foreach (var runnerState in StateMaster.AllRunnerStates)
@@ -86,7 +85,11 @@ namespace Assets.Scripts
                     runnersActions.Add(inputState, actionTransitions);
                 }
             }
-            Initialize()
+        }
+
+        public IEnumerator Initialize()
+        {
+            new RunnerFSMContext(this)
                 .AddTransition(new[]
                                    {
                                        RunnerState.Jumped,
@@ -197,20 +200,22 @@ namespace Assets.Scripts
                                                                    },
 
                                        ReuseTime = 10,
+                                       RechargeEffect = RunnerEffect.GroundDashRecharge,
+                                       TransitionEffect = RunnerEffect.GroundDash,
                                        NextState = RunnerState.GroundDash
                                    })
                 .AddTransition(new[]
                                    {
-                                       RunnerState.GroundDash, 
+                                       RunnerState.GroundDash,
                                    }, InputState.None,
                                new TransitionInfo
-                               {
-                                   CollisionRequirements = new CollisionInfo
                                    {
-                                       Below = true,
-                                   },
-                                   NextState = RunnerState.Running
-                               })
+                                       CollisionRequirements = new CollisionInfo
+                                                                   {
+                                                                       Below = true,
+                                                                   },
+                                       NextState = RunnerState.Running
+                                   })
                 .AddTransition(StateMaster.AllRunnerStates, InputState.None,
                                new TransitionInfo
                                    {
@@ -225,21 +230,50 @@ namespace Assets.Scripts
                                        NextState = RunnerState.Falling,
                                    })
                 .Complete();
+
+            while (true)
+            {
+                ScanForRecharge();
+                yield return new WaitForSeconds(.5f);
+            }
         }
 
-        public RunnerFSMContext Initialize()
+        private void ScanForRecharge()
         {
-            _internalContext = new RunnerFSMContext(this);
-            return _internalContext;
+            var notReady = new List<TransitionInfo>();
+            Debug.Log("Processing Recharge Queue: " + _rechargingStates.Count);
+            while (_rechargingStates.Count > 0)
+            {
+                var toTest = _rechargingStates.Dequeue();
+                if (!IsTransitionReady(toTest))
+                {
+                    Debug.Log("Processing Recharge Not Ready: " + toTest.NextState);
+                    notReady.Add(toTest);
+                }
+                else
+                {
+                    TrySendEventMessage(toTest.RechargeEffect);
+                }
+            }
+            foreach (var transitionInfo in notReady)
+            {
+                _rechargingStates.Enqueue(transitionInfo);
+            }
+        }
+
+        private readonly RunnerEventMessage _message = new RunnerEventMessage();
+        private void TrySendEventMessage(RunnerEffect effect)
+        {
+            if (effect != RunnerEffect.None)
+            {
+                _message.Effect = effect;
+                Debug.Log("Runner Event Send: " + effect);
+                Messenger.Default.Send(_message);
+            }
         }
 
         public RunnerState Transition(InputState input, CollisionInfo collisionInfo, Rigidbody rigidbody)
         {
-            if (_internalContext != null)
-            {
-                _internalContext.Complete();
-                _internalContext = null;
-            }
             velocity = rigidbody.velocity;
             contacts = collisionInfo;
             Dictionary<InputState, List<TransitionInfo>> availableInputs;
@@ -250,7 +284,7 @@ namespace Assets.Scripts
                 {
                     var firstMatchingTransition = inputTransitions
                         .FirstOrDefault(t => (t.CollisionRequirements ?? CollisionInfo.Empty).Equals(collisionInfo) &&
-                                             (t.LastUseTime - Time.time) <= 0 &&
+                                             IsTransitionReady(t) &&
                                              t.VelocityRequirements.Equals(rigidbody.velocity));
                     if (firstMatchingTransition != null)
                     {
@@ -258,11 +292,22 @@ namespace Assets.Scripts
                         currentState = firstMatchingTransition.NextState;
                         chosenTransition = firstMatchingTransition.TransitionName;
                         firstMatchingTransition.Use();
+                        if (firstMatchingTransition.ReuseTime > 0)
+                        {
+                            Debug.Log("Queuing for effect: " + firstMatchingTransition.NextState);
+                            _rechargingStates.Enqueue(firstMatchingTransition);
+                        }
+                        TrySendEventMessage(firstMatchingTransition.TransitionEffect);
                     }
                 }
             }
             StateProcessQueue.Enqueue(currentState);
             return currentState;
+        }
+
+        private static bool IsTransitionReady(TransitionInfo t)
+        {
+            return (t.LastUseTime - Time.time) <= 0;
         }
     }
 
