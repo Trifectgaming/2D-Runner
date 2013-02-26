@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Assets.Scripts
 {
     public class TK2DAnimationAdapter : IAnimatingSprite
@@ -7,6 +9,11 @@ namespace Assets.Scripts
         public TK2DAnimationAdapter(tk2dAnimatedSprite sprite)
         {
             _sprite = sprite;
+        }
+
+        public string[] AvailableAnimations
+        {
+            get { return _sprite.anim.clips.Select(c => c.name).ToArray(); }
         }
 
         public string CurrentAnimation

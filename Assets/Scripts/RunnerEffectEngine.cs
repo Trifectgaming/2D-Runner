@@ -1,20 +1,22 @@
 using System;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 using System.Collections;
 
 public class RunnerEffectEngine
 {
-    private readonly Dictionary<RunnerEffect, EffectInfo> _effects;
+    private readonly Dictionary<string, EffectInfo> _effects;
     private bool _initialized;
 
     public RunnerEffectEngine()
     {
-        _effects = new Dictionary<RunnerEffect, EffectInfo>
-                      {
-                          {RunnerEffect.GroundDashRecharge, new EffectInfo()}, 
-                          {RunnerEffect.GroundDash, new EffectInfo()}, 
-                      };
+        _effects = new Dictionary<string, EffectInfo>();
+        foreach (var effectInfo in StateMaster.AllRunnerStates)
+        {
+            _effects.Add(effectInfo.ToString(), new EffectInfo());
+            _effects.Add(effectInfo.ToString()+"Recharge", new EffectInfo());
+        }
     }
 
     public IEnumerator Initialize()
@@ -46,11 +48,11 @@ public class RunnerEffectEngine
         }
     }
     
-    public void PlayEffect(RunnerEffect name)
+    public void PlayEffect(string effectName)
     {
         if (!_initialized) throw new InvalidOperationException("Effect Engine must be initialized before use.");
         EffectInfo effect;
-        if (_effects.TryGetValue(name, out effect))
+        if (_effects.TryGetValue(effectName, out effect))
             effect.Play();
     }
 }

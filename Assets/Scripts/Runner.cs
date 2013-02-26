@@ -8,7 +8,7 @@ public abstract class Runner : MonoBehaviour {
     public RunnerMotor motor = new RunnerMotor();
     public RunnerInput inputController = new KeyboardRunnerInput();
     public RunnerFSM runnerStateMachine = new RunnerFSM();
-    public RunnerAnimation runnerAnim = new RunnerAnimation();
+    public RunnerAnimationEngine runnerAnim = new RunnerAnimationEngine();
     public RunnerEffectEngine runnerEffectEngine = new RunnerEffectEngine();
     public bool UseFixedStep = false;
 
@@ -143,5 +143,6 @@ public abstract class Runner : MonoBehaviour {
 
 public class RunnerEventMessage
 {
-    public RunnerEffect Effect;
+    public string Effect;
+    public string Audio;
 }

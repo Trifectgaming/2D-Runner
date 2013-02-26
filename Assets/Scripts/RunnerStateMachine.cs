@@ -16,7 +16,7 @@ namespace Assets.Scripts
             public float maxSpeedY;
         }
 
-        public RunnerState currentState = RunnerState.Running;
+        public RunnerState currentState = RunnerState.Run;
         public bool touchingPlatform;
         public Vector3 velocity;
         public StateTranitionTo[] transitions;

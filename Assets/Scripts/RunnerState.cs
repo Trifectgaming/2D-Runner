@@ -3,9 +3,9 @@ namespace Assets.Scripts
     public enum RunnerState
     {
         None,
-        Walking,
-        Running,
-        Jumping,
+        Walk,
+        Run,
+        Jump,
         Jumped,
         Diving,
         Dove,
