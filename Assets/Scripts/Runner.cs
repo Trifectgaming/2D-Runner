@@ -79,6 +79,7 @@ public abstract class Runner : MonoBehaviour {
         StartCoroutine(runnerStateMachine.Initialize());
         StartCoroutine(runnerEffectEngine.Initialize());
         runnerAnim.Initialize(_sprite);
+        motor.Initialize();
         OnGameStart(new GameStartMessage());
         Debug.Log("Using Fixed Step " + UseFixedStep);
     }

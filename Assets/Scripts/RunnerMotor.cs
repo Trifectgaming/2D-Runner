@@ -19,11 +19,11 @@ public class Motor
 [Serializable]
 public class RunnerMotor
 {
-    [NonSerialized]
+    //[NonSerialized]
     public Motor[] Motors;
     private Dictionary<RunnerState, Motor> _motorCache;
 
-    public RunnerMotor()
+    public void Initialize()
     {
         _motorCache = new Dictionary<RunnerState, Motor>
                           {
@@ -61,23 +61,23 @@ public class RunnerMotor
                               },
                               {
                                   RunnerState.Dash, new Motor
-                                                           {
-                                                               Type = RunnerState.Dash,
-                                                               acceleratingVelocity = new Vector3(1.5f, 0, 0),
-                                                               maxVelocity = 200,
-                                                               forceMode = ForceMode.VelocityChange,
-                                                               shouldDecelerate = false,
-                                                           }
+                                                        {
+                                                            Type = RunnerState.Dash,
+                                                            acceleratingVelocity = new Vector3(1.5f, 0, 0),
+                                                            maxVelocity = 200,
+                                                            forceMode = ForceMode.VelocityChange,
+                                                            shouldDecelerate = false,
+                                                        }
                               },
                               {
                                   RunnerState.GroundDash, new Motor
-                                                           {
-                                                               Type = RunnerState.GroundDash,
-                                                               acceleratingVelocity = new Vector3(20f, 0, 0),
-                                                               maxVelocity = 200,
-                                                               forceMode = ForceMode.VelocityChange,
-                                                               shouldDecelerate = false,
-                                                           }
+                                                              {
+                                                                  Type = RunnerState.GroundDash,
+                                                                  acceleratingVelocity = new Vector3(20f, 0, 0),
+                                                                  maxVelocity = 200,
+                                                                  forceMode = ForceMode.VelocityChange,
+                                                                  shouldDecelerate = false,
+                                                              }
                               },
                               {
                                   RunnerState.Sliding, new Motor
@@ -91,13 +91,13 @@ public class RunnerMotor
                               },
                               {
                                   RunnerState.Dropping, new Motor
-                                                           {
-                                                               Type = RunnerState.Dropping,
-                                                               acceleratingVelocity = new Vector3(0, -10, 0),
-                                                               maxVelocity = 200,
-                                                               forceMode = ForceMode.VelocityChange,
-                                                               shouldDecelerate = false,
-                                                           }
+                                                            {
+                                                                Type = RunnerState.Dropping,
+                                                                acceleratingVelocity = new Vector3(0, -10, 0),
+                                                                maxVelocity = 200,
+                                                                forceMode = ForceMode.VelocityChange,
+                                                                shouldDecelerate = false,
+                                                            }
                               },
                           };
 

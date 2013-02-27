@@ -66,7 +66,7 @@ namespace Assets.Scripts
         public CollisionInfo contacts;
         public string chosenTransition;
         public string lastTransition;
-        [NonSerialized]
+        //[NonSerialized]
         public TransitionInfo[] allTransitions;
         public Queue<RunnerState> StateProcessQueue = new Queue<RunnerState>();
 
@@ -291,7 +291,7 @@ namespace Assets.Scripts
                         lastTransition = currentState + "To" + firstMatchingTransition.NextState;
                         currentState = firstMatchingTransition.NextState;
                         chosenTransition = firstMatchingTransition.TransitionName;
-                        firstMatchingTransition.Use();
+                        firstMatchingTransition.LastUseTime = Time.time + firstMatchingTransition.ReuseTime;
                         if (firstMatchingTransition.ReuseTime > 0)
                         {
                             Debug.Log("Queuing for effect: " + firstMatchingTransition.NextState);

@@ -14,10 +14,5 @@ namespace Assets.Scripts
         public RunnerState NextState;
         public RunnerEffect RechargeEffect;
         public RunnerEffect TransitionEffect;
-        //public bool Locking;
-        public void Use()
-        {
-            LastUseTime = Time.time + ReuseTime;
-        }
     }
 }
