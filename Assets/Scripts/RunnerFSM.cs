@@ -72,7 +72,7 @@ namespace Assets.Scripts
 
         private readonly Dictionary<RunnerState, Dictionary<InputState, List<TransitionInfo>>> _availableTransitions =
             new Dictionary<RunnerState, Dictionary<InputState, List<TransitionInfo>>>();
-        private Queue<TransitionInfo> _rechargingStates = new Queue<TransitionInfo>(); 
+        private readonly Queue<TransitionInfo> _rechargingStates = new Queue<TransitionInfo>(); 
         public RunnerFSM()
         {
             foreach (var runnerState in StateMaster.AllRunnerStates)
@@ -93,10 +93,10 @@ namespace Assets.Scripts
                 .AddTransition(new[]
                                    {
                                        RunnerState.Jumped,
-                                       RunnerState.Walking,
+                                       RunnerState.Walk,
                                        RunnerState.Falling,
                                        RunnerState.None,
-                                       RunnerState.Running,
+                                       RunnerState.Run,
                                        RunnerState.Dropping,
                                    }, InputState.None,
                                new TransitionInfo
@@ -109,16 +109,16 @@ namespace Assets.Scripts
                                                                   {
                                                                       minX = 7.0f,
                                                                   },
-                                       NextState = RunnerState.Walking
+                                       NextState = RunnerState.Walk
                                    })
                 .AddTransition(new[]
                                    {
                                        RunnerState.Jumped,
-                                       RunnerState.Walking,
+                                       RunnerState.Walk,
                                        RunnerState.Falling,
                                        RunnerState.None,
                                        RunnerState.Dropping,
-                                       RunnerState.Running,
+                                       RunnerState.Run,
                                    }, InputState.None,
                                new TransitionInfo
                                    {
@@ -130,27 +130,27 @@ namespace Assets.Scripts
                                                                   {
                                                                       maxX = 8.0f,
                                                                   },
-                                       NextState = RunnerState.Running,
+                                       NextState = RunnerState.Run,
                                    })
-                .AddTransition(RunnerState.Running, InputState.SwipeUp,
+                .AddTransition(RunnerState.Run, InputState.SwipeUp,
                                new TransitionInfo
                                    {
                                        CollisionRequirements = new CollisionInfo
                                                                    {
                                                                        Below = true,
                                                                    },
-                                       NextState = RunnerState.Jumping,
+                                       NextState = RunnerState.Jump,
                                    })
-                .AddTransition(RunnerState.Walking, InputState.SwipeUp,
+                .AddTransition(RunnerState.Walk, InputState.SwipeUp,
                                new TransitionInfo
                                    {
                                        CollisionRequirements = new CollisionInfo
                                                                    {
                                                                        Below = true,
                                                                    },
-                                       NextState = RunnerState.Jumping,
+                                       NextState = RunnerState.Jump,
                                    })
-                .AddTransition(RunnerState.Jumping, InputState.None,
+                .AddTransition(RunnerState.Jump, InputState.None,
                                new TransitionInfo
                                    {
                                        CollisionRequirements = new CollisionInfo
@@ -189,8 +189,8 @@ namespace Assets.Scripts
                                    })
                 .AddTransition(new[]
                                    {
-                                       RunnerState.Running,
-                                       RunnerState.Walking
+                                       RunnerState.Run,
+                                       RunnerState.Walk
                                    }, InputState.SwipeRight,
                                new TransitionInfo
                                    {
@@ -199,9 +199,9 @@ namespace Assets.Scripts
                                                                        Below = true,
                                                                    },
 
-                                       ReuseTime = 10,
-                                       RechargeEffect = RunnerEffect.GroundDashRecharge,
-                                       TransitionEffect = RunnerEffect.GroundDash,
+                                       ReuseTime = 4,
+                                       HasRechargeEffect = true,
+                                       HasTransitionEffect = true,
                                        NextState = RunnerState.GroundDash
                                    })
                 .AddTransition(new[]
@@ -214,7 +214,7 @@ namespace Assets.Scripts
                                                                    {
                                                                        Below = true,
                                                                    },
-                                       NextState = RunnerState.Running
+                                       NextState = RunnerState.Run
                                    })
                 .AddTransition(StateMaster.AllRunnerStates, InputState.None,
                                new TransitionInfo
@@ -241,18 +241,17 @@ namespace Assets.Scripts
         private void ScanForRecharge()
         {
             var notReady = new List<TransitionInfo>();
-            Debug.Log("Processing Recharge Queue: " + _rechargingStates.Count);
             while (_rechargingStates.Count > 0)
             {
                 var toTest = _rechargingStates.Dequeue();
                 if (!IsTransitionReady(toTest))
                 {
-                    Debug.Log("Processing Recharge Not Ready: " + toTest.NextState);
                     notReady.Add(toTest);
                 }
                 else
                 {
-                    TrySendEventMessage(toTest.RechargeEffect);
+                    if (toTest.HasRechargeEffect)
+                        TrySendEventMessage(toTest.NextState + "Recharge");
                 }
             }
             foreach (var transitionInfo in notReady)
@@ -262,12 +261,11 @@ namespace Assets.Scripts
         }
 
         private readonly RunnerEventMessage _message = new RunnerEventMessage();
-        private void TrySendEventMessage(RunnerEffect effect)
+        private void TrySendEventMessage(string effect)
         {
-            if (effect != RunnerEffect.None)
+            if (!string.IsNullOrEmpty(effect))
             {
                 _message.Effect = effect;
-                Debug.Log("Runner Event Send: " + effect);
                 Messenger.Default.Send(_message);
             }
         }
@@ -297,7 +295,8 @@ namespace Assets.Scripts
                             Debug.Log("Queuing for effect: " + firstMatchingTransition.NextState);
                             _rechargingStates.Enqueue(firstMatchingTransition);
                         }
-                        TrySendEventMessage(firstMatchingTransition.TransitionEffect);
+                        if (firstMatchingTransition.HasTransitionEffect)
+                            TrySendEventMessage(firstMatchingTransition.NextState.ToString());
                     }
                 }
             }

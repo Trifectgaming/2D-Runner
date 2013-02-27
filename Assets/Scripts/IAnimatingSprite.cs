@@ -4,5 +4,6 @@ namespace Assets.Scripts
     {
         string CurrentAnimation { get; }
         void Play(string animationName);
+        string[] AvailableAnimations { get; }
     }
 }

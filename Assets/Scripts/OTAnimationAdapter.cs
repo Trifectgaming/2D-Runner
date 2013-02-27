@@ -11,5 +11,9 @@ namespace Assets.Scripts
 
         public string CurrentAnimation { get { return _sprite.animationFrameset; } }
         public void Play(string animationName) { _sprite.Play(animationName); }
+        public string[] AvailableAnimations { get
+        {
+            return new string[0];
+        }}
     }
 }

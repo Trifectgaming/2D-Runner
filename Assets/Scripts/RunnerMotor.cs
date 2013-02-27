@@ -28,9 +28,9 @@ public class RunnerMotor
         _motorCache = new Dictionary<RunnerState, Motor>
                           {
                               {
-                                  RunnerState.Running, new Motor
+                                  RunnerState.Run, new Motor
                                                            {
-                                                               Type = RunnerState.Running,
+                                                               Type = RunnerState.Run,
                                                                acceleratingVelocity = new Vector3(15, 0, 0),
                                                                deceleratingVelocity = new Vector3(100, 0, 0),
                                                                maxVelocity = 10,
@@ -39,9 +39,9 @@ public class RunnerMotor
                                                            }
                               },
                               {
-                                  RunnerState.Walking, new Motor
+                                  RunnerState.Walk, new Motor
                                                            {
-                                                               Type = RunnerState.Walking,
+                                                               Type = RunnerState.Walk,
                                                                acceleratingVelocity = new Vector3(15, 0, 0),
                                                                deceleratingVelocity = new Vector3(100, 0, 0),
                                                                maxVelocity = 10,
@@ -50,9 +50,9 @@ public class RunnerMotor
                                                            }
                               },
                               {
-                                  RunnerState.Jumping, new Motor
+                                  RunnerState.Jump, new Motor
                                                            {
-                                                               Type = RunnerState.Jumping,
+                                                               Type = RunnerState.Jump,
                                                                acceleratingVelocity = new Vector3(1, 2, 0),
                                                                maxVelocity = 200,
                                                                forceMode = ForceMode.VelocityChange,
