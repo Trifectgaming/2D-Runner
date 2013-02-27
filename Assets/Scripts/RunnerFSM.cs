@@ -157,6 +157,10 @@ namespace Assets.Scripts
                                                                    {
                                                                        Below = false,
                                                                    },
+                                       VelocityRequirements = new SpeedInfo
+                                                                  {
+                                                                      maxY = 4f
+                                                                  },
                                        NextState = RunnerState.Jumped,
                                    })
                 .AddTransition(new[]
