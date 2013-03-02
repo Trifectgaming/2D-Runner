@@ -66,6 +66,7 @@ namespace Assets.Scripts
         public CollisionInfo contacts;
         public string chosenTransition;
         public string lastTransition;
+        public float lastUseTime;
         //[NonSerialized]
         public TransitionInfo[] allTransitions;
         public Queue<RunnerState> StateProcessQueue = new Queue<RunnerState>();
@@ -210,6 +211,58 @@ namespace Assets.Scripts
                                    })
                 .AddTransition(new[]
                                    {
+                                       RunnerState.Run,
+                                       RunnerState.Walk
+                                   }, InputState.SwipeDown,
+                               new TransitionInfo
+                                   {
+                                       CollisionRequirements = new CollisionInfo
+                                                                   {
+                                                                       Below = true,
+                                                                   },
+                                       NextState = RunnerState.SlideStart
+                                   })
+                .AddTransition(new[]
+                                   {
+                                       RunnerState.SlideStart,
+                                   }, InputState.None,
+                               new TransitionInfo
+                                   {
+                                       CollisionRequirements = new CollisionInfo
+                                                                   {
+                                                                       Below = true,
+                                                                   },
+                                       DelayTime = .2f,
+                                       NextState = RunnerState.Sliding
+                                   })
+                .AddTransition(new[]
+                                   {
+                                       RunnerState.Sliding
+                                   }, InputState.None,
+                               new TransitionInfo
+                                   {
+                                       CollisionRequirements = new CollisionInfo
+                                                                   {
+                                                                       Below = true,
+                                                                   },
+                                       DelayTime = .5f,
+                                       NextState = RunnerState.SlideEnd
+                                   })
+                .AddTransition(new[]
+                                   {
+                                       RunnerState.SlideEnd
+                                   }, InputState.None,
+                               new TransitionInfo
+                                   {
+                                       CollisionRequirements = new CollisionInfo
+                                                                   {
+                                                                       Below = true,
+                                                                   },
+                                       DelayTime = .3f,
+                                       NextState = RunnerState.Run
+                                   })
+                .AddTransition(new[]
+                                   {
                                        RunnerState.GroundDash,
                                    }, InputState.None,
                                new TransitionInfo
@@ -287,13 +340,14 @@ namespace Assets.Scripts
                     var firstMatchingTransition = inputTransitions
                         .FirstOrDefault(t => (t.CollisionRequirements ?? CollisionInfo.Empty).Equals(collisionInfo) &&
                                              IsTransitionReady(t) &&
+                                             IsDelayUp(t) &&
                                              t.VelocityRequirements.Equals(rigidbody.velocity));
                     if (firstMatchingTransition != null)
                     {
                         lastTransition = currentState + "To" + firstMatchingTransition.NextState;
                         currentState = firstMatchingTransition.NextState;
                         chosenTransition = firstMatchingTransition.TransitionName;
-                        firstMatchingTransition.LastUseTime = Time.time + firstMatchingTransition.ReuseTime;
+                        firstMatchingTransition.LastUseTime = lastUseTime = Time.time + firstMatchingTransition.ReuseTime;
                         if (firstMatchingTransition.ReuseTime > 0)
                         {
                             Debug.Log("Queuing for effect: " + firstMatchingTransition.NextState);
@@ -306,6 +360,15 @@ namespace Assets.Scripts
             }
             StateProcessQueue.Enqueue(currentState);
             return currentState;
+        }
+
+        private bool IsDelayUp(TransitionInfo transitionInfo)
+        {
+            if (transitionInfo.DelayTime.HasValue)
+            {
+                return (lastUseTime + transitionInfo.DelayTime.Value) <= Time.time;
+            }
+            return true;
         }
 
         private static bool IsTransitionReady(TransitionInfo t)

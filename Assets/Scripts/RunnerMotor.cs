@@ -84,7 +84,7 @@ public class RunnerMotor
                                                            {
                                                                Type = RunnerState.Sliding,
                                                                acceleratingVelocity = new Vector3(1, 0, 0),
-                                                               maxVelocity = 200,
+                                                               maxVelocity = 10,
                                                                forceMode = ForceMode.VelocityChange,
                                                                shouldDecelerate = false,
                                                            }
