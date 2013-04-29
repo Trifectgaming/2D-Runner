@@ -48,5 +48,9 @@ namespace Assets.Scripts
                            Value = value,
                        };
         }
+        public override string ToString()
+        {
+            return HasValue ? Value.ToString() : "NULL";
+        }
     }
 }

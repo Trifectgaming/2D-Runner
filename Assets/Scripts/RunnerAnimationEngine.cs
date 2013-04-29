@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts;
 
 public class RunnerAnimationEngine
 {
-    private IAnimatingSprite _sprite;
+    private tk2dAnimatedSprite _sprite;
     private HashSet<string> _existingAnimations; 
 
-    public void Initialize(IAnimatingSprite sprite)
+    public void Initialize(tk2dAnimatedSprite sprite)
     {
         _sprite = sprite;
-        _existingAnimations = new HashSet<string>(_sprite.AvailableAnimations);
+        _existingAnimations = new HashSet<string>(_sprite.anim.clips.Select(c => c.name).ToArray());
     }
 
     public void Animate(RunnerState runnerState)
@@ -23,7 +24,7 @@ public class RunnerAnimationEngine
 
     private void ChangeAnimation(string anim)
     {
-        if (_sprite.CurrentAnimation != anim)
+        if ((_sprite.CurrentClip != null ? _sprite.CurrentClip.name : null) != anim)
             _sprite.Play(anim);
     }
 }

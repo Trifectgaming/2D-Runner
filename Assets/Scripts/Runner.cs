@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts;
 using UnityEngine;
 using System.Collections;
@@ -17,8 +20,9 @@ public abstract class Runner : MonoBehaviour {
     private Vector3 _startPosition;
     private static float _distanceTraveled;
     private static int _boosts;
-    private IAnimatingSprite _sprite;
-    
+    private tk2dAnimatedSprite _sprite;
+    public CollisionInfo collisionInfo = CollisionInfo.Empty;
+
 
     public static float DistanceTraveled
     {
@@ -75,7 +79,7 @@ public abstract class Runner : MonoBehaviour {
         Boosts = 0;
         _startPosition = _transform.localPosition;
         _rigidBody.isKinematic = true;
-        _sprite = GetSprite();
+        _sprite = GetComponentInChildren<tk2dAnimatedSprite>();
         StartCoroutine(runnerStateMachine.Initialize());
         StartCoroutine(runnerEffectEngine.Initialize());
         runnerAnim.Initialize(_sprite);
@@ -83,21 +87,54 @@ public abstract class Runner : MonoBehaviour {
         OnGameStart(new GameStartMessage());
         Debug.Log("Using Fixed Step " + UseFixedStep);
     }
-
-    protected abstract IAnimatingSprite GetSprite();
-
+    
     private void ProcessState()
     {
         while (inputController.QueuedStates.Count > 0)
         {
             DistanceTraveled = _transform.localPosition.x;
-            var collisionInfo = new CollisionInfo
-                                    {
-                                        Below = touchingPlatform,
-                                    };
+            UpdateCollisionInfo();
             runnerStateMachine.Transition(inputController.QueuedStates.Dequeue(), collisionInfo, _rigidBody);
             runnerAnim.Animate(runnerStateMachine.currentState);
         }
+    }
+
+    private void UpdateCollisionInfo()
+    {
+        var bounds = _sprite.GetBounds();
+        var position = _transform.position;
+        collisionInfo.Above = CollidedWith(Vector3.up, position, bounds);
+        collisionInfo.Below = CollidedWith(Vector3.down, position, bounds);
+        collisionInfo.Left = CollidedWith(Vector3.left, position, bounds);
+        collisionInfo.Right = CollidedWith(Vector3.right, position, bounds);
+        Debug.Log(collisionInfo);
+    }
+
+    private bool CollidedWith(Vector3 direction, Vector3 p, Bounds bounds)
+    {
+        var xMath = Mathf.Abs(direction.y)*bounds.size.x;
+        var yMath = Mathf.Abs(direction.x)*bounds.size.y;
+        return TestCast(direction, p) ||
+            TestCast(direction, new Vector3(p.x + xMath/ 3, p.y + (yMath / 3), p.z)) ||
+            TestCast(direction, new Vector3(p.x - xMath/ 3, p.y - (yMath / 3), p.z)) ||
+            TestCast(direction, new Vector3(p.x + xMath/ 5, p.y + (yMath / 5), p.z)) ||
+            TestCast(direction, new Vector3(p.x - xMath/ 5, p.y - (yMath / 5), p.z));
+    }
+
+    private static bool TestCast(Vector3 direction, Vector3 position)
+    {
+        Debug.DrawRay(position, direction, Color.blue);
+        return Physics.Raycast(position, direction, .8f);
+    }
+
+    private void OnDrawGizmos()
+    {
+        var bounds = (GetComponentInChildren<tk2dAnimatedSprite>()).GetBounds();
+        var position = (transform).position;
+        CollidedWith(Vector3.up, position, bounds);
+        CollidedWith(Vector3.down, position, bounds);
+        CollidedWith(Vector3.left, position, bounds);
+        CollidedWith(Vector3.right, position, bounds);
     }
 
     void Update()
@@ -121,20 +158,20 @@ public abstract class Runner : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        touchingPlatform = true;
-    }
+    //void OnCollisionEnter(Collision collision)
+    //{
+    //    touchingPlatform = true;
+    //}
 
-    void OnCollisionStay(Collision collision)
-    {
-        touchingPlatform = true;
-    }
+    //void OnCollisionStay(Collision collision)
+    //{
+    //    touchingPlatform = true;
+    //}
 
-    void OnCollisionExit(Collision collision)
-    {
-        touchingPlatform = false;
-    }
+    //void OnCollisionExit(Collision collision)
+    //{
+    //    touchingPlatform = false;
+    //}
 
     public static void AddBoost()
     {
