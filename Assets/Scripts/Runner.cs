@@ -115,8 +115,8 @@ public abstract class Runner : MonoBehaviour {
         var xMath = Mathf.Abs(direction.y)*bounds.size.x;
         var yMath = Mathf.Abs(direction.x)*bounds.size.y;
         return TestCast(direction, p) ||
-            TestCast(direction, new Vector3(p.x + xMath/ 3, p.y + (yMath / 3), p.z)) ||
-            TestCast(direction, new Vector3(p.x - xMath/ 3, p.y - (yMath / 3), p.z)) ||
+            TestCast(direction, new Vector3(p.x + xMath / 3f, p.y + (yMath / 3f), p.z)) ||
+            TestCast(direction, new Vector3(p.x - xMath / 3f, p.y - (yMath / 3f), p.z)) ||
             TestCast(direction, new Vector3(p.x + xMath/ 5, p.y + (yMath / 5), p.z)) ||
             TestCast(direction, new Vector3(p.x - xMath/ 5, p.y - (yMath / 5), p.z));
     }
@@ -127,15 +127,15 @@ public abstract class Runner : MonoBehaviour {
         return Physics.Raycast(position, direction, .8f);
     }
 
-    private void OnDrawGizmos()
-    {
-        var bounds = (GetComponentInChildren<tk2dAnimatedSprite>()).GetBounds();
-        var position = (transform).position;
-        CollidedWith(Vector3.up, position, bounds);
-        CollidedWith(Vector3.down, position, bounds);
-        CollidedWith(Vector3.left, position, bounds);
-        CollidedWith(Vector3.right, position, bounds);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    var bounds = (GetComponentInChildren<tk2dAnimatedSprite>()).GetBounds();
+    //    var position = (transform).position;
+    //    CollidedWith(Vector3.up, position, bounds);
+    //    CollidedWith(Vector3.down, position, bounds);
+    //    CollidedWith(Vector3.left, position, bounds);
+    //    CollidedWith(Vector3.right, position, bounds);
+    //}
 
     void Update()
     {

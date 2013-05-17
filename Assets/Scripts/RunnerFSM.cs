@@ -178,6 +178,15 @@ namespace Assets.Scripts
                                                                   },
                                        NextState = RunnerState.Jumped,
                                    })
+                .AddTransition(RunnerState.Jumped, InputState.None,
+                               new TransitionInfo
+                               {
+                                   CollisionRequirements = new CollisionInfo
+                                   {
+                                       Right = true,
+                                   },
+                                   NextState = RunnerState.Falling,
+                               })
                 .AddTransition(RunnerState.Jump, InputState.None,
                                new TransitionInfo
                                {
@@ -204,6 +213,7 @@ namespace Assets.Scripts
                 .AddTransition(new[]
                                    {
                                        RunnerState.Jumped,
+                                       RunnerState.Jump, 
                                        RunnerState.Falling
                                    }, InputState.SwipeRight,
                                new TransitionInfo
@@ -235,7 +245,8 @@ namespace Assets.Scripts
                 .AddTransition(new[]
                                    {
                                        RunnerState.Run,
-                                       RunnerState.Walk
+                                       RunnerState.Walk,
+                                       RunnerState.None, 
                                    }, InputState.SwipeDown,
                                new TransitionInfo
                                    {
@@ -267,8 +278,9 @@ namespace Assets.Scripts
                                        CollisionRequirements = new CollisionInfo
                                                                    {
                                                                        Below = true,
+                                                                       Above = false,
                                                                    },
-                                       DelayTime = .5f,
+                                       DelayTime = .3f,
                                        NextState = RunnerState.SlideEnd
                                    })
                 .AddTransition(new[]
@@ -280,6 +292,7 @@ namespace Assets.Scripts
                                        CollisionRequirements = new CollisionInfo
                                                                    {
                                                                        Below = true,
+                                                                       
                                                                    },
                                        DelayTime = .3f,
                                        NextState = RunnerState.Run
