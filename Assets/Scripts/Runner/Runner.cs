@@ -14,6 +14,7 @@ public abstract class Runner : MonoBehaviour {
     public RunnerAnimationEngine runnerAnim = new RunnerAnimationEngine();
     public RunnerEffectEngine runnerEffectEngine = new RunnerEffectEngine();
     public bool UseFixedStep = false;
+    public DetectorCollection Detectors = new DetectorCollection();
 
     private bool touchingPlatform;
     private Rigidbody _rigidBody;
@@ -80,6 +81,7 @@ public abstract class Runner : MonoBehaviour {
         _startPosition = _transform.localPosition;
         _rigidBody.isKinematic = true;
         _sprite = GetComponentInChildren<tk2dAnimatedSprite>();
+        Detectors.Initialize(_transform);
         StartCoroutine(runnerStateMachine.Initialize());
         StartCoroutine(runnerEffectEngine.Initialize());
         runnerAnim.Initialize(_sprite);
@@ -103,11 +105,12 @@ public abstract class Runner : MonoBehaviour {
     {
         var bounds = _sprite.GetBounds();
         var position = _transform.position;
-        collisionInfo.Above = CollidedWith(Vector3.up, position, bounds);
-        collisionInfo.Below = CollidedWith(Vector3.down, position, bounds);
-        collisionInfo.Left = CollidedWith(Vector3.left, position, bounds);
-        collisionInfo.Right = CollidedWith(Vector3.right, position, bounds);
-        Debug.Log(collisionInfo);
+        Detectors.Resize(bounds, _transform);
+        collisionInfo.Above = Detectors.Top.Colliding;
+        collisionInfo.Below = Detectors.Bottom.Colliding;
+        collisionInfo.Left = Detectors.Back.Colliding;
+        collisionInfo.Right = Detectors.Front.Colliding;
+        //Debug.Log(collisionInfo);
     }
 
     private bool CollidedWith(Vector3 direction, Vector3 p, Bounds bounds)
@@ -127,16 +130,6 @@ public abstract class Runner : MonoBehaviour {
         return Physics.Raycast(position, direction, .8f);
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    var bounds = (GetComponentInChildren<tk2dAnimatedSprite>()).GetBounds();
-    //    var position = (transform).position;
-    //    CollidedWith(Vector3.up, position, bounds);
-    //    CollidedWith(Vector3.down, position, bounds);
-    //    CollidedWith(Vector3.left, position, bounds);
-    //    CollidedWith(Vector3.right, position, bounds);
-    //}
-
     void Update()
     {
         inputController.Update();
@@ -148,7 +141,7 @@ public abstract class Runner : MonoBehaviour {
     {
         if (UseFixedStep)
             ProcessState();
-        RunnerState lastState = RunnerState.None;
+        var lastState = RunnerState.None;
         while (runnerStateMachine.StateProcessQueue.Count > 0)
         {
             var queuedState = runnerStateMachine.StateProcessQueue.Dequeue();
@@ -157,21 +150,6 @@ public abstract class Runner : MonoBehaviour {
             lastState = queuedState;
         }
     }
-
-    //void OnCollisionEnter(Collision collision)
-    //{
-    //    touchingPlatform = true;
-    //}
-
-    //void OnCollisionStay(Collision collision)
-    //{
-    //    touchingPlatform = true;
-    //}
-
-    //void OnCollisionExit(Collision collision)
-    //{
-    //    touchingPlatform = false;
-    //}
 
     public static void AddBoost()
     {

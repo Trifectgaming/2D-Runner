@@ -394,7 +394,7 @@ namespace Assets.Scripts
                     }
                     else
                     {
-                        Debug.Log("No matching transition from " + currentState);
+                        //Debug.Log("No matching transition from " + currentState);
                     }
                 }
             }
