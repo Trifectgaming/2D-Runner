@@ -14,7 +14,7 @@ Shader "tk2d/LitBlendVertexColor"
 		CGPROGRAM
 		#pragma surface surf Lambert alpha
 		struct Input {
-			half2 uv_MainTex;
+			float2 uv_MainTex;
 			fixed4 color : COLOR;
 		};
 		sampler2D _MainTex;

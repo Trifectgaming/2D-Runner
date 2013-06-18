@@ -98,6 +98,23 @@ public class tk2dSystem : ScriptableObject
 		}
 	}
 
+	// This is a hack to work around a bug in Unity 4.x
+	// Scene serialization will serialize the actively bound texture
+	// but not the material during the build, only when [ExecuteInEditMode]
+	// is on, eg. on sprites.
+	// To work around: Create the file tk2dOverrideBuildMaterial in the project root
+	//                 outside Assets before you start the build, and delete it after
+	//                 your build is complete.
+	public static bool OverrideBuildMaterial {
+		get {
+#if UNITY_EDITOR
+			return System.IO.File.Exists("tk2dOverrideBuildMaterial");
+#else
+			return false;
+#endif
+		}
+	}
+
 	public static tk2dAssetPlatform GetAssetPlatform(string platform)
 	{
 		tk2dSystem inst = tk2dSystem.inst_NoCreate;
@@ -140,7 +157,7 @@ public class tk2dSystem : ScriptableObject
 		// TODO: create and use a dictionary
 		for (int i = 0; i < allResourceEntries.Length; ++i)
 		{
-			if (allResourceEntries[i] == null || allResourceEntries[i].assetName == name)
+			if (allResourceEntries[i] != null && allResourceEntries[i].assetName == name)
 				return LoadResourceByGUIDImpl<T>(allResourceEntries[i].assetGUID);
 		}
 		return null;

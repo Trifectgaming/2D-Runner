@@ -287,7 +287,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 14}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -79, y: -47, z: 1}
+  m_LocalPosition: {x: -158.20697, y: -84, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 35}
@@ -309,7 +309,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 16}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 26, z: 1}
+  m_LocalPosition: {x: 0, y: 28, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 29}
@@ -333,7 +333,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 18}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.5219727, y: -12.272583, z: 0}
+  m_LocalPosition: {x: -11, y: -12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 35}
@@ -664,20 +664,21 @@ MonoBehaviour:
   m_Name: 
   collection: {fileID: 11400000, guid: 4864518b0693631458553f73aaa86021, type: 2}
   _color: {r: 0, g: .657381773, b: 1, a: 1}
-  _scale: {x: 3.41035485, y: 2.17263055, z: 1}
+  _scale: {x: 1, y: 1, z: 1}
   _spriteId: 3
   pixelPerfect: 0
   boxCollider: {fileID: 0}
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
-  _dimensions: {x: 50, y: 50}
+  _dimensions: {x: 156, y: 78}
   _anchor: 0
-  legacyMode: 1
+  _borderOnly: 0
   borderTop: .200000003
   borderBottom: .200000003
   borderLeft: .177777782
   borderRight: .177777782
+  _createBoxCollider: 0
 --- !u!114 &56
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -713,7 +714,6 @@ MonoBehaviour:
   _maxChars: 500
   _inlineStyling: 0
   _formatting: 0
-  _formattedText: 
   _wordWrapWidth: 0
   pixelPerfect: 0
   spacing: 0
@@ -730,20 +730,21 @@ MonoBehaviour:
   m_Name: 
   collection: {fileID: 11400000, guid: 4864518b0693631458553f73aaa86021, type: 2}
   _color: {r: .795428455, g: .268656731, b: 1, a: 1}
-  _scale: {x: 13.4252796, y: 5.39069986, z: 1}
+  _scale: {x: 1, y: 1, z: 1}
   _spriteId: 3
   pixelPerfect: 0
   boxCollider: {fileID: 0}
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
-  _dimensions: {x: 50, y: 50}
-  _anchor: 0
-  legacyMode: 1
+  _dimensions: {x: 615.538696, y: 241.387726}
+  _anchor: 4
+  _borderOnly: 0
   borderTop: .400000006
   borderBottom: .400000006
   borderLeft: .355555564
   borderRight: .355555564
+  _createBoxCollider: 0
 --- !u!114 &58
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -779,7 +780,6 @@ MonoBehaviour:
   _maxChars: 16
   _inlineStyling: 0
   _formatting: 0
-  _formattedText: 
   _wordWrapWidth: 0
   pixelPerfect: 0
   spacing: 0
@@ -891,12 +891,17 @@ MonoBehaviour:
     offsetPixels: {x: 0, y: 0}
     autoScaleMode: 0
     fitMode: 0
+  inheritSettings: {fileID: 0}
   nativeResolutionWidth: 960
   nativeResolutionHeight: 640
   enableResolutionOverrides: 1
   mainCamera: {fileID: 37}
-  forceResolutionInEditor: 0
+  viewportClippingEnabled: 0
+  viewportRegion: {x: 0, y: 0, z: 100, w: 100}
+  screenCamera: {fileID: 0}
+  forceResolutionInEditor: 1
   forceResolution: {x: 960, y: 640}
+  dumbOffset: {x: 0, y: 0}
 --- !u!196 &66
 NavMeshSettings:
   m_ObjectHideFlags: 0

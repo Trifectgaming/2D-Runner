@@ -54,31 +54,3 @@ public class GUIManager : MonoBehaviour
             Messenger.Default.Send(new GameStartMessage());
 	}
 }
-
-public class BoostChangedMessage
-{
-    public int Boosts;
-
-    public BoostChangedMessage(int boosts)
-    {
-        Boosts = boosts;
-    }
-}
-
-public class DistanceChangedMessage
-{
-    public float Distance;
-
-    public DistanceChangedMessage(float distanceTraveled)
-    {
-        Distance = distanceTraveled;
-    }
-}
-
-public class GameStartMessage
-{
-}
-
-public class GameOverMessage
-{
-}

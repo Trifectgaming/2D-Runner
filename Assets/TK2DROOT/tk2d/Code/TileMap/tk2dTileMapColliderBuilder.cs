@@ -7,8 +7,9 @@ namespace tk2dRuntime.TileMap
 {
 	public static class ColliderBuilder
 	{
-		public static void Build(tk2dTileMap tileMap)
+		public static void Build(tk2dTileMap tileMap, bool forceBuild)
 		{
+			bool incremental = !forceBuild;
 			int numLayers = tileMap.Layers.Length;
 			for (int layerId = 0; layerId < numLayers; ++layerId)
 			{
@@ -23,6 +24,9 @@ namespace tk2dRuntime.TileMap
 					{
 						int baseX = cellX * layer.divX;
 						var chunk = layer.GetChunk(cellX, cellY);
+						
+						if (incremental && !chunk.Dirty)
+							continue;
 						
 						if (chunk.IsEmpty)
 							continue;

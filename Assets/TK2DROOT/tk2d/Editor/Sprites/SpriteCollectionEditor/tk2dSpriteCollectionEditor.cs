@@ -30,22 +30,35 @@ public class tk2dSpriteCollectionEditor : Editor
 		}
 		else
 		{
-			GUILayout.BeginHorizontal();
-			GUILayout.FlexibleSpace();
-			if (GUILayout.Button("Open Editor...", GUILayout.MinWidth(120)))
+			string assetPath = AssetDatabase.GetAssetPath(gen).ToLower();
+			bool inResources = assetPath.IndexOf("/resources/") != -1;
+			
+			if (inResources)
 			{
-				if (gen.name == defaultSpriteCollectionName)
-				{
-					EditorUtility.DisplayDialog("Invalid Sprite Collection name", "Please rename sprite collection before proceeding", "Ok");
-				}
-				else
-				{
-					tk2dSpriteCollectionEditorPopup v = EditorWindow.GetWindow( typeof(tk2dSpriteCollectionEditorPopup), false, "Sprite Collection Editor" ) as tk2dSpriteCollectionEditorPopup;
-					v.SetGenerator(gen);
-				}
+				string msg = "Sprite collection is in a resources directory. " +
+					"All source textures will be included in build.\n\n" +
+					"Editor is disabled. Move it out of the resources directory to continue.";
+				tk2dGuiUtility.InfoBox(msg, tk2dGuiUtility.WarningLevel.Error);
 			}
-			GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
+			else 
+			{
+				GUILayout.BeginHorizontal();
+				GUILayout.FlexibleSpace();
+				if (GUILayout.Button("Open Editor...", GUILayout.MinWidth(120)))
+				{
+					if (gen.name == defaultSpriteCollectionName)
+					{
+						EditorUtility.DisplayDialog("Invalid Sprite Collection name", "Please rename sprite collection before proceeding", "Ok");
+					}
+					else
+					{
+						tk2dSpriteCollectionEditorPopup v = EditorWindow.GetWindow( typeof(tk2dSpriteCollectionEditorPopup), false, "SpriteCollection" ) as tk2dSpriteCollectionEditorPopup;
+						v.SetGenerator(gen);
+					}
+				}
+				GUILayout.FlexibleSpace();
+				GUILayout.EndHorizontal();
+			}
 		}
 
         EditorGUILayout.EndVertical();

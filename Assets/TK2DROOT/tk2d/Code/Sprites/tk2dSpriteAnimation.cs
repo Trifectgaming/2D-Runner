@@ -37,19 +37,29 @@ public class tk2dSpriteAnimationFrame
 	{
 		CopyFrom(source, true);
 	}
+
+	public void CopyTriggerFrom(tk2dSpriteAnimationFrame source)
+	{
+		triggerEvent = source.triggerEvent;
+		eventInfo = source.eventInfo;
+		eventInt = source.eventInt;
+		eventFloat = source.eventFloat;		
+	}
+
+	public void ClearTrigger()
+	{
+		triggerEvent = false;
+		eventInt = 0;
+		eventFloat = 0;
+		eventInfo = "";
+	}
 	
 	public void CopyFrom(tk2dSpriteAnimationFrame source, bool full)
 	{
 		spriteCollection = source.spriteCollection;
 		spriteId = source.spriteId;
 		
-		if (full)
-		{
-			triggerEvent = source.triggerEvent;
-			eventInfo = source.eventInfo;
-			eventInt = source.eventInt;
-			eventFloat = source.eventFloat;		
-		}
+		if (full) CopyTriggerFrom(source);
 	}
 }
 
@@ -67,7 +77,7 @@ public class tk2dSpriteAnimationClip
 	/// <summary>
 	/// Array of frames
 	/// </summary>
-	public tk2dSpriteAnimationFrame[] frames;
+	public tk2dSpriteAnimationFrame[] frames = null;
 	
 	/// <summary>
 	/// FPS of clip
@@ -124,6 +134,71 @@ public class tk2dSpriteAnimationClip
 	/// The wrap mode.
 	/// </summary>
 	public WrapMode wrapMode = WrapMode.Loop;
+
+	/// <summary>
+	/// Default contstructor
+	/// </summary>
+	public tk2dSpriteAnimationClip() {
+
+	}
+
+	/// <summary>
+	/// Copy constructor
+	/// </summary>
+	public tk2dSpriteAnimationClip(tk2dSpriteAnimationClip source) {
+		CopyFrom( source );
+	}
+
+	public void CopyFrom(tk2dSpriteAnimationClip source)
+	{
+		name = source.name;
+		if (source.frames == null) 
+		{
+			frames = null;
+		}
+		else
+		{
+			frames = new tk2dSpriteAnimationFrame[source.frames.Length];
+			for (int i = 0; i < frames.Length; ++i)
+			{
+				if (source.frames[i] == null)
+				{
+					frames[i] = null;
+				}
+				else
+				{
+					frames[i] = new tk2dSpriteAnimationFrame();
+					frames[i].CopyFrom(source.frames[i]);
+				}
+			}
+		}
+		fps = source.fps;
+		loopStart = source.loopStart;
+		wrapMode = source.wrapMode;
+		if (wrapMode == tk2dSpriteAnimationClip.WrapMode.Single && frames.Length > 1)
+		{
+			frames = new tk2dSpriteAnimationFrame[] { frames[0] };
+			Debug.LogError(string.Format("Clip: '{0}' Fixed up frames for WrapMode.Single", name));
+		}
+	}
+
+	public void Clear()
+	{
+		name = "";
+		frames = new tk2dSpriteAnimationFrame[0];
+		fps = 30.0f;
+		loopStart = 0;
+		wrapMode = WrapMode.Loop;
+	}
+
+	public bool Empty
+	{
+		get { return name.Length == 0 || frames == null || frames.Length == 0; }
+	}
+
+	public tk2dSpriteAnimationFrame GetFrame(int frame) {
+		return frames[frame];
+	}
 }
 
 [AddComponentMenu("2D Toolkit/Backend/tk2dSpriteAnimation")]
@@ -138,14 +213,64 @@ public class tk2dSpriteAnimation : MonoBehaviour
 	public tk2dSpriteAnimationClip[] clips;
 	
 	/// <summary>
-	/// Resolves an animation clip by name and returns a unique id.
+	/// Resolves an animation clip by name and returns a reference to it
 	/// </summary>
-	/// <returns> Unique Animation Clip Id. </returns>
+	/// <returns> tk2dSpriteAnimationClip reference, null if not found </returns>
 	/// <param name='name'>Case sensitive clip name, as defined in <see cref="tk2dSpriteAnimationClip"/>. </param>
-	public int GetClipIdByName(string name)
+	public tk2dSpriteAnimationClip GetClipByName(string name)
 	{
+		for (int i = 0; i < clips.Length; ++i)
+			if (clips[i].name == name) return clips[i];
+		return null;
+	}
+
+	/// <summary>
+	/// Resolves an animation clip by id and returns a reference to it
+	/// </summary>
+	/// <returns> tk2dSpriteAnimationClip reference, null if not found </returns>
+	public tk2dSpriteAnimationClip GetClipById(int id) {
+		if (id < 0 || id >= clips.Length || clips[id].Empty) {
+			return null;
+		}
+		else {
+			return clips[id];
+		}
+	}
+
+	/// <summary>
+	/// Resolves an animation clip by name and returns a clipId
+	/// </summary>
+	/// <returns> Unique clip id, -1 if not found </returns>
+	/// <param name='name'>Case sensitive clip name, as defined in <see cref="tk2dSpriteAnimationClip"/>. </param>
+	public int GetClipIdByName(string name) {
 		for (int i = 0; i < clips.Length; ++i)
 			if (clips[i].name == name) return i;
 		return -1;
 	}
+
+	/// <summary>
+	/// Gets a clip id from a clip
+	/// </summary>
+	/// <returns> Unique clip id, -1 if not found in the animation collection </returns>
+	public int GetClipIdByName(tk2dSpriteAnimationClip clip) {
+		for (int i = 0; i < clips.Length; ++i)
+			if (clips[i] == clip) return i;
+		return -1;
+	}
+
+	/// <summary>
+	/// The first valid clip in the animation collection. Null if no valid clips are found.
+	/// </summary>
+	public tk2dSpriteAnimationClip FirstValidClip {
+		get {
+			for (int i = 0; i < clips.Length; ++i) {
+				if (!clips[i].Empty && clips[i].frames[0].spriteCollection != null && clips[i].frames[0].spriteId != -1) {
+					return clips[i];
+				}
+			}
+			return null;
+		}
+	}
 }
+
+

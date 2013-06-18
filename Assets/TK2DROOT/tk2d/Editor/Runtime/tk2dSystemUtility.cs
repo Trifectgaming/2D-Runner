@@ -84,10 +84,10 @@ public class tk2dSystemUtility
 		}
 		else
 		{
+			tk2dSystem.inst.Editor__Toc = toc.ToArray();
 			EditorUtility.SetDirty(tk2dSystem.inst);
 			AssetDatabase.SaveAssets();
 			
-			tk2dSystem.inst.Editor__Toc = toc.ToArray();
 			return true;
 		}
 	}
@@ -106,7 +106,7 @@ public class tk2dSystemUtility
 			return false;
 
 		string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(obj));
-		string resourcePath = GetResourcesDir() + "/" + tk2dSystem.guidPrefix + guid + ".asset";
+		string resourcePath = GetResourcesDir() + "/tk2d_" + guid + ".asset";
 		return System.IO.File.Exists(resourcePath);
 	}
 
@@ -250,8 +250,8 @@ public class tk2dSystemUtility
 		tk2dSpriteCollectionIndex[] spriteCollectionIndex = tk2dEditorUtility.GetExistingIndex().GetSpriteCollectionIndex();
 		tk2dGenericIndexItem[] fontIndex = tk2dEditorUtility.GetExistingIndex().GetFonts();
 		int numLoadableAssets = 0;
-		foreach (tk2dGenericIndexItem font in fontIndex) { if (font.managed) numLoadableAssets++; }
-		foreach (tk2dSpriteCollectionIndex sc in spriteCollectionIndex) { if (sc.managedSpriteCollection) numLoadableAssets++; }
+		foreach (tk2dGenericIndexItem font in fontIndex) { if (font.managed || font.loadable) numLoadableAssets++; }
+		foreach (tk2dSpriteCollectionIndex sc in spriteCollectionIndex) { if (sc.managedSpriteCollection || sc.loadable) numLoadableAssets++; }
 
 		// Need an index
 		if (numLoadableAssets > 0)
@@ -261,12 +261,12 @@ public class tk2dSystemUtility
 
 			foreach (tk2dGenericIndexItem font in fontIndex)
 			{
-				if (font.managed) AddFontFromIndex(font);
+				if (font.managed || font.loadable) AddFontFromIndex(font);
 				tk2dEditorUtility.CollectAndUnloadUnusedAssets();
 			}
 			foreach (tk2dSpriteCollectionIndex sc in spriteCollectionIndex)
 			{
-				if (sc.managedSpriteCollection) AddSpriteCollectionFromIndex(sc);
+				if (sc.managedSpriteCollection || sc.loadable) AddSpriteCollectionFromIndex(sc);
 				tk2dEditorUtility.CollectAndUnloadUnusedAssets();
 			}
 

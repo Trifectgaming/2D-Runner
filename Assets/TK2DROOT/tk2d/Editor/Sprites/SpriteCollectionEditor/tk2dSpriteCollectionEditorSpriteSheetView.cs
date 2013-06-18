@@ -244,7 +244,8 @@ namespace tk2dEditor.SpriteCollectionEditor
 			int border = 16;
 			float width = tex.width * zoomAmount;
 			float height = tex.height * zoomAmount;
-			Rect baseRect = GUILayoutUtility.GetRect(border * 2 + width, border * 2 + height, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
+			Rect baseRect = GUILayoutUtility.GetRect(border * 2 + width, border * 2 + height, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+			tk2dGrid.Draw(baseRect);
 			Rect rect = new Rect(baseRect.x + border, baseRect.y + border, width, height);
 			
 			if (Event.current.type == EventType.ScrollWheel)

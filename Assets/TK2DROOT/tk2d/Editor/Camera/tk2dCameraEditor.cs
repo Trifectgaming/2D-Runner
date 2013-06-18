@@ -75,136 +75,195 @@ public class tk2dCameraEditor : Editor
 			GUI.changed = true;
 		}
 		
-		_target.enableResolutionOverrides = EditorGUILayout.Toggle("Resolution overrides", _target.enableResolutionOverrides);
-		if (_target.enableResolutionOverrides)
-		{
-			EditorGUILayout.LabelField("Native resolution", EditorStyles.boldLabel);
-			EditorGUI.indentLevel++;
-			_target.nativeResolutionWidth = EditorGUILayout.IntField("Width", _target.nativeResolutionWidth);
-			_target.nativeResolutionHeight = EditorGUILayout.IntField("Height", _target.nativeResolutionHeight);
-			EditorGUI.indentLevel--;
+		bool cameraOverrideChanged = false;
+		_target.inheritSettings = EditorGUILayout.ObjectField("Inherit settings", _target.inheritSettings, typeof(tk2dCamera), true) as tk2dCamera;
 
-			// Overrides
-			EditorGUILayout.LabelField("Overrides", EditorStyles.boldLabel);
-			EditorGUI.indentLevel++;
-			
-			int deleteId = -1;
-			for (int i = 0; i < _target.resolutionOverride.Length; ++i)
-			{
-				var ovr = _target.resolutionOverride[i];
-				EditorGUILayout.BeginVertical(frameBorderStyle);
-				GUILayout.Space(8);
-				ovr.name = EditorGUILayout.TextField("Name", ovr.name);
-				ovr.width = EditorGUILayout.IntField("Width", ovr.width);
-				ovr.height = EditorGUILayout.IntField("Height", ovr.height);
-				ovr.autoScaleMode = (tk2dCameraResolutionOverride.AutoScaleMode)EditorGUILayout.EnumPopup("Auto Scale", ovr.autoScaleMode);
-				if (ovr.autoScaleMode == tk2dCameraResolutionOverride.AutoScaleMode.None)
-				{
-					EditorGUI.indentLevel++;
-					ovr.scale = EditorGUILayout.FloatField("Scale", ovr.scale);
-					EditorGUI.indentLevel--;
-				}
-				if (ovr.autoScaleMode == tk2dCameraResolutionOverride.AutoScaleMode.StretchToFit)
-				{
-					string msg = "The native resolution image will be stretched to fit the target display. " +
-					"Image quality will suffer if non-uniform scaling occurs.";
-					tk2dGuiUtility.InfoBox(msg, tk2dGuiUtility.WarningLevel.Info);
-				}
-				else
-				{
-					ovr.fitMode = (tk2dCameraResolutionOverride.FitMode)EditorGUILayout.EnumPopup("Fit Mode", ovr.fitMode);
-					if (ovr.fitMode == tk2dCameraResolutionOverride.FitMode.Constant)
-					{
-						EditorGUI.indentLevel++;
-						ovr.offsetPixels.x = EditorGUILayout.FloatField("X", ovr.offsetPixels.x);
-						ovr.offsetPixels.y = EditorGUILayout.FloatField("Y", ovr.offsetPixels.y);
-						EditorGUI.indentLevel--;
-					}
-				}
-				GUILayout.BeginHorizontal();
-				EditorGUILayout.PrefixLabel(" ");
-				if (GUILayout.Button("Delete", EditorStyles.miniButton))
-					deleteId = i;
-				GUILayout.EndHorizontal();
-				GUILayout.Space(4);
-				EditorGUILayout.EndVertical();
-			}
-			
-			if (deleteId != -1)
-			{
-				List<tk2dCameraResolutionOverride> ovr = new List<tk2dCameraResolutionOverride>(_target.resolutionOverride);
-				ovr.RemoveAt(deleteId);
-				_target.resolutionOverride = ovr.ToArray();
-				GUI.changed = true;
-				Repaint();
-			}
-			
-			EditorGUILayout.BeginVertical(frameBorderStyle);
-			GUILayout.Space(32);
+		if (_target.inheritSettings != null) {
 			GUILayout.BeginHorizontal();
-			GUILayout.FlexibleSpace();
-			if (GUILayout.Button("Add override", GUILayout.ExpandWidth(false)))
-			{
-				tk2dCameraResolutionOverride ovr = new tk2dCameraResolutionOverride();
-				ovr.name = "Wildcard Override";
-				ovr.width = -1;
-				ovr.height = -1;
-				ovr.autoScaleMode = tk2dCameraResolutionOverride.AutoScaleMode.FitVisible;
-				ovr.fitMode = tk2dCameraResolutionOverride.FitMode.Center;
-				System.Array.Resize(ref _target.resolutionOverride, _target.resolutionOverride.Length + 1);
-				_target.resolutionOverride[_target.resolutionOverride.Length - 1] = ovr;
+			EditorGUILayout.PrefixLabel(" ");
+			if (GUILayout.Button("Clear")) {
+				_target.inheritSettings = null;
 				GUI.changed = true;
 			}
-			GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
 			GUILayout.Space(32);
-			EditorGUILayout.EndVertical();
+		}
+		else {
+			GUILayout.Space(8);
+			_target.enableResolutionOverrides = EditorGUILayout.Toggle("Resolution overrides", _target.enableResolutionOverrides);
+			if (_target.enableResolutionOverrides)
+			{
+				EditorGUILayout.LabelField("Native resolution", EditorStyles.boldLabel);
+				EditorGUI.indentLevel++;
+				_target.nativeResolutionWidth = EditorGUILayout.IntField("Width", _target.nativeResolutionWidth);
+				_target.nativeResolutionHeight = EditorGUILayout.IntField("Height", _target.nativeResolutionHeight);
+				EditorGUI.indentLevel--;
+
+				// Overrides
+				EditorGUILayout.LabelField("Overrides", EditorStyles.boldLabel);
+				EditorGUI.indentLevel++;
+				
+				int deleteId = -1;
+				for (int i = 0; i < _target.resolutionOverride.Length; ++i)
+				{
+					var ovr = _target.resolutionOverride[i];
+					EditorGUILayout.BeginVertical(frameBorderStyle);
+					GUILayout.Space(8);
+					ovr.name = EditorGUILayout.TextField("Name", ovr.name);
+
+					int resolutionMatch = (ovr.width == -1 && ovr.height == -1) ? 0 : 1;
+					int newResolutionMatch = EditorGUILayout.Popup("Match resolution", resolutionMatch, new string[] { "Wildcard (Match-all)", "Explicit" });
+					if (resolutionMatch != newResolutionMatch) {
+
+						if (newResolutionMatch == 0) {
+							ovr.width = -1;
+							ovr.height = -1;
+						}
+						else {
+							ovr.width = 1024;
+							ovr.height = 768;
+						}
+						resolutionMatch = newResolutionMatch;
+						EditorUtility.SetDirty(_target);
+					}
+
+					EditorGUI.indentLevel++;
+					if (resolutionMatch != 0) {
+						ovr.width = EditorGUILayout.IntField("Width", ovr.width);
+						ovr.height = EditorGUILayout.IntField("Height", ovr.height);
+					}
+					EditorGUI.indentLevel--;
+
+					ovr.autoScaleMode = (tk2dCameraResolutionOverride.AutoScaleMode)EditorGUILayout.EnumPopup("Auto Scale", ovr.autoScaleMode);
+					if (ovr.autoScaleMode == tk2dCameraResolutionOverride.AutoScaleMode.None)
+					{
+						EditorGUI.indentLevel++;
+						ovr.scale = EditorGUILayout.FloatField("Scale", ovr.scale);
+						EditorGUI.indentLevel--;
+					}
+					if (ovr.autoScaleMode == tk2dCameraResolutionOverride.AutoScaleMode.StretchToFit)
+					{
+						string msg = "The native resolution image will be stretched to fit the target display. " +
+						"Image quality will suffer if non-uniform scaling occurs.";
+						tk2dGuiUtility.InfoBox(msg, tk2dGuiUtility.WarningLevel.Info);
+					}
+					else
+					{
+						ovr.fitMode = (tk2dCameraResolutionOverride.FitMode)EditorGUILayout.EnumPopup("Fit Mode", ovr.fitMode);
+						if (ovr.fitMode == tk2dCameraResolutionOverride.FitMode.Constant)
+						{
+							EditorGUI.indentLevel++;
+							ovr.offsetPixels.x = EditorGUILayout.FloatField("X", ovr.offsetPixels.x);
+							ovr.offsetPixels.y = EditorGUILayout.FloatField("Y", ovr.offsetPixels.y);
+							EditorGUI.indentLevel--;
+						}
+					}
+					GUILayout.BeginHorizontal();
+					EditorGUILayout.PrefixLabel(" ");
+					if (GUILayout.Button("Delete", EditorStyles.miniButton))
+						deleteId = i;
+					GUILayout.EndHorizontal();
+					GUILayout.Space(4);
+					EditorGUILayout.EndVertical();
+				}
+				
+				if (deleteId != -1)
+				{
+					List<tk2dCameraResolutionOverride> ovr = new List<tk2dCameraResolutionOverride>(_target.resolutionOverride);
+					ovr.RemoveAt(deleteId);
+					_target.resolutionOverride = ovr.ToArray();
+					GUI.changed = true;
+					Repaint();
+				}
+				
+				EditorGUILayout.BeginVertical(frameBorderStyle);
+				GUILayout.Space(32);
+				GUILayout.BeginHorizontal();
+				GUILayout.FlexibleSpace();
+				if (GUILayout.Button("Add override", GUILayout.ExpandWidth(false)))
+				{
+					tk2dCameraResolutionOverride ovr = new tk2dCameraResolutionOverride();
+					ovr.name = "Wildcard Override";
+					ovr.width = -1;
+					ovr.height = -1;
+					ovr.autoScaleMode = tk2dCameraResolutionOverride.AutoScaleMode.FitVisible;
+					ovr.fitMode = tk2dCameraResolutionOverride.FitMode.Center;
+					System.Array.Resize(ref _target.resolutionOverride, _target.resolutionOverride.Length + 1);
+					_target.resolutionOverride[_target.resolutionOverride.Length - 1] = ovr;
+					GUI.changed = true;
+				}
+				GUILayout.FlexibleSpace();
+				GUILayout.EndHorizontal();
+				GUILayout.Space(32);
+				EditorGUILayout.EndVertical();
+				EditorGUI.indentLevel--;
+			}
+			EditorGUILayout.Space();
+
+
+			EditorGUILayout.LabelField("Camera resolution", EditorStyles.boldLabel);
+			GUIContent toggleLabel = new GUIContent("Force Editor Resolution", 
+				"When enabled, forces the resolution in the editor regardless of the size of the game window.");
+			EditorGUI.indentLevel++;
+
+			tk2dGuiUtility.BeginChangeCheck();
+			_target.forceResolutionInEditor = EditorGUILayout.Toggle(toggleLabel, _target.forceResolutionInEditor);
+			if (tk2dGuiUtility.EndChangeCheck()) cameraOverrideChanged = true;
+
+			if (_target.forceResolutionInEditor)
+			{
+				tk2dGuiUtility.BeginChangeCheck();
+
+				int selectedResolution = EditorGUILayout.Popup("Preset", 0, presetListStr);
+				if (selectedResolution != 0)
+				{
+					var preset = presets[selectedResolution - 1];
+					_target.forceResolution.x = preset.width;
+					_target.forceResolution.y = preset.height;
+					GUI.changed = true;
+				}
+
+				_target.forceResolution.x = EditorGUILayout.IntField("Width", (int)_target.forceResolution.x);
+				_target.forceResolution.y = EditorGUILayout.IntField("Height", (int)_target.forceResolution.y);
+
+				// clamp to a sensible value
+				_target.forceResolution.x = Mathf.Max(_target.forceResolution.x, 50);
+				_target.forceResolution.y = Mathf.Max(_target.forceResolution.y, 50);
+
+				Rect r = GUILayoutUtility.GetRect(1, 1, GUILayout.ExpandWidth(true), GUILayout.MinHeight(43));
+				EditorGUI.HelpBox(new Rect(r.x + 4, r.y, r.width - 8, r.height), "Ensure that the the game view resolution is the same as the override chosen here, otherwise the game window will not display correctly.", MessageType.Warning);
+
+				if (tk2dGuiUtility.EndChangeCheck())
+					cameraOverrideChanged = true;
+			}
+			else
+			{
+				EditorGUILayout.FloatField("Width", _target.TargetResolution.x);
+				EditorGUILayout.FloatField("Height", _target.TargetResolution.y);
+			}
 			EditorGUI.indentLevel--;
 		}
-		EditorGUILayout.Space();
-		
-		
-		EditorGUILayout.LabelField("Camera resolution", EditorStyles.boldLabel);
-		GUIContent toggleLabel = new GUIContent("Force Editor Resolution", 
-			"When enabled, forces the resolution in the editor regardless of the size of the game window.");
+
+		EditorGUILayout.LabelField("Viewport Clipping", EditorStyles.boldLabel);
 		EditorGUI.indentLevel++;
-
-		bool cameraOverrideChanged = false;
-
-		tk2dGuiUtility.BeginChangeCheck();
-		_target.forceResolutionInEditor = EditorGUILayout.Toggle(toggleLabel, _target.forceResolutionInEditor);
-		if (tk2dGuiUtility.EndChangeCheck()) cameraOverrideChanged = true;
-
-		if (_target.forceResolutionInEditor)
-		{
-			tk2dGuiUtility.BeginChangeCheck();
-
-			int selectedResolution = EditorGUILayout.Popup("Preset", 0, presetListStr);
-			if (selectedResolution != 0)
-			{
-				var preset = presets[selectedResolution - 1];
-				_target.forceResolution.x = preset.width;
-				_target.forceResolution.y = preset.height;
-				GUI.changed = true;
+		_target.viewportClippingEnabled = EditorGUILayout.Toggle("Enable", _target.viewportClippingEnabled);
+		if (_target.viewportClippingEnabled) {
+			_target.screenCamera = EditorGUILayout.ObjectField("Screen Camera", _target.screenCamera, typeof(Camera), true) as Camera;
+			if (_target.screenCamera == null) {
+				tk2dGuiUtility.InfoBox("Viewport Clipping disabled.\nAttach a link to a camera which displays the entire screen to enable viewport clipping.", tk2dGuiUtility.WarningLevel.Error);
 			}
-
-			_target.forceResolution.x = EditorGUILayout.IntField("Width", (int)_target.forceResolution.x);
-			_target.forceResolution.y = EditorGUILayout.IntField("Height", (int)_target.forceResolution.y);
-
-			// clamp to a sensible value
-			_target.forceResolution.x = Mathf.Max(_target.forceResolution.x, 50);
-			_target.forceResolution.y = Mathf.Max(_target.forceResolution.y, 50);
-
-			Rect r = GUILayoutUtility.GetRect(1, 1, GUILayout.ExpandWidth(true), GUILayout.MinHeight(43));
-			EditorGUI.HelpBox(new Rect(r.x + 4, r.y, r.width - 8, r.height), "Ensure that the the game view resolution is the same as the override chosen here, otherwise the game window will not display correctly.", MessageType.Warning);
-
-			if (tk2dGuiUtility.EndChangeCheck())
-				cameraOverrideChanged = true;
-		}
-		else
-		{
-			EditorGUILayout.FloatField("Width", _target.TargetResolution.x);
-			EditorGUILayout.FloatField("Height", _target.TargetResolution.y);
+			else if (_target.screenCamera.rect != new Rect(0, 0, 1, 1)) {
+				tk2dGuiUtility.InfoBox("Viewport Clipping disabled.\nLinked camera can't have a viewport set.", tk2dGuiUtility.WarningLevel.Error);
+			}
+			else {
+				EditorGUILayout.LabelField("Region");
+				EditorGUI.indentLevel++;
+				_target.viewportRegion.x = EditorGUILayout.IntField("X", (int)_target.viewportRegion.x);
+				_target.viewportRegion.y = EditorGUILayout.IntField("Y", (int)_target.viewportRegion.y);
+				_target.viewportRegion.z = EditorGUILayout.IntField("Width", (int)_target.viewportRegion.z);
+				_target.viewportRegion.w = EditorGUILayout.IntField("Height", (int)_target.viewportRegion.w);
+				EditorGUI.indentLevel--;
+			}
 		}
 		EditorGUI.indentLevel--;
 
@@ -252,6 +311,11 @@ public class tk2dCameraEditor : Editor
 		}
 		
 		EditorGUILayout.EndHorizontal();
+		
+		// {
+		// 	tk2dCamera cam = (tk2dCamera)target;
+		// 	cam.zoomScale = EditorGUILayout.FloatField("Zoom scale", cam.zoomScale);
+		// }
 	}
 
 	// Scene GUI handler - draws custom preview window, working around Unity bug
@@ -279,6 +343,8 @@ public class tk2dCameraEditor : Editor
     [MenuItem("GameObject/Create Other/tk2d/Camera", false, 14905)]
     static void DoCreateCameraObject()
 	{
+		bool setAsMain = (Camera.main == null);
+
 		GameObject go = tk2dEditorUtility.CreateGameObjectInScene("tk2dCamera");
 		go.transform.position = new Vector3(0, 0, -10.0f);
 		Camera camera = go.AddComponent<Camera>();
@@ -286,6 +352,11 @@ public class tk2dCameraEditor : Editor
 		camera.orthographicSize = 480.0f; // arbitrary large number
 		camera.farClipPlane = 1000.0f;
 		go.AddComponent<tk2dCamera>();
+
+		// Set as main camera if Camera.main is not set
+		if (setAsMain)
+			go.tag = "MainCamera";
+
 
 		Selection.activeGameObject = go;
 		Undo.RegisterCreatedObjectUndo(go, "Create tk2dCamera");

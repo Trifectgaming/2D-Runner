@@ -14,6 +14,7 @@ namespace tk2dEditor.Font
 		public int texX, texY, texW, texH;
 		public bool texFlipped;
 		public bool texOverride;
+		public int channel = 0;
 	};
 	
 	public class Kerning
@@ -27,6 +28,7 @@ namespace tk2dEditor.Font
 		public int scaleW = 0, scaleH = 0;
 		public int lineHeight = 0;
 		public int numPages = 0;
+		public bool isPacked = false;
 		
 		public List<Char> chars = new List<Char>();
 		public List<Kerning> kernings = new List<Kerning>();
@@ -49,6 +51,10 @@ namespace tk2dEditor.Font
 		static Vector2 ReadVector2Attributes(XmlNode node, string attributeX, string attributeY)
 		{
 			return new Vector2(ReadFloatAttribute(node, attributeX), ReadFloatAttribute(node, attributeY));
+		}
+		static bool HasAttribute(XmlNode node, string attribute)
+		{
+			return node.Attributes[attribute] != null;
 		}
 
 		public static Info Parse(string path)
@@ -145,6 +151,8 @@ namespace tk2dEditor.Font
 						return null;
 					}
 					fontInfo.numPages = pages;
+					if (FindKeyValue(tokens, "packed") != "")
+						fontInfo.isPacked = int.Parse(FindKeyValue(tokens, "packed")) != 0;
 					fontInfo.texturePaths = new string[pages];
 					for (int i = 0 ; i < pages; ++i)
 						fontInfo.texturePaths[i] = string.Empty;
@@ -168,6 +176,11 @@ namespace tk2dEditor.Font
 					thisChar.xoffset = int.Parse(FindKeyValue(tokens, "xoffset"));
 					thisChar.yoffset = int.Parse(FindKeyValue(tokens, "yoffset"));
 					thisChar.xadvance = int.Parse(FindKeyValue(tokens, "xadvance"));
+					if (fontInfo.isPacked)
+					{
+						int chnl = int.Parse(FindKeyValue(tokens, "chnl"));
+						thisChar.channel = (int)Mathf.Round(Mathf.Log(chnl) / Mathf.Log(2));
+					}
 					fontInfo.chars.Add(thisChar);
 				}
 				else if (tokens[0] == "kerning")
@@ -218,6 +231,7 @@ namespace tk2dEditor.Font
 	        target.version = tk2dFontData.CURRENT_VERSION; 
 	        target.lineHeight = lineHeight * scale;
 	        target.texelSize = new Vector2(scale, scale);
+			target.isPacked = fontInfo.isPacked;
 			
 			// Get number of characters (lastindex + 1)
 			int maxCharId = 0;
@@ -264,7 +278,7 @@ namespace tk2dEditor.Font
 					xoffset = 0;
 					yoffset = 0;
 				}
-
+				
 				// precompute required data
 				if (theChar.texOverride)
 				{
@@ -324,6 +338,7 @@ namespace tk2dEditor.Font
 					thisChar.flipped = false;
 				}
 	            thisChar.advance = xadvance * scale;
+				thisChar.channel = theChar.channel;
 				largestWidth = Mathf.Max(thisChar.advance, largestWidth);
 				
 				// Needs gradient data
@@ -383,6 +398,7 @@ namespace tk2dEditor.Font
 			// share null char, same pointer
 			var nullChar = new tk2dFontChar();
 			nullChar.gradientUv = new Vector2[4]; // this would be null otherwise
+			nullChar.channel = 0;
 			
 			target.largestWidth = largestWidth;
 			if (useDictionary)

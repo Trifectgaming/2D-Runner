@@ -227,7 +227,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 
 			// Loadable
 			bool allowSwitch = SpriteCollection.spriteCollection != null;
-			bool loadable = SpriteCollection.spriteCollection?tk2dSystemUtility.IsLoadableAsset(SpriteCollection.spriteCollection):false;
+			bool loadable = SpriteCollection.spriteCollection?SpriteCollection.loadable:false;
 			bool newLoadable = EditorGUILayout.Toggle("Loadable asset", loadable);
 			if (newLoadable != loadable)
 			{
@@ -245,9 +245,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 					}
 					else 
 					{
-						tk2dSystemUtility.UnmakeLoadableAsset(SpriteCollection.spriteCollection);
+						if (tk2dSystemUtility.IsLoadableAsset(SpriteCollection.spriteCollection))
+							tk2dSystemUtility.UnmakeLoadableAsset(SpriteCollection.spriteCollection);
 					}
 					loadable = newLoadable;
+					SpriteCollection.loadable = loadable;
 				}
 			}
 			if (loadable)
@@ -269,6 +271,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 				{
 					SpriteCollection.altMaterials = new Material[0];
 					SpriteCollection.atlasMaterials = new Material[0];
+					SpriteCollection.atlasTextures = new Texture2D[0];
 					SpriteCollection.spriteCollection = null;
 					foreach (tk2dSpriteCollectionPlatform plat in SpriteCollection.platforms)
 						plat.spriteCollection = null;
@@ -325,7 +328,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 					{
 						foreach (tk2dSpriteCollectionFont f in deletedSpriteCollection.fonts)
 							tk2dSystemUtility.UnmakeLoadableAsset(f.data);	
-						tk2dSystemUtility.UnmakeLoadableAsset(deletedSpriteCollection);
+						tk2dSystemUtility.UnmakeLoadableAsset(deletedSpriteCollection.spriteCollection);
 					}
 				}
 
@@ -376,7 +379,15 @@ namespace tk2dEditor.SpriteCollectionEditor
 			SpriteCollection.disableTrimming = EditorGUILayout.Toggle("Disable Trimming", SpriteCollection.disableTrimming);
 			SpriteCollection.normalGenerationMode = (tk2dSpriteCollection.NormalGenerationMode)EditorGUILayout.EnumPopup("Normal Generation", SpriteCollection.normalGenerationMode);
 	
-			SpriteCollection.useTk2dCamera = EditorGUILayout.Toggle("Use tk2dCamera", SpriteCollection.useTk2dCamera);
+			bool newUseTk2dCamera = EditorGUILayout.Toggle("Use tk2dCamera", SpriteCollection.useTk2dCamera);
+			if (SpriteCollection.useTk2dCamera != newUseTk2dCamera) {
+				SpriteCollection.useTk2dCamera = newUseTk2dCamera;
+				if (SpriteCollection.useTk2dCamera && SpriteCollection.physicsDepth < 1 &&
+					EditorUtility.DisplayDialog("Use tk2dCamera", "Would you like to adjust the collider depth to work better with the tk2dCamera? A depth of 1 or above works best.", "Yes", "No")) {
+					SpriteCollection.physicsDepth = 1;
+				}
+
+			}
 			if (!SpriteCollection.useTk2dCamera)
 			{
 				EditorGUI.indentLevel = EditorGUI.indentLevel + 1;
@@ -484,6 +495,9 @@ namespace tk2dEditor.SpriteCollectionEditor
 			
 			GUILayout.BeginVertical(tk2dEditorSkin.SC_BodyBackground, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
 			GUILayout.EndVertical();
+
+			Rect rect = GUILayoutUtility.GetLastRect();
+			tk2dGrid.Draw(rect);
 			
 			
 			int inspectorWidth = host.InspectorWidth;

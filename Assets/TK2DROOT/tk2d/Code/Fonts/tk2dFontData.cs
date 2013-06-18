@@ -25,6 +25,8 @@ public class tk2dFontChar
 	/// Spacing required for current character, mix with <see cref="tk2dFontKerning"/> to get true advance value
 	/// </summary>
     public float advance;
+
+    public int channel = 0; // channel data for multi channel fonts. Lookup into an array (R=0, G=1, B=2, A=3)
 }
 
 [System.Serializable]
@@ -91,6 +93,8 @@ public class tk2dFontData : MonoBehaviour
 	public bool hasPlatformData = false;
     public bool managedFont = false;
     public bool needMaterialInstance = false;
+    public bool isPacked = false;
+    public bool premultipliedAlpha = false;
 
     public tk2dSpriteCollectionData spriteCollection = null;
 

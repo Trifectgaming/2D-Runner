@@ -61,6 +61,7 @@ public class tk2dSpriteCollectionDefinition
 		Default,
 		BlackZeroAlpha,
 		Extend,
+		TileXY,
 	}
 	
 	public enum ColliderType
@@ -112,6 +113,7 @@ public class tk2dSpriteCollectionDefinition
 	public float anchorX, anchorY;
     public Object overrideMesh;
 
+    public bool doubleSidedSprite = false;
 	public bool customSpriteGeometry = false;
 	public tk2dSpriteColliderIsland[] geometryIslands = new tk2dSpriteColliderIsland[0];
 	
@@ -134,7 +136,7 @@ public class tk2dSpriteCollectionDefinition
 	public ColliderType colliderType = ColliderType.UserDefined;
 	public Vector2 boxColliderMin, boxColliderMax;
 	public tk2dSpriteColliderIsland[] polyColliderIslands;
-	public PolygonColliderCap polyColliderCap = PolygonColliderCap.None;
+	public PolygonColliderCap polyColliderCap = PolygonColliderCap.FrontAndBack;
 	public bool colliderConvex = false;
 	public bool colliderSmoothSphereCollisions = false;
 	public ColliderColor colliderColor = ColliderColor.Default;
@@ -153,6 +155,7 @@ public class tk2dSpriteCollectionDefinition
 		anchorY = src.anchorY;
 		overrideMesh = src.overrideMesh;
 		
+		doubleSidedSprite = src.doubleSidedSprite;
 		customSpriteGeometry = src.customSpriteGeometry;
 		geometryIslands = src.geometryIslands;
 		
@@ -239,6 +242,8 @@ public class tk2dSpriteCollectionDefinition
 		if (pad != src.pad) return false;
 		if (extraPadding != src.extraPadding) return false;
 
+		if (doubleSidedSprite != src.doubleSidedSprite) return false;
+
 		if (customSpriteGeometry != src.customSpriteGeometry) return false;
 		if (geometryIslands != src.geometryIslands) return false;
 		if (geometryIslands != null && src.geometryIslands != null)
@@ -291,7 +296,7 @@ public class tk2dSpriteCollectionDefault
 	public tk2dSpriteCollectionDefinition.Anchor anchor = tk2dSpriteCollectionDefinition.Anchor.MiddleCenter;
 	public tk2dSpriteCollectionDefinition.Pad pad = tk2dSpriteCollectionDefinition.Pad.Default;	
 	
-	public tk2dSpriteCollectionDefinition.ColliderType colliderType = tk2dSpriteCollectionDefinition.ColliderType.ForceNone;
+	public tk2dSpriteCollectionDefinition.ColliderType colliderType = tk2dSpriteCollectionDefinition.ColliderType.UserDefined;
 }
 
 [System.Serializable]
@@ -333,7 +338,7 @@ public class tk2dSpriteSheetSource
 	public int version = 0;
 	public const int CURRENT_VERSION = 1;
 
-	public tk2dSpriteCollectionDefinition.ColliderType colliderType = tk2dSpriteCollectionDefinition.ColliderType.ForceNone;
+	public tk2dSpriteCollectionDefinition.ColliderType colliderType = tk2dSpriteCollectionDefinition.ColliderType.UserDefined;
 	
 	public void CopyFrom(tk2dSpriteSheetSource src)
 	{
@@ -445,6 +450,11 @@ public class tk2dSpriteCollectionPlatform
 	public string name = "";
 	public tk2dSpriteCollection spriteCollection = null;
 	public bool Valid { get { return name.Length > 0 && spriteCollection != null; } }
+	public void CopyFrom(tk2dSpriteCollectionPlatform source)
+	{
+		name = source.name;
+		spriteCollection = source.spriteCollection;
+	}
 }
 
 [AddComponentMenu("2D Toolkit/Backend/tk2dSpriteCollection")]
@@ -475,6 +485,7 @@ public class tk2dSpriteCollection : MonoBehaviour
 	public List<tk2dSpriteCollectionPlatform> platforms = new List<tk2dSpriteCollectionPlatform>();
 	public bool managedSpriteCollection = false; // true when generated and managed by system, eg. platform specific data
 	public bool HasPlatformData { get { return platforms.Count > 1; } }
+	public bool loadable = false;
 	
 	public int maxTextureSize = 1024;
 	
@@ -509,7 +520,7 @@ public class tk2dSpriteCollection : MonoBehaviour
 	
 	public bool useTk2dCamera = false;
 	public int targetHeight = 640;
-	public float targetOrthoSize = 1.0f;
+	public float targetOrthoSize = 10.0f;
 	public float globalScale = 1.0f;
 	
 	// Texture settings

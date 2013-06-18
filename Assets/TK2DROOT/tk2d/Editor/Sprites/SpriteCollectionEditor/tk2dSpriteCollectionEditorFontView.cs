@@ -33,7 +33,10 @@ namespace tk2dEditor.SpriteCollectionEditor
 			if (font.texture != null)
 			{
 				font.texture.filterMode = FilterMode.Point;
-				GUILayout.Label(font.texture);
+				int border = 16;
+				Rect rect = GUILayoutUtility.GetRect(border + font.texture.width, border + font.texture.height, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+				tk2dGrid.Draw(rect);
+				GUI.Label(new Rect(border + rect.x, border + rect.y, font.texture.width, font.texture.height), font.texture);
 			}
 			GUILayout.EndScrollView();
 			GUILayout.EndVertical();

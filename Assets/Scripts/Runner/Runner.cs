@@ -21,8 +21,9 @@ public abstract class Runner : MonoBehaviour {
     private Vector3 _startPosition;
     private static float _distanceTraveled;
     private static int _boosts;
-    private tk2dAnimatedSprite _sprite;
-    public CollisionInfo collisionInfo = CollisionInfo.Empty;
+    private tk2dSprite _sprite;
+    //private CollisionInfo collisionInfo = CollisionInfo.Empty;
+    private tk2dSpriteAnimator _spriteAnimator;
 
 
     public static float DistanceTraveled
@@ -80,11 +81,12 @@ public abstract class Runner : MonoBehaviour {
         Boosts = 0;
         _startPosition = _transform.localPosition;
         _rigidBody.isKinematic = true;
-        _sprite = GetComponentInChildren<tk2dAnimatedSprite>();
+        _sprite = GetComponentInChildren<tk2dSprite>();
+        _spriteAnimator = GetComponentInChildren<tk2dSpriteAnimator>();
         Detectors.Initialize(_transform);
         StartCoroutine(runnerStateMachine.Initialize());
         StartCoroutine(runnerEffectEngine.Initialize());
-        runnerAnim.Initialize(_sprite);
+        runnerAnim.Initialize(_sprite, _spriteAnimator);
         motor.Initialize();
         OnGameStart(new GameStartMessage());
         Debug.Log("Using Fixed Step " + UseFixedStep);
@@ -95,21 +97,24 @@ public abstract class Runner : MonoBehaviour {
         while (inputController.QueuedStates.Count > 0)
         {
             DistanceTraveled = _transform.localPosition.x;
-            UpdateCollisionInfo();
+            var collisionInfo = UpdateCollisionInfo();
             runnerStateMachine.Transition(inputController.QueuedStates.Dequeue(), collisionInfo, _rigidBody);
             runnerAnim.Animate(runnerStateMachine.currentState);
         }
     }
 
-    private void UpdateCollisionInfo()
+    private CollisionInfo UpdateCollisionInfo()
     {
         var bounds = _sprite.GetBounds();
-        var position = _transform.position;
         Detectors.Resize(bounds, _transform);
-        collisionInfo.Above = Detectors.Top.Colliding;
-        collisionInfo.Below = Detectors.Bottom.Colliding;
-        collisionInfo.Left = Detectors.Back.Colliding;
-        collisionInfo.Right = Detectors.Front.Colliding;
+        var collisionInfo = new CollisionInfo
+                                {
+                                    Above = Detectors.Top.Colliding,
+                                    Below = Detectors.Bottom.Colliding,
+                                    Left = Detectors.Back.Colliding,
+                                    Right = Detectors.Front.Colliding
+                                };
+        return collisionInfo;
         //Debug.Log(collisionInfo);
     }
 
@@ -155,10 +160,4 @@ public abstract class Runner : MonoBehaviour {
     {
         Boosts++;
     }
-}
-
-public class RunnerEventMessage
-{
-    public string Effect;
-    public string Audio;
 }

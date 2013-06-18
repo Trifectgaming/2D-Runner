@@ -55,6 +55,7 @@ MonoBehaviour:
   targetOrthoSize: 1
   gradientCount: 8
   manageMaterial: 1
+  loadable: 0
   charPadX: 0
   data: {fileID: 11400000, guid: e7a6b09a73c6b2b4f8060096ddbd3b5e, type: 2}
 --- !u!1002 &11400001

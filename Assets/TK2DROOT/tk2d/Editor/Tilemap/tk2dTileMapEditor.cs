@@ -221,12 +221,6 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 			tileMap.data.tilePrefabs[selectedDataTile] = EditorGUILayout.ObjectField("Prefab", tileMap.data.tilePrefabs[selectedDataTile], typeof(Object), false);
 		}
 		
-		if (newSelectedPrefab != selectedDataTile)		
-		{
-			selectedDataTile = newSelectedPrefab;
-			Repaint();
-		}
-
 		// Add all additional tilemap data
 		var allTileInfos = tileMap.data.GetOrCreateTileInfo(SpriteCollection.Count);
 		if (selectedDataTile >= 0 && selectedDataTile < allTileInfos.Length)
@@ -237,6 +231,12 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 			tileInfo.stringVal = EditorGUILayout.TextField("String", tileInfo.stringVal);
 			tileInfo.intVal = EditorGUILayout.IntField("Int", tileInfo.intVal);
 			tileInfo.floatVal = EditorGUILayout.FloatField("Float", tileInfo.floatVal);
+		}
+
+		if (newSelectedPrefab != selectedDataTile)		
+		{
+			selectedDataTile = newSelectedPrefab;
+			Repaint();
 		}
 	}
 	
@@ -625,8 +625,8 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 		{
 			EditorGUI.indentLevel++;
 			
-			width = Mathf.Clamp(EditorGUILayout.IntField("Width", width), 1, 512);
-			height = Mathf.Clamp(EditorGUILayout.IntField("Height", height), 1, 512);
+			width = Mathf.Clamp(EditorGUILayout.IntField("Width", width), 1, tk2dEditor.TileMap.TileMapUtility.MaxWidth);
+			height = Mathf.Clamp(EditorGUILayout.IntField("Height", height), 1, tk2dEditor.TileMap.TileMapUtility.MaxHeight);
 			partitionSizeX = Mathf.Clamp(EditorGUILayout.IntField("PartitionSizeX", partitionSizeX), 4, 32);
 			partitionSizeY = Mathf.Clamp(EditorGUILayout.IntField("PartitionSizeY", partitionSizeY), 4, 32);
 			

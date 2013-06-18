@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[AddComponentMenu("2D Toolkit/Extra/tk2dPixelPerfectHelper")]
+[AddComponentMenu("2D Toolkit/Deprecated/Extra/tk2dPixelPerfectHelper")]
 /// <summary>
 /// Allows remapping resolution and rescaling based on settings in this class. Deprecated and replaced by <see cref="tk2dCamera"/>.
 /// </summary>

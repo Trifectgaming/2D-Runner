@@ -35,7 +35,7 @@ Shader "tk2d/PremulVertexColor"
 			{
 				float4 vertex : POSITION;
 				fixed4 color : COLOR;
-				half2 texcoord : TEXCOORD0;
+				float2 texcoord : TEXCOORD0;
 			};
 
 			v2f_vct vert_vct(vin_vct v)

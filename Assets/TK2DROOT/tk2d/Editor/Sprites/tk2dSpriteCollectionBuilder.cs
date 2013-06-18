@@ -163,24 +163,32 @@ public class tk2dSpriteCollectionBuilder
 		return Mathf.Max(0, basePadAmount);
 	}
 
-	static void PadTexture(Texture2D tex, int pad, bool stretchPad)
+	static void PadTexture(Texture2D tex, int pad, tk2dSpriteCollectionDefinition.Pad padMode)
 	{
 		Color bgColor = new Color(0,0,0,0);
-
+		Color c0 = bgColor, c1 = bgColor;
 		for (int y = 0; y < pad; ++y)
 		{
 			for (int x = 0; x < tex.width; ++x)
 			{
-				tex.SetPixel(x, y, stretchPad?tex.GetPixel(x, pad):bgColor);
-				tex.SetPixel(x, tex.height - 1 - y, stretchPad?tex.GetPixel(x, tex.height - 1 - pad):bgColor);
+				switch (padMode) {
+					case tk2dSpriteCollectionDefinition.Pad.Extend: c0 = tex.GetPixel(x, pad); c1 = tex.GetPixel(x, tex.height - 1 - pad); break;
+					case tk2dSpriteCollectionDefinition.Pad.TileXY: c1 = tex.GetPixel(x, pad); c0 = tex.GetPixel(x, tex.height - 1 - pad); break;
+				}
+				tex.SetPixel(x, y, c0);
+				tex.SetPixel(x, tex.height - 1 - y, c1);
 			}
 		}
 		for (int x = 0; x < pad; ++x)
 		{
 			for (int y = 0; y < tex.height; ++y)
 			{
-				tex.SetPixel(x, y, stretchPad?tex.GetPixel(pad, y):bgColor);
-				tex.SetPixel(tex.width - 1 - x, y, stretchPad?tex.GetPixel(tex.width - 1 - pad, y):bgColor);
+				switch (padMode) {
+					case tk2dSpriteCollectionDefinition.Pad.Extend: c0 = tex.GetPixel(pad, y); c1 = tex.GetPixel(tex.width - 1 - pad, y); break;
+					case tk2dSpriteCollectionDefinition.Pad.TileXY: c1 = tex.GetPixel(pad, y); c0 = tex.GetPixel(tex.width - 1 - pad, y); break;
+				}
+				tex.SetPixel(x, y, c0);
+				tex.SetPixel(tex.width - 1 - x, y, c1);
 			}
 		}
 	}
@@ -232,7 +240,25 @@ public class tk2dSpriteCollectionBuilder
 		}
 	}
 
-	static Texture2D ProcessTexture(tk2dSpriteCollection settings, bool additive, bool stretchPad, bool disableTrimming, bool isInjectedTexture, Texture2D srcTex, int sx, int sy, int tw, int th, ref SpriteLut spriteLut, int padAmount)
+	static void DeleteUnusedAssets<T>( List<T> oldAssets, T[] newAssets ) where T : UnityEngine.Object
+	{
+		foreach (T asset in oldAssets)
+		{
+			bool found = false;
+			foreach (T t in newAssets)
+			{
+				if (t == asset)
+				{
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				UnityEditor.AssetDatabase.DeleteAsset(UnityEditor.AssetDatabase.GetAssetPath(asset));
+		}
+	}
+
+	static Texture2D ProcessTexture(tk2dSpriteCollection settings, bool additive, tk2dSpriteCollectionDefinition.Pad padMode, bool disableTrimming, bool isInjectedTexture, Texture2D srcTex, int sx, int sy, int tw, int th, ref SpriteLut spriteLut, int padAmount)
 	{
 		// Can't have additive without premultiplied alpha
 		if (!settings.premultipliedAlpha) additive = false;
@@ -315,6 +341,7 @@ public class tk2dSpriteCollectionBuilder
 			}
 			
 			Texture2D dtex = new Texture2D(w1 + padAmount * 2, h1 + padAmount * 2);
+			dtex.hideFlags = HideFlags.DontSave;
 			for (int x = 0; x < w1; ++x)
 			{
 				for (int y = 0; y < h1; ++y)
@@ -338,7 +365,7 @@ public class tk2dSpriteCollectionBuilder
 				}
 			}
 			
-			PadTexture(dtex, padAmount, stretchPad);
+			PadTexture(dtex, padAmount, padMode);
 			switch (textureCompression)
 			{
 			case tk2dSpriteCollection.TextureCompression.Dithered16Bit_NoAlpha:
@@ -417,6 +444,23 @@ public class tk2dSpriteCollectionBuilder
 		}	
 	}
 
+	static bool CheckSourceAssets(tk2dSpriteCollection gen)
+	{
+		string missingTextures = "";
+
+		foreach (var param in gen.textureParams) {
+			if (param.texture == null && param.name.Length > 0) {
+				missingTextures += "  Missing texture: " + param.name;
+			}
+		}
+
+		if (missingTextures.Length > 0) {
+			Debug.LogError(string.Format("Error in sprite collection '{0}'\n{1}", gen.name, missingTextures));
+		}
+
+		return missingTextures.Length == 0;
+	}
+
     public static bool Rebuild(tk2dSpriteCollection gen)
     {
 		// avoid "recursive" build being triggered by texture watcher
@@ -437,6 +481,11 @@ public class tk2dSpriteCollectionBuilder
 		currentBuild = gen;
 		gen.Upgrade(); // upgrade if necessary. could be invoked by texture watcher.
 		
+		// Check all source assets are present, fail otherwise
+		if (!CheckSourceAssets(gen)) {
+			return false;
+		}
+
 		// Get some sensible paths to work with
 		string dataDirName = GetOrCreateDataPath(gen) + "/";
 		
@@ -522,6 +571,7 @@ public class tk2dSpriteCollectionBuilder
 				data.materialInst = null;
 				data.fontPlatforms = platformNames.ToArray();
 				data.fontPlatformGUIDs = new string[platformNames.Count];
+				data.premultipliedAlpha = gen.premultipliedAlpha;
 				for (int i = 0; i < gen.platforms.Count; ++i)
 				{
 					tk2dSpriteCollectionPlatform platform = gen.platforms[i];
@@ -545,6 +595,7 @@ public class tk2dSpriteCollectionBuilder
 			gen.spriteCollection.hasPlatformData = true;
 			gen.spriteCollection.spriteCollectionPlatforms = platformNames.ToArray();
 			gen.spriteCollection.spriteCollectionPlatformGUIDs = platformGUIDs.ToArray();
+			gen.spriteCollection.ResetPlatformData();
 
 			EditorUtility.SetDirty(gen);
 			EditorUtility.SetDirty(gen.spriteCollection);
@@ -554,6 +605,8 @@ public class tk2dSpriteCollectionBuilder
 			tk2dEditorUtility.CommitIndex();
 
 			AssetDatabase.SaveAssets();
+			
+			RefreshExistingAssets(gen.spriteCollection);
 			
 			ResetCurrentBuild();
 			return true;
@@ -586,6 +639,7 @@ public class tk2dSpriteCollectionBuilder
 
 		// blank texture used when texture has been deleted
 		Texture2D blankTexture = new Texture2D(2, 2);
+		blankTexture.hideFlags = HideFlags.DontSave;
 		blankTexture.SetPixel(0, 0, Color.magenta);
 		blankTexture.SetPixel(0, 1, Color.yellow);
 		blankTexture.SetPixel(1, 0, Color.cyan);
@@ -594,6 +648,8 @@ public class tk2dSpriteCollectionBuilder
 		
 		// make local texture sources
 		List<Texture2D> allocatedTextures = new List<Texture2D>();
+		allocatedTextures.Add( blankTexture );
+
 		sourceTextures = new Texture2D[gen.textureParams.Length];
 		for (int i = 0; i < gen.textureParams.Length; ++i)
 		{
@@ -601,6 +657,7 @@ public class tk2dSpriteCollectionBuilder
 			if (param.extractRegion && param.texture != null)
 			{
 				Texture2D localTex = new Texture2D(param.regionW, param.regionH);
+				localTex.hideFlags = HideFlags.DontSave;
 				for (int y = 0; y < param.regionH; ++y)
 				{
 					for (int x = 0; x < param.regionW; ++x)
@@ -669,7 +726,7 @@ public class tk2dSpriteCollectionBuilder
 						diceLut.sourceTex = srcTex;
 						diceLut.isDuplicate = false; // duplicate diced textures can be chopped up differently, so don't detect dupes here
 
-						Texture2D dest = ProcessTexture(gen, gen.textureParams[i].additive, true, gen.textureParams[i].disableTrimming, false, srcTex, sx, sy, tw, th, ref diceLut, GetPadAmount(gen, i));
+						Texture2D dest = ProcessTexture(gen, gen.textureParams[i].additive, tk2dSpriteCollectionDefinition.Pad.Extend, gen.textureParams[i].disableTrimming, false, srcTex, sx, sy, tw, th, ref diceLut, GetPadAmount(gen, i));
 						if (dest)
 						{
 							diceLut.atlasIndex = numTexturesToAtlas++;
@@ -704,16 +761,14 @@ public class tk2dSpriteCollectionBuilder
 				if (!lut.isDuplicate)
 				{
 					lut.atlasIndex = numTexturesToAtlas++;
-					bool stretchPad = false;
-					if (gen.textureParams[i].pad == tk2dSpriteCollectionDefinition.Pad.Extend) stretchPad = true;
-
-					Texture2D dest = ProcessTexture(gen, gen.textureParams[i].additive, stretchPad, gen.textureParams[i].disableTrimming, false, currentTexture, 0, 0, currentTexture.width, currentTexture.height, ref lut, GetPadAmount(gen, i));
+					Texture2D dest = ProcessTexture(gen, gen.textureParams[i].additive, gen.textureParams[i].pad, gen.textureParams[i].disableTrimming, false, currentTexture, 0, 0, currentTexture.width, currentTexture.height, ref lut, GetPadAmount(gen, i));
 					if (dest == null)
 					{
 						// fall back to a tiny blank texture
 						lut.tex = new Texture2D(1, 1);
+						lut.tex.hideFlags = HideFlags.DontSave;
 						lut.tex.SetPixel(0, 0, new Color( 0, 0, 0, 0 ));
-						PadTexture(lut.tex, GetPadAmount(gen, i), stretchPad);
+						PadTexture(lut.tex, GetPadAmount(gen, i), gen.textureParams[i].pad);
 						lut.tex.Apply();
 
 						lut.rx = currentTexture.width / 2; lut.ry = currentTexture.height / 2;
@@ -745,7 +800,7 @@ public class tk2dSpriteCollectionBuilder
 					SpriteLut lut = new SpriteLut();
 					
 					int cy = font.flipTextureY?c.y:(fontInfo.scaleH - c.y - c.height);
-					Texture2D dest = ProcessTexture(gen, false, false, false, true,
+					Texture2D dest = ProcessTexture(gen, false, tk2dSpriteCollectionDefinition.Pad.Default, false, true,
 						font.texture, c.x, cy, c.width, c.height, 
 						ref lut, GetPadAmount(gen, -1));
 					if (dest == null)
@@ -774,6 +829,7 @@ public class tk2dSpriteCollectionBuilder
 					int dims = 5;
 					SpriteLut lut = new SpriteLut();
 					lut.tex = new Texture2D(dims, dims);
+					lut.tex.hideFlags = HideFlags.DontSave;
 					for (int y = 0; y < dims; ++y)
 						for (int x = 0; x < dims; ++x)
 							lut.tex.SetPixel(x, y, Color.clear);
@@ -836,7 +892,12 @@ public class tk2dSpriteCollectionBuilder
 			}
 		}
 		
+
+
 		// Fill atlas textures
+		List<Material> oldAtlasMaterials = new List<Material>(gen.atlasMaterials);
+		List<Texture2D> oldAtlasTextures = new List<Texture2D>(gen.atlasTextures);
+
 		tk2dEditor.Atlas.Data[] atlasData = atlasBuilder.GetAtlasData();
 		System.Array.Resize(ref gen.atlasTextures, atlasData.Length);
 		System.Array.Resize(ref gen.atlasMaterials, atlasData.Length);
@@ -847,13 +908,11 @@ public class tk2dSpriteCollectionBuilder
 		}
 		for (int atlasIndex = 0; atlasIndex < atlasData.Length; ++atlasIndex)
 		{
-	        Texture2D tex = new Texture2D(64, 64, TextureFormat.ARGB32, false);
-
+	        Texture2D tex = new Texture2D(atlasData[atlasIndex].width, atlasData[atlasIndex].height, TextureFormat.ARGB32, false);
+	        tex.hideFlags = HideFlags.DontSave;
 			gen.atlasWastage = (1.0f - atlasData[0].occupancy) * 100.0f;
 			gen.atlasWidth = atlasData[0].width;
 			gen.atlasHeight = atlasData[0].height;
-
-			tex.Resize(atlasData[atlasIndex].width, atlasData[atlasIndex].height);
 
 			// Clear texture, unsure if this is REALLY necessary
 			// Turns out it is
@@ -902,10 +961,11 @@ public class tk2dSpriteCollectionBuilder
 			fs.Write(bytes, 0, bytes.Length);
 			fs.Close();
 
+			Object.DestroyImmediate(tex);
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();
-			Object.DestroyImmediate(tex);
-			
+
+			// Get a reference to the texture asset
 			tex = AssetDatabase.LoadAssetAtPath(texturePath, typeof(Texture2D)) as Texture2D;
 			gen.atlasTextures[atlasIndex] = tex;
 
@@ -944,7 +1004,7 @@ public class tk2dSpriteCollectionBuilder
 			coll.textures[i] = gen.atlasTextures[i];
 		}
 		
-		if (gen.atlasMaterials.Length == 1)
+		if (!gen.allowMultipleAtlases && gen.altMaterials.Length > 1)
 		{
 			coll.materials = new Material[gen.altMaterials.Length];
 	        for (int i = 0; i < gen.altMaterials.Length; ++i)
@@ -957,6 +1017,10 @@ public class tk2dSpriteCollectionBuilder
 				coll.materials[i] = gen.atlasMaterials[i];
 		}
 		
+		// Delete unused atlas textures & materials
+		DeleteUnusedAssets( oldAtlasMaterials, gen.atlasMaterials );
+		DeleteUnusedAssets( oldAtlasTextures, gen.atlasTextures );
+		
 		// Wipe out legacy data
 		coll.material = null;
 		
@@ -966,9 +1030,7 @@ public class tk2dSpriteCollectionBuilder
 		coll.materialIdsValid = true;
 		coll.spriteCollectionGUID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(gen));
 		coll.spriteCollectionName = gen.name;
-		coll.invOrthoSize = 1.0f / gen.targetOrthoSize;
-		coll.halfTargetHeight = gen.targetHeight * 0.5f;
-		
+
 		int buildKey = Random.Range(0, int.MaxValue);
 		while (buildKey == coll.buildKey)
 		{
@@ -1002,10 +1064,14 @@ public class tk2dSpriteCollectionBuilder
 		float scale = 1.0f;
 		if (gen.useTk2dCamera)
 		{
+			coll.invOrthoSize = 1.0f;
+			coll.halfTargetHeight = 1.0f;
 			scale = 1.0f * gen.globalScale;
 		}
 		else
 		{
+			coll.invOrthoSize = 1.0f / gen.targetOrthoSize;
+			coll.halfTargetHeight = gen.targetHeight * 0.5f;
 			scale = (2.0f * gen.targetOrthoSize / gen.targetHeight) * gen.globalScale;
 		}
 		
@@ -1053,14 +1119,15 @@ public class tk2dSpriteCollectionBuilder
 				font.data.gradientTexture = null;
 				font.data.textureGradients = false;
 			}
-			
+
+			font.data.premultipliedAlpha = gen.premultipliedAlpha;
 			font.data.spriteCollection = gen.spriteCollection;
 			font.data.material = coll.materials[font.materialId];
 			font.editorData.material = coll.materials[font.materialId];
 
 			font.data.invOrthoSize = coll.invOrthoSize;
 			font.data.halfTargetHeight = coll.halfTargetHeight;
-			font.data.texelSize = new Vector3(scale, scale, 0.0f);
+			font.data.texelSize = new Vector3(scale / gen.globalScale, scale / gen.globalScale, 0.0f);
 
 			// Managed?
 			font.data.managedFont = gen.managedSpriteCollection;
@@ -1075,7 +1142,7 @@ public class tk2dSpriteCollectionBuilder
 			tk2dEditorUtility.CommitIndex();
 
 			// Loadable?
-			if (!tk2dSystemUtility.IsLoadableAsset(font.data))
+			if (font.editorData.loadable || font.data.managedFont)
 				tk2dSystemUtility.MakeLoadableAsset(font.data, "");
 		}
 		
@@ -1083,18 +1150,21 @@ public class tk2dSpriteCollectionBuilder
 		UpdateVertexCache(gen, scale, atlasData, coll, spriteLuts);
 
 		// Free tmp textures
-		foreach (var sprite in spriteLuts)
-		{
-			if (!sprite.isDuplicate)
+		foreach (var sprite in spriteLuts) {
+			if (!sprite.isDuplicate) {
 				Object.DestroyImmediate(sprite.tex);
+			}
 		}
-		foreach (var tex in allocatedTextures)
+		foreach (var tex in allocatedTextures) {
 			Object.DestroyImmediate(tex);
+		}
 	
         // refresh existing
+		gen.spriteCollection.ResetPlatformData();
 		RefreshExistingAssets(gen.spriteCollection);
 		
 		// save changes
+		gen.spriteCollection.loadable = gen.loadable;
 		gen.spriteCollection.assetName = gen.assetName;
 		gen.spriteCollection.managedSpriteCollection = gen.managedSpriteCollection;
 		gen.spriteCollection.needMaterialInstance = gen.managedSpriteCollection;
@@ -1110,10 +1180,8 @@ public class tk2dSpriteCollectionBuilder
 		tk2dEditorUtility.GetOrCreateIndex().AddSpriteCollectionData(gen.spriteCollection);
 		tk2dEditorUtility.CommitIndex();
 	
-		Object.DestroyImmediate(blankTexture);
-
 		// update resource system
-		if (tk2dSystemUtility.IsLoadableAsset(gen.spriteCollection))
+		if (gen.spriteCollection.loadable)
 		{
 			tk2dSystemUtility.UpdateAssetName(gen.spriteCollection, gen.assetName);
 		}
@@ -1383,7 +1451,7 @@ public class tk2dSpriteCollectionBuilder
 				// build mesh
 				if (_lut.isSplit)
 				{
-					coll.spriteDefinitions[i].flipped = false; // each split could be rotated, but not consistently
+					coll.spriteDefinitions[i].flipped = tk2dSpriteDefinition.FlipMode.None; // each split could be rotated, but not consistently
 					
 					for (int j = 0; j < spriteLuts.Count; ++j)
 					{
@@ -1452,7 +1520,7 @@ public class tk2dSpriteCollectionBuilder
 				}
 				else if (thisTexParam.customSpriteGeometry)
 				{
-					coll.spriteDefinitions[i].flipped = atlasEntry.flipped;
+					coll.spriteDefinitions[i].flipped = atlasEntry.flipped ? tk2dSpriteDefinition.FlipMode.Tk2d : tk2dSpriteDefinition.FlipMode.None;
 					
 					List<int> indices = new List<int>();
 					foreach (var island in thisTexParam.geometryIslands)
@@ -1502,7 +1570,7 @@ public class tk2dSpriteCollectionBuilder
 				}
 				else
 				{
-					coll.spriteDefinitions[i].flipped = atlasEntry.flipped;
+					coll.spriteDefinitions[i].flipped = atlasEntry.flipped ? tk2dSpriteDefinition.FlipMode.Tk2d : tk2dSpriteDefinition.FlipMode.None;
 					
 					float x0 = _lut.rx / texWidth;
 					float y0 = _lut.ry / texHeight;
@@ -1530,6 +1598,14 @@ public class tk2dSpriteCollectionBuilder
 	                    uvs.Add(new Vector2(v1.x,v0.y));
 	                    uvs.Add(new Vector2(v0.x,v1.y));
 	                    uvs.Add(new Vector2(v1.x,v1.y));
+	                }
+
+					if (thisTexParam.doubleSidedSprite)
+					{
+						positions.Add(positions[3]); uvs.Add(uvs[3]);
+						positions.Add(positions[1]); uvs.Add(uvs[1]);
+						positions.Add(positions[2]); uvs.Add(uvs[2]);
+						positions.Add(positions[0]); uvs.Add(uvs[0]);
 	                }
 				}
 
@@ -1588,9 +1664,12 @@ public class tk2dSpriteCollectionBuilder
 					
 					coll.spriteDefinitions[i].normals = tmpMesh.normals;
 
-					if (gen.normalGenerationMode != tk2dSpriteCollection.NormalGenerationMode.NormalsOnly)
+					if (gen.normalGenerationMode == tk2dSpriteCollection.NormalGenerationMode.NormalsAndTangents)
 					{
-						coll.spriteDefinitions[i].tangents = tmpMesh.tangents;
+						Vector4[] tangents = new Vector4[tmpMesh.normals.Length];
+						for (int t = 0; t < tangents.Length; ++t)
+							tangents[t] = new Vector4(1, 0, 0, 1);
+						coll.spriteDefinitions[i].tangents = tangents;
 					}
 				}
 			}
@@ -1599,6 +1678,7 @@ public class tk2dSpriteCollectionBuilder
 			if (coll.allowMultipleAtlases)
 			{
 				coll.spriteDefinitions[i].material = gen.atlasMaterials[atlasIndex];
+				coll.spriteDefinitions[i].materialId = atlasIndex;
 			}
 			else
 			{
@@ -1625,7 +1705,7 @@ public class tk2dSpriteCollectionBuilder
 			coll.spriteDefinitions[i].boundsData[1] = (boundsMax - boundsMin);
 
 			// this is the dimension of exactly one pixel, scaled to match sprite dimensions and scale
-			coll.spriteDefinitions[i].texelSize = new Vector3(scale * thisTexParam.scale.x, scale * thisTexParam.scale.y, 0.0f);
+			coll.spriteDefinitions[i].texelSize = new Vector3(scale * thisTexParam.scale.x / gen.globalScale, scale * thisTexParam.scale.y / gen.globalScale, 0.0f);
 			
 			coll.spriteDefinitions[i].untrimmedBoundsData = new Vector3[2];
 			if (mesh)

@@ -9,6 +9,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 		enum CustomMeshType {
 			Default,
 			Diced,
+			DoubleSided,
 			Custom
 		};
 		
@@ -320,15 +321,21 @@ namespace tk2dEditor.SpriteCollectionEditor
 			CustomMeshType meshType = CustomMeshType.Default;
 			if (param.customSpriteGeometry) meshType = CustomMeshType.Custom;
 			else if (param.dice) meshType = CustomMeshType.Diced;
+			else if (param.doubleSidedSprite) meshType = CustomMeshType.DoubleSided;
 			CustomMeshType newMeshType = (CustomMeshType)EditorGUILayout.EnumPopup("Render Mesh", meshType);
 			if (newMeshType != meshType)
 			{
 				// Fix up
+				param.customSpriteGeometry = false;
+				param.dice = false;
+				param.doubleSidedSprite = false;
+
 				switch (newMeshType)
 				{
-				case CustomMeshType.Custom: param.customSpriteGeometry = true; 	param.dice = false; break;
-				case CustomMeshType.Diced:	param.customSpriteGeometry = false;	param.dice = true;	break;
-				case CustomMeshType.Default:param.customSpriteGeometry = false;	param.dice = false;	break;
+				case CustomMeshType.Custom: param.customSpriteGeometry = true; break;
+				case CustomMeshType.Diced:	param.dice = true;	break;
+				case CustomMeshType.Default: break;
+				case CustomMeshType.DoubleSided: param.doubleSidedSprite = true; break;
 				}
 
 				// Automatically switch to custom geom edit mode when explicitly switched

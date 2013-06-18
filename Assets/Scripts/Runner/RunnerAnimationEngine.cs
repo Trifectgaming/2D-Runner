@@ -5,18 +5,13 @@ using Assets.Scripts;
 
 public class RunnerAnimationEngine
 {
-    private tk2dAnimatedSprite _sprite;
-    private HashSet<string> _existingAnimations; 
-
-    public void Initialize(tk2dAnimatedSprite sprite)
-    {
-        _sprite = sprite;
-        _existingAnimations = new HashSet<string>(_sprite.anim.clips.Select(c => c.name).ToArray());
-    }
+    private tk2dSpriteAnimator _animator;
+    private HashSet<string> _existingAnimations;
+    private tk2dSprite _sprite;
 
     public void Animate(RunnerState runnerState)
     {
-        if (_sprite == null)
+        if (_animator == null)
             throw new InvalidOperationException("Animation must be initialized");
         if (_existingAnimations.Contains(runnerState.ToString()))
             ChangeAnimation(runnerState.ToString());
@@ -24,7 +19,14 @@ public class RunnerAnimationEngine
 
     private void ChangeAnimation(string anim)
     {
-        if ((_sprite.CurrentClip != null ? _sprite.CurrentClip.name : null) != anim)
-            _sprite.Play(anim);
+        if ((_animator.CurrentClip != null ? _animator.CurrentClip.name : null) != anim)
+            _animator.Play(anim);
+    }
+
+    public void Initialize(tk2dSprite sprite, tk2dSpriteAnimator spriteAnimator)
+    {
+        _animator = spriteAnimator;
+        _sprite = sprite;
+        _existingAnimations = new HashSet<string>(_animator.Library.clips.Select(c => c.name).ToArray());
     }
 }

@@ -13,7 +13,7 @@ namespace Assets.Scripts
 
         public string[] AvailableAnimations
         {
-            get { return _sprite.anim.clips.Select(c => c.name).ToArray(); }
+            get { return _sprite.Library.clips.Select(c => c.name).ToArray(); }
         }
 
         public string CurrentAnimation

@@ -43,7 +43,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 023bfc31841d2f24ba7eb00462467382, type: 1}
   m_Name: 
-  version: 1
+  version: 2
   lineHeight: .146875009
   chars:
   - p0: {x: 0, y: 0, z: 0}
@@ -57,6 +57,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -68,6 +69,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -79,6 +81,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -90,6 +93,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -101,6 +105,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -112,6 +117,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -123,6 +129,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -134,6 +141,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -145,6 +153,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -156,6 +165,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -167,6 +177,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -178,6 +189,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -189,6 +201,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -200,6 +213,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -211,6 +225,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -222,6 +237,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -233,6 +249,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -244,6 +261,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -255,6 +273,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -266,6 +285,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -277,6 +297,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -288,6 +309,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -299,6 +321,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -310,6 +333,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -321,6 +345,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -332,6 +357,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -343,6 +369,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -354,6 +381,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -365,6 +393,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -376,6 +405,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -387,6 +417,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: 0, y: 0, z: 0}
     p1: {x: 0, y: 0, z: 0}
     uv0: {x: 0, y: 0, z: 0}
@@ -398,6 +429,7 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     advance: 0
+    channel: 0
   - p0: {x: -.00625000009, y: .0281250011, z: 0}
     p1: {x: .00937500037, y: .0125000011, z: 0}
     uv0: {x: .9765625, y: .45703125, z: 0}
@@ -405,6 +437,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0250000004
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .03125, y: .0156249981, z: 0}
     uv0: {x: .953125, y: .71484375, z: 0}
@@ -412,6 +445,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0250000004
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0531250015, y: .075000003, z: 0}
     uv0: {x: .2890625, y: .0859375, z: 0}
@@ -419,6 +453,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00625000009, y: .115625001, z: 0}
     p1: {x: .09375, y: .015625, z: 0}
     uv0: {x: .51171875, y: .43359375, z: 0}
@@ -426,6 +461,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0874999985
+    channel: 0
   - p0: {x: 0, y: .125, z: 0}
     p1: {x: .075000003, y: .0156249981, z: 0}
     uv0: {x: .51953125, y: .85546875, z: 0}
@@ -433,6 +469,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0718749985
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0874999985, y: .0156249981, z: 0}
     uv0: {x: .09375, y: .85546875, z: 0}
@@ -440,6 +477,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0812500045
+    channel: 0
   - p0: {x: -.00312500005, y: .112500004, z: 0}
     p1: {x: .0812500045, y: .012500003, z: 0}
     uv0: {x: .640625, y: .43359375, z: 0}
@@ -447,6 +485,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .075000003
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0281250011, y: .075000003, z: 0}
     uv0: {x: .36328125, y: .08984375, z: 0}
@@ -454,6 +493,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0250000004
+    channel: 0
   - p0: {x: -.00625000009, y: .125, z: 0}
     p1: {x: .0437499993, y: .0156249981, z: 0}
     uv0: {x: .6015625, y: .57421875, z: 0}
@@ -461,6 +501,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0437499993
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .046875, y: .0156249981, z: 0}
     uv0: {x: .53515625, y: .57421875, z: 0}
@@ -468,6 +509,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0437499993
+    channel: 0
   - p0: {x: -.00625000009, y: .121875003, z: 0}
     p1: {x: .0531250015, y: .0625, z: 0}
     uv0: {x: .2109375, y: .0859375, z: 0}
@@ -475,6 +517,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00625000009, y: .100000001, z: 0}
     p1: {x: .0625, y: .0281250011, z: 0}
     uv0: {x: .82421875, y: .21875, z: 0}
@@ -482,6 +525,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0593749993
+    channel: 0
   - p0: {x: -.00312500005, y: .046875, z: 0}
     p1: {x: .0281250011, y: -6.98491931e-10, z: 0}
     uv0: {x: .51953125, y: .08984375, z: 0}
@@ -489,6 +533,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0218749996
+    channel: 0
   - p0: {x: -.00312500005, y: .078125, z: 0}
     p1: {x: .0718749985, y: .0406249985, z: 0}
     uv0: {x: .65625, y: .09765625, z: 0}
@@ -496,6 +541,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: 0, y: .046875, z: 0}
     p1: {x: .03125, y: .015625, z: 0}
     uv0: {x: .81640625, y: .1015625, z: 0}
@@ -503,6 +549,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0250000004
+    channel: 0
   - p0: {x: -.00625000009, y: .125, z: 0}
     p1: {x: .0593749993, y: .0156249981, z: 0}
     uv0: {x: .36328125, y: .57421875, z: 0}
@@ -510,6 +557,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0531250015
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0718749985, y: .0156249981, z: 0}
     uv0: {x: .09765625, y: .71484375, z: 0}
@@ -517,6 +565,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0625, y: .0156249981, z: 0}
     uv0: {x: .27734375, y: .57421875, z: 0}
@@ -524,6 +573,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0593749993
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0718749985, y: .0156249981, z: 0}
     uv0: {x: .1953125, y: .71484375, z: 0}
@@ -531,6 +581,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: -.00625000009, y: .125, z: 0}
     p1: {x: .0687500015, y: .0156249981, z: 0}
     uv0: {x: .29296875, y: .71484375, z: 0}
@@ -538,6 +589,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0625
+    channel: 0
   - p0: {x: -.00625000009, y: .121875003, z: 0}
     p1: {x: .0687500015, y: .0156250019, z: 0}
     uv0: {x: .85546875, y: .57421875, z: 0}
@@ -545,6 +597,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0625
+    channel: 0
   - p0: {x: -.00312500005, y: .121875003, z: 0}
     p1: {x: .0687500015, y: .0156250019, z: 0}
     uv0: {x: .19140625, y: .43359375, z: 0}
@@ -552,6 +605,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0718749985, y: .0156249981, z: 0}
     uv0: {x: .71484375, y: .85546875, z: 0}
@@ -559,6 +613,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0718749985, y: .0124999983, z: 0}
     uv0: {x: .33203125, y: 1, z: 0}
@@ -566,6 +621,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: 0, y: .125, z: 0}
     p1: {x: .075000003, y: .0124999983, z: 0}
     uv0: {x: .4296875, y: 1, z: 0}
@@ -573,6 +629,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0718749985
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0718749985, y: .0124999983, z: 0}
     uv0: {x: .52734375, y: 1, z: 0}
@@ -580,6 +637,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: 0, y: .090625003, z: 0}
     p1: {x: .03125, y: .0156250019, z: 0}
     uv0: {x: .78125, y: .19921875, z: 0}
@@ -587,6 +645,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0250000004
+    channel: 0
   - p0: {x: -.00312500005, y: .090625003, z: 0}
     p1: {x: .0281250011, y: 1.62981451e-09, z: 0}
     uv0: {x: .953125, y: .57421875, z: 0}
@@ -594,6 +653,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0218749996
+    channel: 0
   - p0: {x: -.00625000009, y: .100000001, z: 0}
     p1: {x: .0531250015, y: .015625, z: 0}
     uv0: {x: .828125, y: .43359375, z: 0}
@@ -601,6 +661,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: -.00312500005, y: .090625003, z: 0}
     p1: {x: .0625, y: .0312500037, z: 0}
     uv0: {x: .9140625, y: .21875, z: 0}
@@ -608,6 +669,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0593749993
+    channel: 0
   - p0: {x: -.00312500005, y: .100000001, z: 0}
     p1: {x: .0562500022, y: .015625, z: 0}
     uv0: {x: .75, y: .43359375, z: 0}
@@ -615,6 +677,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: -.00625000009, y: .125, z: 0}
     p1: {x: .0656250045, y: .0156249981, z: 0}
     uv0: {x: 0, y: .5625, z: 0}
@@ -622,6 +685,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0593749993
+    channel: 0
   - p0: {x: 0, y: .121875003, z: 0}
     p1: {x: .0812500045, y: .0125000011, z: 0}
     uv0: {x: .31640625, y: .85546875, z: 0}
@@ -629,6 +693,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .075000003
+    channel: 0
   - p0: {x: -.00625000009, y: .125, z: 0}
     p1: {x: .0687500015, y: .0124999983, z: 0}
     uv0: {x: .234375, y: 1, z: 0}
@@ -636,6 +701,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0625
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0687500015, y: .0124999983, z: 0}
     uv0: {x: 0, y: .84765625, z: 0}
@@ -643,6 +709,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0687500015, y: .0124999983, z: 0}
     uv0: {x: .81640625, y: 1, z: 0}
@@ -650,6 +717,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: 0, y: .125, z: 0}
     p1: {x: .0718749985, y: .0156249981, z: 0}
     uv0: {x: .578125, y: .71484375, z: 0}
@@ -657,6 +725,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: 0, y: .125, z: 0}
     p1: {x: .0687500015, y: .0156249981, z: 0}
     uv0: {x: .91015625, y: .85546875, z: 0}
@@ -664,6 +733,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: -.00312500005, y: .121875003, z: 0}
     p1: {x: .0718749985, y: .0125000011, z: 0}
     uv0: {x: .8125, y: .85546875, z: 0}
@@ -671,6 +741,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: -.00625000009, y: .125, z: 0}
     p1: {x: .0687500015, y: .0124999983, z: 0}
     uv0: {x: .13671875, y: 1, z: 0}
@@ -678,6 +749,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0718749985, y: .0156249981, z: 0}
     uv0: {x: .6171875, y: .85546875, z: 0}
@@ -685,6 +757,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0375000015, y: .0156249981, z: 0}
     uv0: {x: .80078125, y: .57421875, z: 0}
@@ -692,6 +765,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0343750007
+    channel: 0
   - p0: {x: -.00625000009, y: .125, z: 0}
     p1: {x: .0656250045, y: .0124999983, z: 0}
     uv0: {x: .72265625, y: 1, z: 0}
@@ -699,6 +773,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0625
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0687500015, y: .0156249981, z: 0}
     uv0: {x: .390625, y: .71484375, z: 0}
@@ -706,6 +781,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: -.00625000009, y: .125, z: 0}
     p1: {x: .0656250045, y: .0156249981, z: 0}
     uv0: {x: .09375, y: .5625, z: 0}
@@ -713,6 +789,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0625
+    channel: 0
   - p0: {x: 0, y: .121875003, z: 0}
     p1: {x: .0656250045, y: .0156250019, z: 0}
     uv0: {x: .28515625, y: .43359375, z: 0}
@@ -720,6 +797,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0718749985, y: .0124999983, z: 0}
     uv0: {x: .625, y: 1, z: 0}
@@ -727,6 +805,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0656250045, y: .0124999983, z: 0}
     uv0: {x: .91015625, y: 1, z: 0}
@@ -734,6 +813,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: 0, y: .125, z: 0}
     p1: {x: .075000003, y: .0156249981, z: 0}
     uv0: {x: 0, y: .703125, z: 0}
@@ -741,6 +821,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: 0, y: .121875003, z: 0}
     p1: {x: .0718749985, y: .0125000011, z: 0}
     uv0: {x: .859375, y: .71484375, z: 0}
@@ -748,6 +829,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .078125, y: .0156249981, z: 0}
     uv0: {x: .2109375, y: .85546875, z: 0}
@@ -755,6 +837,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0718749985
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0718749985, y: .0124999983, z: 0}
     uv0: {x: .0390625, y: 1, z: 0}
@@ -762,6 +845,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0718749985
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0687500015, y: .0156249981, z: 0}
     uv0: {x: .671875, y: .71484375, z: 0}
@@ -769,6 +853,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0625
+    channel: 0
   - p0: {x: 0, y: .121875003, z: 0}
     p1: {x: .0687500015, y: .0125000011, z: 0}
     uv0: {x: .1875, y: .57421875, z: 0}
@@ -776,6 +861,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0656250045
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0687500015, y: .0156249981, z: 0}
     uv0: {x: .484375, y: .71484375, z: 0}
@@ -783,6 +869,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0625
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0687500015, y: .0156249981, z: 0}
     uv0: {x: .765625, y: .71484375, z: 0}
@@ -790,6 +877,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0625
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .0718749985, y: .0156249981, z: 0}
     uv0: {x: .421875, y: .85546875, z: 0}
@@ -797,6 +885,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: -.00312500005, y: .121875003, z: 0}
     p1: {x: .0687500015, y: .0156250019, z: 0}
     uv0: {x: .09765625, y: .421875, z: 0}
@@ -804,6 +893,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0625
+    channel: 0
   - p0: {x: -.00312500005, y: .121875003, z: 0}
     p1: {x: .0718749985, y: .0156250019, z: 0}
     uv0: {x: 0, y: .421875, z: 0}
@@ -811,6 +901,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0687500015
+    channel: 0
   - p0: {x: -.00312500005, y: .125, z: 0}
     p1: {x: .046875, y: .0156249981, z: 0}
     uv0: {x: .66796875, y: .57421875, z: 0}
@@ -818,6 +909,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0437499993
+    channel: 0
   - p0: {x: -.00625000009, y: .125, z: 0}
     p1: {x: .0593749993, y: .0156249981, z: 0}
     uv0: {x: .44921875, y: .57421875, z: 0}
@@ -825,6 +917,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0531250015
+    channel: 0
   - p0: {x: -.00625000009, y: .125, z: 0}
     p1: {x: .0437499993, y: .0156249981, z: 0}
     uv0: {x: .734375, y: .57421875, z: 0}
@@ -832,6 +925,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0437499993
+    channel: 0
   - p0: {x: -.00625000009, y: .121875003, z: 0}
     p1: {x: .0656250045, y: .078125, z: 0}
     uv0: {x: .5625, y: .08984375, z: 0}
@@ -839,6 +933,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0593749993
+    channel: 0
   - p0: {x: -.00312500005, y: .0218749996, z: 0}
     p1: {x: .0874999985, y: -.00625000056, z: 0}
     uv0: {x: .859375, y: .125, z: 0}
@@ -846,6 +941,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0843750015
+    channel: 0
   - p0: {x: -.00625000009, y: .121875003, z: 0}
     p1: {x: .0406250022, y: .0843750015, z: 0}
     uv0: {x: .75390625, y: .09765625, z: 0}
@@ -853,6 +949,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0343750007
+    channel: 0
   - p0: {x: -.00625000009, y: .0968750045, z: 0}
     p1: {x: .0500000007, y: .0156250037, z: 0}
     uv0: {x: .515625, y: .3046875, z: 0}
@@ -860,6 +957,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0437499993
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0500000007, y: .0156250037, z: 0}
     uv0: {x: .28125, y: .19140625, z: 0}
@@ -867,6 +965,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0500000007, y: .012500003, z: 0}
     uv0: {x: .140625, y: .28515625, z: 0}
@@ -874,6 +973,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: 0, y: .0968750045, z: 0}
     p1: {x: .0531250015, y: .0156250037, z: 0}
     uv0: {x: .88671875, y: .32421875, z: 0}
@@ -881,6 +981,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: -.00312500005, y: .09375, z: 0}
     p1: {x: .0500000007, y: .0156249991, z: 0}
     uv0: {x: .57421875, y: .19921875, z: 0}
@@ -888,6 +989,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00312500005, y: .09375, z: 0}
     p1: {x: .0531250015, y: .0124999993, z: 0}
     uv0: {x: .3671875, y: .296875, z: 0}
@@ -895,6 +997,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0500000007, y: .012500003, z: 0}
     uv0: {x: .90625, y: .4375, z: 0}
@@ -902,6 +1005,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0531250015, y: .0156250037, z: 0}
     uv0: {x: .6640625, y: .3046875, z: 0}
@@ -909,6 +1013,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: 0, y: .0968750045, z: 0}
     p1: {x: .03125, y: .0156250037, z: 0}
     uv0: {x: .95703125, y: .328125, z: 0}
@@ -916,6 +1021,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0250000004
+    channel: 0
   - p0: {x: -.00625000009, y: .0968750045, z: 0}
     p1: {x: .046875, y: .012500003, z: 0}
     uv0: {x: 0, y: .28515625, z: 0}
@@ -923,6 +1029,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: -.00312500005, y: .09375, z: 0}
     p1: {x: .0531250015, y: .0156249991, z: 0}
     uv0: {x: .3515625, y: .19140625, z: 0}
@@ -930,6 +1037,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0531250015, y: .0156250037, z: 0}
     uv0: {x: .8125, y: .32421875, z: 0}
@@ -937,6 +1045,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: 0, y: .09375, z: 0}
     p1: {x: .0500000007, y: .0156249991, z: 0}
     uv0: {x: .71484375, y: .19921875, z: 0}
@@ -944,6 +1053,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0531250015, y: .0156250037, z: 0}
     uv0: {x: .29296875, y: .296875, z: 0}
@@ -951,6 +1061,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0500000007, y: .012500003, z: 0}
     uv0: {x: .0703125, y: .28515625, z: 0}
@@ -958,6 +1069,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: 0, y: .0968750045, z: 0}
     p1: {x: .0562500022, y: .0156250037, z: 0}
     uv0: {x: .44140625, y: .296875, z: 0}
@@ -965,6 +1077,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: -.00312500005, y: .09375, z: 0}
     p1: {x: .0500000007, y: .0124999993, z: 0}
     uv0: {x: 0, y: .17578125, z: 0}
@@ -972,6 +1085,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0593749993, y: .0156250037, z: 0}
     uv0: {x: .2109375, y: .296875, z: 0}
@@ -979,6 +1093,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00312500005, y: .09375, z: 0}
     p1: {x: .0531250015, y: .0124999993, z: 0}
     uv0: {x: .73828125, y: .3046875, z: 0}
@@ -986,6 +1101,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0500000007, y: .0156250037, z: 0}
     uv0: {x: .0703125, y: .17578125, z: 0}
@@ -993,6 +1109,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0437499993
+    channel: 0
   - p0: {x: 0, y: .09375, z: 0}
     p1: {x: .0531250015, y: .0124999993, z: 0}
     uv0: {x: .140625, y: .17578125, z: 0}
@@ -1000,6 +1117,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0500000007, y: .0156250037, z: 0}
     uv0: {x: .2109375, y: .19140625, z: 0}
@@ -1007,6 +1125,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: -.00312500005, y: .09375, z: 0}
     p1: {x: .0500000007, y: .0156249991, z: 0}
     uv0: {x: .64453125, y: .19921875, z: 0}
@@ -1014,6 +1133,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: -.00312500005, y: .0968750045, z: 0}
     p1: {x: .0531250015, y: .0156250037, z: 0}
     uv0: {x: .58984375, y: .3046875, z: 0}
@@ -1021,6 +1141,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00312500005, y: .09375, z: 0}
     p1: {x: .0531250015, y: .0156249991, z: 0}
     uv0: {x: .42578125, y: .19140625, z: 0}
@@ -1028,6 +1149,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .046875
+    channel: 0
   - p0: {x: -.00312500005, y: .09375, z: 0}
     p1: {x: .0531250015, y: .0156249991, z: 0}
     uv0: {x: .5, y: .19140625, z: 0}
@@ -1035,6 +1157,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0500000007
+    channel: 0
   - p0: {x: -.00625000009, y: .121875003, z: 0}
     p1: {x: .046875, y: .0156250019, z: 0}
     uv0: {x: .44140625, y: .43359375, z: 0}
@@ -1042,6 +1165,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0437499993
+    channel: 0
   - p0: {x: -.00312500005, y: .128124997, z: 0}
     p1: {x: .0250000004, y: .00937499478, z: 0}
     uv0: {x: 0, y: 1, z: 0}
@@ -1049,6 +1173,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0250000004
+    channel: 0
   - p0: {x: -.00312500005, y: .121875003, z: 0}
     p1: {x: .0500000007, y: .0156250019, z: 0}
     uv0: {x: .37109375, y: .43359375, z: 0}
@@ -1056,6 +1181,7 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .0437499993
+    channel: 0
   - p0: {x: -.00625000009, y: .078125, z: 0}
     p1: {x: .0812500045, y: .03125, z: 0}
     uv0: {x: .40625, y: .08984375, z: 0}
@@ -1063,8 +1189,16 @@ MonoBehaviour:
     flipped: 0
     gradientUv: []
     advance: .078125
+    channel: 0
   charDictKeys: 
   charDictValues: []
+  fontPlatforms: []
+  fontPlatformGUIDs: []
+  hasPlatformData: 0
+  managedFont: 0
+  needMaterialInstance: 0
+  isPacked: 0
+  spriteCollection: {fileID: 0}
   useDictionary: 0
   kerning:
   - c0: 65
@@ -1537,7 +1671,7 @@ MonoBehaviour:
   gradientTexture: {fileID: 0}
   textureGradients: 0
   gradientCount: 1
-  texelSize: {x: 0, y: 0}
+  texelSize: {x: .00312500005, y: .00312500005}
   invOrthoSize: 1
   halfTargetHeight: 320
 --- !u!1002 &11400001

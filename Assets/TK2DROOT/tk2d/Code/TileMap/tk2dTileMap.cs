@@ -200,7 +200,7 @@ public class tk2dTileMap : MonoBehaviour, tk2dRuntime.ISpriteCollectionForceBuil
 		
 		if (!editMode)
 		{
-			ColliderBuilder.Build(this);
+			ColliderBuilder.Build(this, forceBuild);
 			BuilderUtil.SpawnPrefabs(this);
 		}
 		
@@ -304,11 +304,26 @@ public class tk2dTileMap : MonoBehaviour, tk2dRuntime.ISpriteCollectionForceBuil
 	/// </summary>
 	public Vector3 GetTilePosition(int x, int y)
 	{
-		Vector3 localPosition = new Vector3(
-			x * data.tileSize.x + data.tileOrigin.x,
-			y * data.tileSize.y + data.tileOrigin.y,
-			0);
-		return transform.localToWorldMatrix.MultiplyPoint(localPosition);
+		switch (data.tileType)
+		{
+		case tk2dTileMapData.TileType.Rectangular:
+		default:
+			{
+				Vector3 localPosition = new Vector3(
+				x * data.tileSize.x + data.tileOrigin.x,
+				y * data.tileSize.y + data.tileOrigin.y,
+				0);
+				return transform.localToWorldMatrix.MultiplyPoint(localPosition);
+			}
+		case tk2dTileMapData.TileType.Isometric:
+			{
+				Vector3 localPosition = new Vector3(
+				((float)x + (((y & 1) == 0) ? 0.0f : 0.5f)) * data.tileSize.x + data.tileOrigin.x,
+				y * data.tileSize.y + data.tileOrigin.y,
+				0);
+				return transform.localToWorldMatrix.MultiplyPoint(localPosition);
+			}
+		}
 	}
 	
 	/// <summary>

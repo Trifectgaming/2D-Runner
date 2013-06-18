@@ -71,7 +71,13 @@ namespace tk2dEditor.SpriteCollectionEditor
 			var target = this;
 			var source = obj;
 			
-			target.platforms = new List<tk2dSpriteCollectionPlatform>(source.platforms);
+			target.platforms = new List<tk2dSpriteCollectionPlatform>();
+			foreach (tk2dSpriteCollectionPlatform plat in source.platforms)
+			{
+				tk2dSpriteCollectionPlatform p = new tk2dSpriteCollectionPlatform();
+				p.CopyFrom(plat);
+				target.platforms.Add(p);
+			}
 			if (target.platforms.Count == 0)
 			{
 				tk2dSpriteCollectionPlatform plat = new tk2dSpriteCollectionPlatform(); // add a null platform
@@ -79,6 +85,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			}
 
 			target.assetName = source.assetName;
+			target.loadable = source.loadable;
 
 			target.maxTextureSize = source.maxTextureSize;
 			target.forceTextureSize = source.forceTextureSize;
@@ -172,6 +179,105 @@ namespace tk2dEditor.SpriteCollectionEditor
 			}
 		}
 
+		public void DeleteUnusedData()
+		{
+			foreach (tk2dSpriteCollectionFont font in obj.fonts)
+			{
+				bool found = false;
+				foreach (tk2dSpriteCollectionFont f in fonts)
+				{
+					if (f.data == font.data && f.editorData == font.editorData)
+					{
+						found = true;
+						break;
+					}
+				}
+				if (!found)
+				{
+					tk2dEditorUtility.DeleteAsset(font.data);
+					tk2dEditorUtility.DeleteAsset(font.editorData);
+				}
+			}
+
+			if (obj.altMaterials != null)
+			{
+				foreach (Material material in obj.altMaterials)
+				{
+					bool found = false;
+					if (altMaterials != null)
+					{
+						foreach (Material m in altMaterials)
+						{
+							if (m == material)
+							{
+								found = true;
+								break;
+							}
+						}
+					}
+					if (!found)
+						tk2dEditorUtility.DeleteAsset(material);
+				}
+			}
+
+			List<tk2dSpriteCollectionPlatform> platformsToDelete = new List<tk2dSpriteCollectionPlatform>();
+			if (obj.HasPlatformData && !this.HasPlatformData)
+			{
+				platformsToDelete = new List<tk2dSpriteCollectionPlatform>(obj.platforms);
+				atlasTextures = new Texture2D[0]; // clear all references
+				atlasMaterials = new Material[0];
+			}
+			else if (this.HasPlatformData && !obj.HasPlatformData)
+			{
+				// delete old sprite collection atlases and materials
+				foreach (Material material in obj.atlasMaterials)
+					tk2dEditorUtility.DeleteAsset(material);
+				foreach (Texture2D texture in obj.atlasTextures)
+					tk2dEditorUtility.DeleteAsset(texture);
+			}
+			else if (obj.HasPlatformData && this.HasPlatformData)
+			{
+				foreach (tk2dSpriteCollectionPlatform platform in obj.platforms)
+				{
+					bool found = false;
+					foreach (tk2dSpriteCollectionPlatform p in platforms)
+					{
+						if (p.spriteCollection == platform.spriteCollection)
+						{
+							found = true;
+							break;
+						}
+					}
+					if (!found) // platform existed previously, but does not any more
+						platformsToDelete.Add(platform);
+				}
+			}
+
+			foreach (tk2dSpriteCollectionPlatform platform in platformsToDelete)
+			{
+				if (platform.spriteCollection == null) continue;
+				tk2dSpriteCollection sc = platform.spriteCollection;
+				string path = AssetDatabase.GetAssetPath(sc.spriteCollection);
+
+				tk2dEditorUtility.DeleteAsset(sc.spriteCollection);
+				foreach (Material material in sc.atlasMaterials)
+					tk2dEditorUtility.DeleteAsset(material);
+				foreach (Texture2D texture in sc.atlasTextures)
+					tk2dEditorUtility.DeleteAsset(texture);
+				foreach (tk2dSpriteCollectionFont font in sc.fonts)
+				{
+					tk2dEditorUtility.DeleteAsset(font.editorData);
+					tk2dEditorUtility.DeleteAsset(font.data);
+				}
+
+				tk2dEditorUtility.DeleteAsset(sc);
+
+				string dataDirName = System.IO.Path.GetDirectoryName(path);
+				if (System.IO.Directory.Exists(dataDirName) && System.IO.Directory.GetFiles(dataDirName).Length == 0)
+					AssetDatabase.DeleteAsset(dataDirName);
+			}
+		}
+
 		public void CopyToTarget()
 		{
 			CopyToTarget(obj);
@@ -184,8 +290,15 @@ namespace tk2dEditor.SpriteCollectionEditor
 			target.fonts = fonts.ToArray();
 
 			var source = this;
-			target.platforms = new List<tk2dSpriteCollectionPlatform>(source.platforms);
+			target.platforms = new List<tk2dSpriteCollectionPlatform>();
+			foreach (tk2dSpriteCollectionPlatform plat in source.platforms)
+			{
+				tk2dSpriteCollectionPlatform p = new tk2dSpriteCollectionPlatform();
+				p.CopyFrom(plat);
+				target.platforms.Add(p);
+			}
 			target.assetName = source.assetName;
+			target.loadable = source.loadable;
 			
 			target.maxTextureSize = source.maxTextureSize;
 			target.forceTextureSize = source.forceTextureSize;
@@ -237,7 +350,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 		{
 			for (int index = 0; index < textureParams.Count; ++index)
 			{
-				if (textureParams[index].texture == null)
+				if (textureParams[index].texture == null && textureParams[index].name.Length == 0)
 					return index;
 			}
 			textureParams.Add(new tk2dSpriteCollectionDefinition());
@@ -280,6 +393,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 		
 		public string FindUniqueTextureName(string name)
 		{
+			int at = name.LastIndexOf('@');
+			if (at != -1) {
+				name = name.Substring(0, at);
+			}
+
 			List<string> textureNames = new List<string>();
 			foreach (var entry in textureParams)
 			{
@@ -306,7 +424,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 			int lastIndex = textureParams.Count - 1;
 			while (lastIndex >= 0)
 			{
-				if (textureParams[lastIndex].texture != null)
+				if (textureParams[lastIndex].texture != null || textureParams[lastIndex].name.Length > 0)
 					break;
 				lastIndex--;
 			}
@@ -403,6 +521,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 	    public bool premultipliedAlpha;
 
 	    public List<tk2dSpriteCollectionPlatform> platforms = new List<tk2dSpriteCollectionPlatform>();
+		public bool HasPlatformData { get { return platforms.Count > 1; } }
 		
 		public Material[] altMaterials;
 		public Material[] atlasMaterials;
@@ -430,6 +549,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 		public tk2dSpriteCollection.NormalGenerationMode normalGenerationMode;
 		public int padAmount;
 		public bool autoUpdate;
+		public bool loadable;
 		
 		public float editorDisplayScale;
 	}

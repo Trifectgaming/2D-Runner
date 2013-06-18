@@ -25,6 +25,9 @@ public class tk2dFont : MonoBehaviour
 	
 	public bool manageMaterial = false;
 	
+	[HideInInspector]
+	public bool loadable = false;
+	
 	public int charPadX = 0;
 	
 	public tk2dFontData data;

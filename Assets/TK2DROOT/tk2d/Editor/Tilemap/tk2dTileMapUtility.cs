@@ -7,8 +7,8 @@ namespace tk2dEditor.TileMap
 {
 	public static class TileMapUtility
 	{
-		public static int MaxWidth = 512;
-		public static int MaxHeight = 512;
+		public static int MaxWidth = 1024;
+		public static int MaxHeight = 1024;
 		public static int MaxLayers = 32;
 		
 		public static void ResizeTileMap(tk2dTileMap tileMap, int width, int height, int partitionSizeX, int partitionSizeY)

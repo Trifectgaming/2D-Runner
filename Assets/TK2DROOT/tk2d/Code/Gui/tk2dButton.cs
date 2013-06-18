@@ -1,10 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-[AddComponentMenu("2D Toolkit/GUI/tk2dButton")]
-/// <summary>
-/// Simple gui button
-/// </summary>
+[AddComponentMenu("2D Toolkit/Deprecated/GUI/tk2dButton")]
 public class tk2dButton : MonoBehaviour 
 {
 	/// <summary>
@@ -272,7 +269,7 @@ public class tk2dButton : MonoBehaviour
             Ray ray = viewCamera.ScreenPointToRay(cursorPosition);
 
             RaycastHit hitInfo;
-			bool colliderHit = collider.Raycast(ray, out hitInfo, 1.0e8f);
+			bool colliderHit = collider.Raycast(ray, out hitInfo, Mathf.Infinity);
             if (buttonPressed && !colliderHit)
 			{
 				if (targetScale != 1.0f)

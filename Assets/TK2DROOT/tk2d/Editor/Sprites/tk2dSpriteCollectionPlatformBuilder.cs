@@ -96,6 +96,8 @@ namespace tk2dEditor.SpriteCollectionBuilder
 			proxy.atlasWidth = (int)(proxy.atlasWidth * scale);
 			proxy.atlasHeight = (int)(proxy.atlasHeight * scale);
 			proxy.maxTextureSize = (int)(proxy.maxTextureSize * scale);
+			proxy.forcedTextureWidth = (int)(proxy.forcedTextureWidth * scale);
+			proxy.forcedTextureHeight = (int)(proxy.forcedTextureHeight * scale);
 
 			if (!proxy.useTk2dCamera)
 				proxy.targetOrthoSize *= 1.0f;
@@ -152,6 +154,11 @@ namespace tk2dEditor.SpriteCollectionBuilder
 							for (int p = 0; p < geom.points.Length; ++p)
 								geom.points[p] *= scale;
 						}
+					}
+					else if (param.dice)
+					{
+						param.diceUnitX = (int)(param.diceUnitX * scale);
+						param.diceUnitY = (int)(param.diceUnitY * scale);
 					}
 
 					if (param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon)

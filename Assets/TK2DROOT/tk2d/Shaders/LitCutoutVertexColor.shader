@@ -15,7 +15,7 @@ Shader "tk2d/LitCutoutVertexColor"
 		CGPROGRAM
 		#pragma surface surf Lambert alphatest:_Cutoff
 		struct Input {
-			half2 uv_MainTex;
+			float2 uv_MainTex;
 			fixed4 color : COLOR;
 		};
 		sampler2D _MainTex;

@@ -14,6 +14,8 @@ public class tk2dSpriteCollectionIndex
 	public string[] spriteTextureGUIDs = new string[0];
 	public string[] spriteTextureTimeStamps = new string[0];
 	public bool managedSpriteCollection = false;
+	public bool loadable = false;
+	public string assetName = "";
 	public int version;
 }
 
@@ -24,6 +26,7 @@ public class tk2dGenericIndexItem
 	public string assetGUID;
 	public string dataGUID;
 	public bool managed = false;
+	public bool loadable = false;
 	public string AssetName
 	{
 		get
@@ -59,7 +62,7 @@ public class tk2dGenericIndexItem
 public class tk2dIndex : ScriptableObject
 {
 	public int version = 0;
-	public static int CURRENT_VERSION = 2;
+	public static int CURRENT_VERSION = 4;
 
 	[SerializeField] List<tk2dGenericIndexItem> spriteAnimationIndex = new List<tk2dGenericIndexItem>();
 	[SerializeField] List<tk2dGenericIndexItem> fontIndex = new List<tk2dGenericIndexItem>();
@@ -118,6 +121,8 @@ public class tk2dIndex : ScriptableObject
 		indexEntry.spriteTextureTimeStamps = new string[sc.spriteDefinitions.Length];
 		indexEntry.version = sc.version;
 		indexEntry.managedSpriteCollection = sc.managedSpriteCollection;
+		indexEntry.loadable = sc.loadable;
+		indexEntry.assetName = sc.assetName;
 		for (int i = 0; i < sc.spriteDefinitions.Length; ++i)
 		{
 			var s = sc.spriteDefinitions[i];
@@ -137,6 +142,12 @@ public class tk2dIndex : ScriptableObject
 				indexEntry.spriteTextureGUIDs[i] = "";
 				indexEntry.spriteTextureTimeStamps[i] = "";
 			}
+		}
+
+		if (sc.spriteCollectionPlatforms.Length > 0) {
+			indexEntry.spriteNames = new string[] { "dummy" };
+			indexEntry.spriteTextureGUIDs = new string[] { "" };
+			indexEntry.spriteTextureTimeStamps = new string[] { "0" };
 		}
 
 		if (!existing)
@@ -197,8 +208,9 @@ public class tk2dIndex : ScriptableObject
 			item = new tk2dGenericIndexItem(guid);
 			fontIndex.Add(item);
 		}
-
-		item.managed = font.data.managedFont;
+		
+		item.loadable = font.loadable;
+		item.managed = (font.data == null) ? false : font.data.managedFont;
 		item.dataGUID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(font.data));
 #endif		
 	}

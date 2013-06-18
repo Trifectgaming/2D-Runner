@@ -114,7 +114,7 @@ namespace Assets.Scripts
                                                                    },
                                        VelocityRequirements = new SpeedInfo
                                                                   {
-                                                                      minX = 7.0f,
+                                                                      minX = 6.0f,
                                                                   },
                                        NextState = RunnerState.Walk
                                    })
@@ -398,7 +398,9 @@ namespace Assets.Scripts
                     }
                 }
             }
+
             StateProcessQueue.Enqueue(currentState);
+            Messenger.Default.Send(new RunnerStatsMessage(currentState, velocity, collisionInfo, input));
             return currentState;
         }
 

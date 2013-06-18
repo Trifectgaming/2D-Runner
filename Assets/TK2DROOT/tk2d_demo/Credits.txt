@@ -9,8 +9,10 @@ Some of the sprites (Brown Block, Chest Closed, Stone Block, Rock) are from the 
 http://www.lostgarden.com/2007/05/dancs-miraculously-flexible-game.html
 
 Explosion texture generated from:
-http://www.nuvorm.nl/start/index.php?option=com_content&view=article&id=76:explosiongenerator&catid=40:experiments&Itemid=53
+http://www.nuvorm.nl/?p=1
 
 Commodore 64 font by Devin Cook.
 http://www.dafont.com/commodore-64.font
 
+Old Sans Black font by Manfred Klein
+http://manfred-klein.ina-mar.com/

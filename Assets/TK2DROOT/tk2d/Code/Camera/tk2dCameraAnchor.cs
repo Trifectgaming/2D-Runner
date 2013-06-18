@@ -100,7 +100,7 @@ public class tk2dCameraAnchor : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void LateUpdate () 
 	{
 		UpdateTransform();
 	}

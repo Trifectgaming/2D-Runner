@@ -50,6 +50,10 @@ namespace tk2dEditor.TileMap
 		// Xml helpers
 		static int ReadIntAttribute(XmlNode node, string attribute) { return int.Parse(node.Attributes[attribute].Value, System.Globalization.NumberFormatInfo.InvariantInfo); }
 		
+		const string FormatErrorString = "Unsupported format error.\n" + 
+		"Please ensure layer data is stored as xml, base64(zlib) * or base64(uncompressed) in TileD preferences.\n\n" + 
+		"* - Preferred format";
+
 		// Import TMX
 		string ImportTMX(string path)
 		{
@@ -73,18 +77,42 @@ namespace tk2dEditor.TileMap
 					if (layerHeight != height || layerWidth != width) return "Layer \"" + name + "\" has invalid dimensions";
 					
 					var dataNode = layerNode.SelectSingleNode("data");
-					string encoding = dataNode.Attributes["encoding"].Value;
-					string compression = (encoding == "base64")?dataNode.Attributes["compression"].Value:"";
-					
-					if (encoding == "base64" && compression == "zlib")
+					string encoding = (dataNode.Attributes["encoding"] != null)?dataNode.Attributes["encoding"].Value:"";
+					string compression = (dataNode.Attributes["compression"] != null)?dataNode.Attributes["compression"].Value:"";
+
+					uint[] data = null;
+					if (encoding == "base64")
 					{
-						uint[] data = BytesToInts(ZlibInflate(System.Convert.FromBase64String(dataNode.InnerText)));
+						if (compression == "zlib")
+						{
+							data = BytesToInts(ZlibInflate(System.Convert.FromBase64String(dataNode.InnerText)));
+						}
+						else if (compression == "")
+						{
+							data = BytesToInts(System.Convert.FromBase64String(dataNode.InnerText));
+						}
+						else return FormatErrorString;
+					}
+					else if (encoding == "")
+					{
+						List<uint> values = new List<uint>();
+						var tileNodes = dataNode.SelectNodes("tile");
+						foreach (XmlNode tileNode in tileNodes)
+							values.Add( uint.Parse(tileNode.Attributes["gid"].Value, System.Globalization.NumberFormatInfo.InvariantInfo) );
+						data = values.ToArray();
+					}
+					else
+					{
+						return FormatErrorString;
+					}
+
+					if (data != null)
+					{
 						var layerProxy = new LayerProxy();
 						layerProxy.name = name;
 						layerProxy.tiles = data;
 						layers.Add(layerProxy);
 					}
-					else return "Unsupported encoding type";
 				}
 			}
 			catch (System.Exception e) { return e.ToString(); }
