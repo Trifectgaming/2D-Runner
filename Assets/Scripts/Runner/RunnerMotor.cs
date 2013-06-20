@@ -31,9 +31,9 @@ public class RunnerMotor
                                   RunnerState.Run, new Motor
                                                            {
                                                                Type = RunnerState.Run,
-                                                               acceleratingVelocity = new Vector3(15, 0, 0),
+                                                               acceleratingVelocity = new Vector3(7, 0, 0),
                                                                deceleratingVelocity = new Vector3(100, 0, 0),
-                                                               maxVelocity = 10,
+                                                               maxVelocity = 5,
                                                                forceMode = ForceMode.Force,
                                                                shouldDecelerate = true,
                                                            }
@@ -42,9 +42,9 @@ public class RunnerMotor
                                   RunnerState.Walk, new Motor
                                                            {
                                                                Type = RunnerState.Walk,
-                                                               acceleratingVelocity = new Vector3(15, 0, 0),
+                                                               acceleratingVelocity = new Vector3(7, 0, 0),
                                                                deceleratingVelocity = new Vector3(100, 0, 0),
-                                                               maxVelocity = 10,
+                                                               maxVelocity = 6,
                                                                forceMode = ForceMode.Force,
                                                                shouldDecelerate = true,
                                                            }
@@ -53,7 +53,7 @@ public class RunnerMotor
                                   RunnerState.Jump, new Motor
                                                            {
                                                                Type = RunnerState.Jump,
-                                                               acceleratingVelocity = new Vector3(.1f, f, 0),
+                                                               acceleratingVelocity = new Vector3(.5f, 1.05f, 0),
                                                                maxVelocity = 100,
                                                                forceMode = ForceMode.VelocityChange,
                                                                shouldDecelerate = false,

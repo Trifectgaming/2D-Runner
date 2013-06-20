@@ -114,7 +114,7 @@ namespace Assets.Scripts
                                                                    },
                                        VelocityRequirements = new SpeedInfo
                                                                   {
-                                                                      minX = 6.0f,
+                                                                      minX = 2.0f,
                                                                   },
                                        NextState = RunnerState.Walk
                                    })
@@ -137,7 +137,7 @@ namespace Assets.Scripts
                                                                    },
                                        VelocityRequirements = new SpeedInfo
                                                                   {
-                                                                      maxX = 8.0f,
+                                                                      maxX = 3.0f,
                                                                   },
                                        NextState = RunnerState.Run,
                                    })
@@ -174,7 +174,7 @@ namespace Assets.Scripts
                                                                    },
                                        VelocityRequirements = new SpeedInfo
                                                                   {
-                                                                      maxY = 4f
+                                                                      maxY = 0f
                                                                   },
                                        NextState = RunnerState.Jumped,
                                    })

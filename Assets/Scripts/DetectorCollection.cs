@@ -59,7 +59,7 @@ public class DetectorCollection : IEnumerable<Detector>
         TopTrans.localScale = new Vector3(bounds.size.x, .1f, 1);
         TopTrans.localPosition = new Vector3(bounds.center.x, bounds.max.y + .1f);
         
-        BottomTrans.localScale = new Vector3(bounds.size.x-.5f, .1f, 1);
+        BottomTrans.localScale = new Vector3(bounds.size.x, .1f, 1);
         BottomTrans.localPosition = new Vector3(bounds.center.x, bounds.min.y - .1f);
     }
 
