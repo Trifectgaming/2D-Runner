@@ -114,7 +114,7 @@ namespace Assets.Scripts
                                                                    },
                                        VelocityRequirements = new SpeedInfo
                                                                   {
-                                                                      minX = 2.0f,
+                                                                      minX = 3.0f,
                                                                   },
                                        NextState = RunnerState.Walk
                                    })
@@ -237,7 +237,7 @@ namespace Assets.Scripts
                                                                        Below = true,
                                                                    },
 
-                                       ReuseTime = 4,
+                                       //ReuseTime = 4,
                                        HasRechargeEffect = true,
                                        HasTransitionEffect = true,
                                        NextState = RunnerState.GroundDash
@@ -303,6 +303,7 @@ namespace Assets.Scripts
                                    }, InputState.None,
                                new TransitionInfo
                                    {
+                                       DelayTime = .1f,
                                        CollisionRequirements = new CollisionInfo
                                                                    {
                                                                        Below = true,

@@ -32,7 +32,7 @@ public class RunnerMotor
                                                            {
                                                                Type = RunnerState.Run,
                                                                acceleratingVelocity = new Vector3(7, 0, 0),
-                                                               deceleratingVelocity = new Vector3(100, 0, 0),
+                                                               deceleratingVelocity = new Vector3(20, 0, 0),
                                                                maxVelocity = 7,
                                                                forceMode = ForceMode.Force,
                                                                shouldDecelerate = true,
@@ -43,7 +43,7 @@ public class RunnerMotor
                                                            {
                                                                Type = RunnerState.Walk,
                                                                acceleratingVelocity = new Vector3(7, 0, 0),
-                                                               deceleratingVelocity = new Vector3(100, 0, 0),
+                                                               deceleratingVelocity = new Vector3(20, 0, 0),
                                                                maxVelocity = 8,
                                                                forceMode = ForceMode.Force,
                                                                shouldDecelerate = true,
@@ -54,7 +54,7 @@ public class RunnerMotor
                                                            {
                                                                Type = RunnerState.Jump,
                                                                acceleratingVelocity = new Vector3(.5f, 1.05f, 0),
-                                                               maxVelocity = 100,
+                                                               maxVelocity = 200,
                                                                forceMode = ForceMode.VelocityChange,
                                                                shouldDecelerate = false,
                                                            }
@@ -74,9 +74,10 @@ public class RunnerMotor
                                                               {
                                                                   Type = RunnerState.GroundDash,
                                                                   acceleratingVelocity = new Vector3(20f, 0, 0),
-                                                                  maxVelocity = 200,
+                                                                  deceleratingVelocity = new Vector3(4, 0, 0),
+                                                                  maxVelocity = 8,
                                                                   forceMode = ForceMode.VelocityChange,
-                                                                  shouldDecelerate = false,
+                                                                  shouldDecelerate = true,
                                                               }
                               },
                               {
