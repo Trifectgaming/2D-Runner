@@ -78,7 +78,7 @@ public class tk2dUIHoverItem : tk2dUIBaseItemControl
     }
 
     /// <summary>
-    /// Manually updates state based on IsOver
+    /// Manually updates input based on IsOver
     /// </summary>
     public void SetState()
     {

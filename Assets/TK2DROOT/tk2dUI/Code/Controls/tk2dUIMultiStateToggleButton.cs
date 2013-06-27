@@ -19,13 +19,13 @@ public class tk2dUIMultiStateToggleButton : tk2dUIBaseItemControl
     public bool activateOnPress = false;
 
     /// <summary>
-    /// Event on change of state
+    /// Event on change of input
     /// </summary>
     public event System.Action<tk2dUIMultiStateToggleButton> OnStateToggle;
     private int index = 0;
 
     /// <summary>
-    /// Currently selected index of active state
+    /// Currently selected index of active input
     /// </summary>
     public int Index
     {

@@ -28,7 +28,7 @@ public class tk2dUIToggleButton : tk2dUIBaseItemControl
     public event System.Action<tk2dUIToggleButton> OnToggle;
 
     /// <summary>
-    /// Is toggle in On state
+    /// Is toggle in On input
     /// </summary>
     public bool IsOn
     {

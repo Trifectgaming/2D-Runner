@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// UpDown Button, changes state based on if it is up or down
+/// UpDown Button, changes input based on if it is up or down
 /// </summary>
 [AddComponentMenu("2D Toolkit/UI/tk2dUIUpDownButton")]
 public class tk2dUIUpDownButton : tk2dUIBaseItemControl
@@ -18,7 +18,7 @@ public class tk2dUIUpDownButton : tk2dUIBaseItemControl
     public GameObject downStateGO;
 
     /// <summary>
-    /// Use OnRelase instead of OnUp to toggle state
+    /// Use OnRelase instead of OnUp to toggle input
     /// </summary>
     [SerializeField]
     private bool useOnReleaseInsteadOfOnUp = false;

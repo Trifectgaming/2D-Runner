@@ -270,7 +270,7 @@ namespace tk2dRuntime
 			int state = 0;
 			System.IO.TextReader tr = new System.IO.StringReader(texturePackerFileContents);
 
-			// tmp state		
+			// tmp input		
 			bool entryRotated = false;
 			bool entryTrimmed = false;
 			string entryName = "";

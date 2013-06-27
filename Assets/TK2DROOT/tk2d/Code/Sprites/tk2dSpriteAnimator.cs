@@ -29,7 +29,7 @@ public class tk2dSpriteAnimator : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Get or set pause state on this current sprite
+	/// Get or set pause input on this current sprite
 	/// </summary>
 	public bool Paused
 	{
@@ -110,7 +110,7 @@ public class tk2dSpriteAnimator : MonoBehaviour
 		Playing = 1,
 		Paused = 2,
 	}
-	State state = State.Init; // init state. Do not use elsewhere
+	State state = State.Init; // init input. Do not use elsewhere
 	
 	void OnEnable() {
 		if (Sprite == null) {

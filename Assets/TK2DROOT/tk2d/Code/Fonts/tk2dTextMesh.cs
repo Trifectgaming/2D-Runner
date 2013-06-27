@@ -305,7 +305,7 @@ public class tk2dTextMesh : MonoBehaviour, tk2dRuntime.ISpriteCollectionForceBui
 	public TextAnchor anchor { get { UpgradeData(); return data.anchor; } set { UpgradeData(); data.anchor = value; updateFlags |= UpdateFlags.UpdateText; } }
 	/// <summary>Gets or sets the scale. Call <see cref="Commit"/> to commit changes.</summary>
 	public Vector3 scale { get { UpgradeData(); return data.scale; } set { UpgradeData(); data.scale = value; updateFlags |= UpdateFlags.UpdateText; } }
-	/// <summary>Gets or sets kerning state. Call <see cref="Commit"/> to commit changes.</summary>
+	/// <summary>Gets or sets kerning input. Call <see cref="Commit"/> to commit changes.</summary>
 	public bool kerning { get { UpgradeData(); return data.kerning; } set { UpgradeData(); data.kerning = value; updateFlags |= UpdateFlags.UpdateText; } }
 	/// <summary>Gets or sets maxChars. Call <see cref="Commit"/> to commit changes.
 	/// NOTE: This will free & allocate memory, avoid using at runtime.

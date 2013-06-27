@@ -28,7 +28,6 @@ public class RunnerAnimationEngine
     {
         if ((_animator.CurrentClip != null ? _animator.CurrentClip.name : null) != anim)
         {
-            Debug.Log("Playing animation " + anim);
             _animator.Play(anim);
         }
     }

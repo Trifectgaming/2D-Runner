@@ -23,7 +23,7 @@ public class tk2dUIUpDownHoverButton : tk2dUIBaseItemControl
     public GameObject hoverOverStateGO;
 
     /// <summary>
-    /// Use OnRelase instead of OnUp to toggle state
+    /// Use OnRelase instead of OnUp to toggle input
     /// </summary>
     [SerializeField]
     private bool useOnReleaseInsteadOfOnUp = false;

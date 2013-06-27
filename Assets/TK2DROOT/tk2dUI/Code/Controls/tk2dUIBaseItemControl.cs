@@ -25,7 +25,7 @@ public abstract class tk2dUIBaseItemControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Changes active state, but first checks to make sure it isn't null
+    /// Changes active input, but first checks to make sure it isn't null
     /// </summary>
     public static void ChangeGameObjectActiveStateWithNullCheck(GameObject go, bool isActive)
     {

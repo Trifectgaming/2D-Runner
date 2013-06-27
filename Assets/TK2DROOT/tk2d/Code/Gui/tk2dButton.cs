@@ -13,7 +13,7 @@ public class tk2dButton : MonoBehaviour
 	/// </summary>
 	public Camera viewCamera;
 	
-	// Button Up = normal state
+	// Button Up = normal input
 	// Button Down = held down
 	// Button Pressed = after it is pressed and activated
 	
@@ -33,11 +33,11 @@ public class tk2dButton : MonoBehaviour
 	int buttonDownSpriteId = -1, buttonUpSpriteId = -1, buttonPressedSpriteId = -1;
 	
 	/// <summary>
-	/// Audio clip to play when the button transitions from up to down state. Requires an AudioSource component to be attached to work.
+	/// Audio clip to play when the button transitions from up to down input. Requires an AudioSource component to be attached to work.
 	/// </summary>
 	public AudioClip buttonDownSound = null;
 	/// <summary>
-	/// Audio clip to play when the button transitions from down to up state. Requires an AudioSource component to be attached to work.
+	/// Audio clip to play when the button transitions from down to up input. Requires an AudioSource component to be attached to work.
 	/// </summary>
 	public AudioClip buttonUpSound = null;
 	/// <summary>
@@ -75,11 +75,11 @@ public class tk2dButton : MonoBehaviour
 	/// </summary>
 	public event ButtonHandlerDelegate ButtonAutoFireEvent;
 	/// <summary>
-	/// Occurs when button transition from up to down state
+	/// Occurs when button transition from up to down input
 	/// </summary>
 	public event ButtonHandlerDelegate ButtonDownEvent;
 	/// <summary>
-	/// Occurs when button transitions from down to up state
+	/// Occurs when button transitions from down to up input
 	/// </summary>
 	public event ButtonHandlerDelegate ButtonUpEvent;
 	
@@ -87,7 +87,7 @@ public class tk2dButton : MonoBehaviour
 	bool buttonDown = false;
 	
 	/// <summary>
-	/// How much to scale the sprite when the button is in the down state
+	/// How much to scale the sprite when the button is in the down input
 	/// </summary>
 	public float targetScale = 1.1f;
 	/// <summary>

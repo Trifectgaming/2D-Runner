@@ -53,7 +53,7 @@ public class RunnerMotor
                                   RunnerState.Jump, new Motor
                                                            {
                                                                Type = RunnerState.Jump,
-                                                               acceleratingVelocity = new Vector3(.5f, 1.05f, 0),
+                                                               acceleratingVelocity = new Vector3(.5f, 1.25f, 0),
                                                                maxVelocity = 200,
                                                                forceMode = ForceMode.VelocityChange,
                                                                shouldDecelerate = false,

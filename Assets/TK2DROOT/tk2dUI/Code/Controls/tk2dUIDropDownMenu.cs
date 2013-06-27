@@ -93,7 +93,7 @@ public class tk2dUIDropDownMenu : MonoBehaviour
 
     private List<tk2dUIDropDownItem> dropDownItems = new List<tk2dUIDropDownItem>();
 
-    private bool isExpanded = false; //is currently in expanded state
+    private bool isExpanded = false; //is currently in expanded input
 
     void Awake()
     {

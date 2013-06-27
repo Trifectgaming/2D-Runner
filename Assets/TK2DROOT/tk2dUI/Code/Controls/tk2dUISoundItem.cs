@@ -8,11 +8,11 @@ using System.Collections;
 public class tk2dUISoundItem : tk2dUIBaseItemControl
 {
     /// <summary>
-    /// Audio clip to play when the button transitions from up to down state. Requires an AudioSource component to be attached to work.
+    /// Audio clip to play when the button transitions from up to down input. Requires an AudioSource component to be attached to work.
     /// </summary>
     public AudioClip downButtonSound;
     /// <summary>
-    /// Audio clip to play when the button transitions from down to up state. Requires an AudioSource component to be attached to work.
+    /// Audio clip to play when the button transitions from down to up input. Requires an AudioSource component to be attached to work.
     /// </summary>
     public AudioClip upButtonSound;
     /// <summary>

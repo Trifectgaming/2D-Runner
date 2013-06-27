@@ -94,11 +94,11 @@ public abstract class Runner : MonoBehaviour {
     
     private void ProcessState()
     {
-        while (inputController.QueuedStates.Count > 0)
+        //while (inputController.QueuedStates.Count > 0)
         {
             DistanceTraveled = _transform.localPosition.x;
             var collisionInfo = UpdateCollisionInfo();
-            runnerStateMachine.Transition(inputController.QueuedStates.Dequeue(), collisionInfo, _rigidBody);
+            runnerStateMachine.Transition(inputController, collisionInfo, _rigidBody);
             runnerAnim.Animate(runnerStateMachine.currentState);
         }
     }
