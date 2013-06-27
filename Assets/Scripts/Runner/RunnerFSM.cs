@@ -157,15 +157,6 @@ namespace Assets.Scripts
                                                                    },
                                        NextState = RunnerState.Jump,
                                    })
-                //.AddTransition(RunnerState.Walk, InputState.SwipeUp,
-                //               new TransitionInfo
-                //                   {
-                //                       CollisionRequirements = new CollisionInfo
-                //                                                   {
-                //                                                       Below = true,
-                //                                                   },
-                //                       NextState = RunnerState.Jump,
-                //                   })
                 .AddTransition(RunnerState.Jump, InputState.None,
                                new TransitionInfo
                                    {
@@ -239,7 +230,7 @@ namespace Assets.Scripts
                                                                        Below = true,
                                                                    },
 
-                                       //ReuseTime = 4,
+                                       ReuseTime = 4,
                                        HasRechargeEffect = true,
                                        HasTransitionEffect = true,
                                        NextState = RunnerState.GroundDash
@@ -332,7 +323,7 @@ namespace Assets.Scripts
                                    }, InputState.None,
                                new TransitionInfo
                                    {
-                                       DelayTime = .1f,
+                                       DelayTime = .2f,
                                        CollisionRequirements = new CollisionInfo
                                                                    {
                                                                        Below = true,
@@ -407,14 +398,15 @@ namespace Assets.Scripts
                     var firstMatchingTransition = inputTransitions
                         .FirstOrDefault(t => (t.CollisionRequirements ?? CollisionInfo.Empty).Valid(collisionInfo) &&
                                              IsTransitionReady(t) &&
-                                             (inputToTry != InputState.None || IsDelayUp(t)) &&
+                                             IsDelayUp(t) &&
                                              t.VelocityRequirements.Equals(rigidbody.velocity));
                     if (firstMatchingTransition != null)
                     {
                         lastTransition = currentState + "To" + firstMatchingTransition.NextState;
                         currentState = firstMatchingTransition.NextState;
                         chosenTransition = firstMatchingTransition.TransitionName;
-                        firstMatchingTransition.LastUseTime = lastUseTime = Time.time + firstMatchingTransition.ReuseTime;
+                        lastUseTime = Time.time;
+                        firstMatchingTransition.Use();
                         if (firstMatchingTransition.ReuseTime > 0)
                         {
                             Debug.Log("Queuing for effect: " + firstMatchingTransition.NextState);
@@ -426,7 +418,7 @@ namespace Assets.Scripts
                     }
                     else
                     {
-                        Debug.Log("No transition retying " + input.state);
+                        Debug.Log("No transition retrying " + input.state);
                     }
                 }
             }
@@ -440,7 +432,9 @@ namespace Assets.Scripts
         {
             if (transitionInfo.DelayTime.HasValue)
             {
-                return (lastUseTime + transitionInfo.DelayTime.Value) <= Time.time;
+                var delay = (lastUseTime + transitionInfo.DelayTime.Value);
+                var delayUp =  delay <= Time.time;
+                return delayUp;
             }
             return true;
         }
