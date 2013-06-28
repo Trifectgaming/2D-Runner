@@ -8,8 +8,6 @@ public abstract class RunnerInput
 {
     public InputWrapper state;
     public InputState lastState;
-    //public Queue<InputState> QueuedStates = new Queue<InputState>();
-    //public Queue<InputWrapper> RequeuedStates = new Queue<InputWrapper>();
     public abstract void Update();
 
     public InputState Try()
@@ -84,16 +82,6 @@ public class KeyboardRunnerInput : RunnerInput
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             state = InputState.SwipeDown;
-        }
-        else
-        {
-            //state = InputState.None;            
-        }
-        //if (state != InputState.None)
-        {
-            //lastState = state;
-        }
-        //QueuedStates.Enqueue(state);
-        //return state;
+        };
     }
 }

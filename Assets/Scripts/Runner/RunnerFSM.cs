@@ -85,8 +85,9 @@ namespace Assets.Scripts
                                    {
                                        RunnerState.Walk, 
                                        RunnerState.Run,
-                                       RunnerState.Falling,
+                                       RunnerState.SlideStart,
                                        RunnerState.Sliding,
+                                       RunnerState.SlideEnd,
                                        RunnerState.Dash,
                                        RunnerState.GroundDash,
                                    }, InputState.None,
@@ -95,6 +96,19 @@ namespace Assets.Scripts
                                        CollisionRequirements = new CollisionInfo
                                        {
                                            Right = true,
+                                       },
+                                       NextState = RunnerState.None
+                                   })
+                .AddTransition(new[]
+                                   {
+                                       RunnerState.Falling,
+                                   }, InputState.None,
+                                   new TransitionInfo
+                                   {
+                                       CollisionRequirements = new CollisionInfo
+                                       {
+                                           Right = true,
+                                           Below = true,
                                        },
                                        NextState = RunnerState.None
                                    })
@@ -240,6 +254,7 @@ namespace Assets.Scripts
                                        RunnerState.Run,
                                        RunnerState.Walk,
                                        RunnerState.None, 
+                                       RunnerState.SlideEnd
                                    }, InputState.SwipeDown,
                                new TransitionInfo
                                    {
@@ -264,7 +279,8 @@ namespace Assets.Scripts
                                    })
                 .AddTransition(new[]
                                    {
-                                       RunnerState.Sliding
+                                       RunnerState.Sliding,
+                                       
                                    }, InputState.SwipeDown,
                                    new TransitionInfo
                                    {
