@@ -58,6 +58,7 @@ public class RunnerMotor
                                                             Type = RunnerState.Jump,
                                                             acceleratingVelocity = new Vector3(.5f, 1.25f, 0),
                                                             maxXVelocity = 200,
+                                                            maxYVelocity = 4,
                                                             forceMode = ForceMode.VelocityChange,
                                                             shouldDecelerate = false,
                                                         }
@@ -122,7 +123,7 @@ public class RunnerMotor
                 }
                 else if (motor.shouldDecelerate && rigidbody.velocity.y > motor.maxYVelocity)
                 {
-                    rigidbody.AddForce(0, -motor.deceleratingVelocity.y, 0, ForceMode.Acceleration);
+                    rigidbody.AddForce(0, -motor.deceleratingVelocity.y, 0, motor.forceMode);
                 }
                 
                 if (rigidbody.velocity.y < motor.maxYVelocity)
@@ -131,7 +132,7 @@ public class RunnerMotor
                 }
                 else if (motor.shouldDecelerate && rigidbody.velocity.x > motor.maxXVelocity)
                 {
-                    rigidbody.AddForce(-motor.deceleratingVelocity.x, 0, 0, ForceMode.Acceleration);
+                    rigidbody.AddForce(-motor.deceleratingVelocity.x, 0, 0, motor.forceMode);
                 }
                 
             }
