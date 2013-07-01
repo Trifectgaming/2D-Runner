@@ -8,11 +8,11 @@ using System.Collections;
 public abstract class Runner : MonoBehaviour {
     private Transform _transform;
     public float gameOverY;
-    public RunnerMotor motor = new RunnerMotor();
-    public RunnerInput inputController = new KeyboardRunnerInput();
-    public RunnerFSM runnerStateMachine = new RunnerFSM();
-    public RunnerAnimationEngine runnerAnim = new RunnerAnimationEngine();
-    public RunnerEffectEngine runnerEffectEngine = new RunnerEffectEngine();
+    public RunnerMotor motor;
+    public RunnerInput inputController;
+    public RunnerFSM runnerStateMachine;
+    public RunnerAnimationEngine runnerAnim;
+    public RunnerEffectEngine runnerEffectEngine;    
     public bool UseFixedStep = false;
     public DetectorCollection Detectors = new DetectorCollection();
 
@@ -49,6 +49,21 @@ public abstract class Runner : MonoBehaviour {
     {
         _transform = transform;
         _rigidBody = rigidbody;
+        SetupDependencies(new RunnerMotor(), new AutomaticRunnerInput(), );
+        SetupMessages();
+    }
+
+    protected virtual void SetupDependencies(RunnerMotor runnerMotor, RunnerInput controller, RunnerFSM runnerFsm, RunnerAnimationEngine animationEngine, RunnerEffectEngine effectEngine)
+    {
+        motor = runnerMotor;
+        inputController = controller;
+        runnerStateMachine = runnerFsm;
+        runnerAnim = animationEngine;
+        runnerEffectEngine = effectEngine;
+    }
+
+    protected virtual void SetupMessages()
+    {
         Messenger.Default.Register<GameStartMessage>(this, OnGameStart);
         Messenger.Default.Register<GameOverMessage>(this, OnGameOver);
         Messenger.Default.Register<RunnerEventMessage>(this, OnRunnerEvent);

@@ -85,3 +85,15 @@ public class KeyboardRunnerInput : RunnerInput
         };
     }
 }
+
+[Serializable]
+public class AutomaticRunnerInput : RunnerInput
+{
+    public Queue<InputState> ActionQueue = new Queue<InputState>(); 
+    
+    public override void Update()
+    {
+        if (ActionQueue.Count == 0) return;
+        state = ActionQueue.Dequeue();
+    }
+}
