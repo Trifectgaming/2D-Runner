@@ -2036,8 +2036,8 @@ public class AstarPath : MonoBehaviour {
 	
 	/** Handler for the CalculateAdv function.
 	 * Will initialize an IEnumerator from the CalculateAdv function.
-	 * This function has a loop which will increment the CalculateAdv function state by one every time.
-	 * Supposed to be called using StartCoroutine, this enabled other functions to also increment the state of the function when needed
+	 * This function has a loop which will increment the CalculateAdv function input by one every time.
+	 * Supposed to be called using StartCoroutine, this enabled other functions to also increment the input of the function when needed
 	 * using the #threadEnumerator variable.
 	 * \see CalculateAdv
 	 * \see threadEnumerator
