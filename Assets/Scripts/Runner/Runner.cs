@@ -49,7 +49,7 @@ public abstract class Runner : MonoBehaviour {
     {
         _transform = transform;
         _rigidBody = rigidbody;
-        SetupDependencies(new RunnerMotor(), new AutomaticRunnerInput(), );
+        SetupDependencies(new RunnerMotor(), new KeyboardRunnerInput(), new RunnerFSM(), new RunnerAnimationEngine(), new RunnerEffectEngine());
         SetupMessages();
     }
 
