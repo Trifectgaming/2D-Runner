@@ -33,7 +33,7 @@ public class RunnerMotor
                                                        {
                                                            Type = RunnerState.Run,
                                                            acceleratingVelocity = new Vector3(7, 0, 0),
-                                                           deceleratingVelocity = new Vector3(20, 0, 0),
+                                                           deceleratingVelocity = new Vector3(40, 0, 0),
                                                            maxXVelocity = 7,
                                                            maxYVelocity = 0,
                                                            forceMode = ForceMode.Force,
@@ -58,7 +58,7 @@ public class RunnerMotor
                                                             Type = RunnerState.Jump,
                                                             acceleratingVelocity = new Vector3(.5f, 1.25f, 0),
                                                             maxXVelocity = 200,
-                                                            maxYVelocity = 4,
+                                                            maxYVelocity = 5,
                                                             forceMode = ForceMode.VelocityChange,
                                                             shouldDecelerate = false,
                                                         }
@@ -89,7 +89,7 @@ public class RunnerMotor
                                                            {
                                                                Type = RunnerState.Sliding,
                                                                acceleratingVelocity = new Vector3(1, 0, 0),
-                                                               maxXVelocity = 10,
+                                                               maxXVelocity = 8,
                                                                forceMode = ForceMode.VelocityChange,
                                                                shouldDecelerate = false,
                                                            }
