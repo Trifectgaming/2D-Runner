@@ -85,7 +85,7 @@ namespace Assets.Scripts
                                    {
                                        RunnerState.Walk, 
                                        RunnerState.Run,
-                                       RunnerState.SlideStart,
+                                       //RunnerState.SlideStart,
                                        RunnerState.Sliding,
                                        RunnerState.SlideEnd,
                                        RunnerState.Dash,
