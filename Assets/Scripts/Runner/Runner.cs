@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts;
 using UnityEngine;
+using System.Collections;
 
 public abstract class Runner : MonoBehaviour {
     private Transform _transform;
@@ -13,13 +16,13 @@ public abstract class Runner : MonoBehaviour {
     public bool UseFixedStep = false;
     public DetectorCollection Detectors = new DetectorCollection();
 
-    protected Action Setup;
     private bool touchingPlatform;
     private Rigidbody _rigidBody;
     private Vector3 _startPosition;
     private static float _distanceTraveled;
     private static int _boosts;
     private tk2dSprite _sprite;
+    //private CollisionInfo collisionInfo = CollisionInfo.Empty;
     private tk2dSpriteAnimator _spriteAnimator;
 
 
@@ -46,10 +49,10 @@ public abstract class Runner : MonoBehaviour {
     {
         _transform = transform;
         _rigidBody = rigidbody;
-        Setup();
+        SetupDependencies(new RunnerMotor(), new AutomaticRunnerInput(), );
         SetupMessages();
     }
-    
+
     protected virtual void SetupDependencies(RunnerMotor runnerMotor, RunnerInput controller, RunnerFSM runnerFsm, RunnerAnimationEngine animationEngine, RunnerEffectEngine effectEngine)
     {
         motor = runnerMotor;
