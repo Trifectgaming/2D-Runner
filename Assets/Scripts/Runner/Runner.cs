@@ -45,15 +45,29 @@ public abstract class Runner : MonoBehaviour {
         }
     }
 
+    protected virtual Action Setup
+    {
+        get
+        {
+            return () =>
+                   SetupDependencies(
+                       new RunnerMotor(),
+                       new KeyboardRunnerInput(),
+                       new RunnerFSM(),
+                       new RunnerAnimationEngine(),
+                       new RunnerEffectEngine());
+        }
+    }
+
     void Awake()
     {
         _transform = transform;
         _rigidBody = rigidbody;
-        SetupDependencies(new RunnerMotor(), new KeyboardRunnerInput(), new RunnerFSM(), new RunnerAnimationEngine(), new RunnerEffectEngine());
+        Setup();
         SetupMessages();
     }
 
-    protected virtual void SetupDependencies(RunnerMotor runnerMotor, RunnerInput controller, RunnerFSM runnerFsm, RunnerAnimationEngine animationEngine, RunnerEffectEngine effectEngine)
+    protected void SetupDependencies(RunnerMotor runnerMotor, RunnerInput controller, RunnerFSM runnerFsm, RunnerAnimationEngine animationEngine, RunnerEffectEngine effectEngine)
     {
         motor = runnerMotor;
         inputController = controller;
