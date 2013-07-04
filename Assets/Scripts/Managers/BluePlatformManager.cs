@@ -20,7 +20,7 @@ public class BluePlatformManager : MonoBehaviour
     }
     private void Update()
     {
-        if (_lastObstaclePositionEnd + distanceOffset > Runner.DistanceTraveled) return;
+        if (_lastObstaclePositionEnd + distanceOffset > TK2DRunner.DistanceTraveled) return;
         var batch = _queues[Random.Range(0, _queues.Length)];
         var platform = batch.Next();
         var trans = platform.transform;

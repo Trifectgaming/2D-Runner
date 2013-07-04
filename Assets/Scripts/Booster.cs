@@ -38,7 +38,7 @@ public class Booster : MonoBehaviour
 	}
 	
 	void Update () {
-	    if ((transform.localPosition.x + recycleOffset) < Runner.DistanceTraveled)
+        if ((transform.localPosition.x + recycleOffset) < TK2DRunner.DistanceTraveled)
 	    {
 	        _gameObject.SetActive(false);
 	        return;

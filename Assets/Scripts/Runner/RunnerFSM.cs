@@ -432,10 +432,6 @@ namespace Assets.Scripts
                             TrySendEventMessage(firstMatchingTransition.NextState.ToString());
                         input.Complete();
                     }
-                    else
-                    {
-                        Debug.Log("No transition retrying " + input.state);
-                    }
                 }
             }
 

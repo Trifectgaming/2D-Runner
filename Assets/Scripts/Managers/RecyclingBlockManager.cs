@@ -22,7 +22,7 @@ public class RecyclingBlockManager : BlockManager
     protected virtual void Update ()
     {
         var offset = objectQueue.Peek().localPosition.x + recycleOffset;
-        if (offset < Runner.DistanceTraveled)
+        if (offset < TK2DRunner.DistanceTraveled)
         {
             Recycle();
         }

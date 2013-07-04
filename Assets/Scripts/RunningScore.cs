@@ -34,7 +34,7 @@ public class RunningScore : MonoBehaviour
                 -resolution * orthoSize + offset.x,
                 orthoSize + offset.y,
                 _transform.localPosition.z + offset.z);
-            _mesh.text = "Ran: " + Runner.DistanceTraveled.ToString("0000000");
+            _mesh.text = "Ran: " + Mathf.Round(TK2DRunner.DistanceTraveled).ToString().PadLeft(6, '0');
             _mesh.Commit();
 
             yield return new WaitForSeconds(1f);

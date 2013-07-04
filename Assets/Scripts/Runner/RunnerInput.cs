@@ -25,6 +25,7 @@ public abstract class RunnerInput
 public struct InputWrapper
 {
     public static InputWrapper Empty = new InputWrapper();
+    public static int AttempCounter = 6;
     public int attempts;
     public InputState input;
 
@@ -43,7 +44,7 @@ public struct InputWrapper
 
     public static implicit operator InputWrapper(InputState value)
     {
-        return new InputWrapper(value == InputState.None ? 0 : 6, value);
+        return new InputWrapper(value == InputState.None ? 0 : AttempCounter, value);
     }
 
     public override string ToString()

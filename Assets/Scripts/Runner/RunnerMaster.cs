@@ -7,7 +7,12 @@ public class RunnerMaster : MonoBehaviour
     public int FPS =30;
 
 	// Use this for initialization
-	void Start () {
+    void Awake()
+    {
+
+    }
+    
+    void Start () {
 	    
 	}
 	

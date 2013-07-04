@@ -30,7 +30,7 @@ public class SpriteManager : MonoBehaviour
 	void Update ()
 	{
         var offset = _batch.Peek().transform.localPosition.x + (_batch.Peek().GetBounds().size.x);
-        if (offset < Runner.DistanceTraveled)
+        if (offset < TK2DRunner.DistanceTraveled)
 	    {
             Recycle(_batch.Dequeue());
 	    }

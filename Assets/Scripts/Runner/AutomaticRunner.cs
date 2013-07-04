@@ -1,6 +1,4 @@
 using Assets.Scripts;
-using UnityEngine;
-using System.Collections;
 
 public class AutomaticRunner : Runner
 {
