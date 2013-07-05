@@ -11,7 +11,10 @@ public class LevelRecording : MonoBehaviour {
     private List<List<InputRecord>> replayQueue = new List<List<InputRecord>>();
     private XmlSerializer _serializer = new XmlSerializer(typeof(List<List<InputRecord>>));
     public static List<InputRecord> currentQueue;
+    public ReplayRunner runnerPrefab;
     public bool reset;
+    public int maxReplays;
+    public bool createReplays;
 
     void Awake()
     {
@@ -39,17 +42,32 @@ public class LevelRecording : MonoBehaviour {
 
     private void Start()
     {
-        //TODO: load from player prefs
         OnGameStart(new GameStartMessage());
-        LoadLevelRecording();
-        //StartCoroutine(SaveLevelRecording());
+        if (createReplays)
+        {
+            LoadLevelRecording();
+            CreateReplay();
+        }
+        StartCoroutine(SaveLevelRecording());
+    }
+
+    private void CreateReplay()
+    {
+        for (int index = 0; index < replayQueue.Count; index++)
+        {
+            var replay = replayQueue[index];
+            var runner = (ReplayRunner)Instantiate(runnerPrefab, new Vector3(transform.position.x, transform.position.y, 0),
+                                     Quaternion.identity);
+            runner.name = "ReplayRunner" + index;
+            runner.LoadInputQueue(replay);
+        }
     }
 
     private void LoadLevelRecording()
     {
         if (reset)
-            PlayerPrefs.DeleteKey("LevelRecording");
-        var levelRecording = PlayerPrefs.GetString("LevelRecording", null);
+            PlayerPrefs.DeleteKey(GetLevelKeyName());
+        var levelRecording = PlayerPrefs.GetString(GetLevelKeyName(), null);
         if (string.IsNullOrEmpty(levelRecording)) return;
         using (var memoryStream = new MemoryStream())
         {
@@ -64,6 +82,7 @@ public class LevelRecording : MonoBehaviour {
                 data = (List<List<InputRecord>>) _serializer.Deserialize(memoryStream);
             }
             replayQueue = data;
+            Debug.Log("Replay Queue contains " + replayQueue.Count + " replays");
         }
     }
 
@@ -81,8 +100,17 @@ public class LevelRecording : MonoBehaviour {
     {
         while (true)
         {
-            if (currentQueue != null)
-                replayQueue.Add(currentQueue);
+            if (currentQueue != null && !replayQueue.Contains(currentQueue))
+            {
+                replayQueue.Insert(0, currentQueue);
+                if (replayQueue.Count > maxReplays)
+                {
+                    while (replayQueue.Count > maxReplays)
+                    {
+                        replayQueue.RemoveAt(replayQueue.Count - 1);
+                    }
+                }
+            }
             using (var memoryStream = new MemoryStream())
             {
                 _serializer.Serialize(memoryStream, replayQueue);
@@ -90,11 +118,16 @@ public class LevelRecording : MonoBehaviour {
                 using (var reader = new StreamReader(memoryStream))
                 {
                     var data = reader.ReadToEnd();
-                    PlayerPrefs.SetString("LevelRecording", data);
+                    PlayerPrefs.SetString(GetLevelKeyName(), data);
                 }
             }
             Debug.Log("Saved Level Recording");
             yield return new WaitForSeconds(2);
         }
+    }
+
+    private static string GetLevelKeyName()
+    {
+        return "LevelRecording" + Application.loadedLevelName;
     }
 }

@@ -145,7 +145,7 @@ public abstract class Runner : MonoBehaviour {
         return Physics.Raycast(position, direction, .8f);
     }
 
-    void Update()
+    protected virtual void Update()
     {
         inputController.Update();
         if (!UseFixedStep)
