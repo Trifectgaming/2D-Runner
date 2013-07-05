@@ -41,7 +41,7 @@ public abstract class Runner : MonoBehaviour {
                    SetupDependencies(
                        new RunnerMotor(),
                        new KeyboardRunnerInput(),
-                       new RunnerFSM(),
+                       new RunnerFSM(this),
                        new RunnerAnimationEngine(),
                        new RunnerEffectEngine());
         }
@@ -68,13 +68,6 @@ public abstract class Runner : MonoBehaviour {
     {
         Messenger.Default.Register<GameStartMessage>(this, OnGameStart);
         Messenger.Default.Register<GameOverMessage>(this, OnGameOver);
-        Messenger.Default.Register<RunnerEventMessage>(this, OnRunnerEvent);
-    }
-
-    private void OnRunnerEvent(RunnerEventMessage obj)
-    {
-        Debug.Log("Runner Event Received: " + obj.Effect);
-        runnerEffectEngine.PlayEffect(obj.Effect);
     }
 
     private void OnGameOver(GameOverMessage obj)

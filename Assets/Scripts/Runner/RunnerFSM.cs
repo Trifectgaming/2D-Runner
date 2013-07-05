@@ -9,6 +9,8 @@ namespace Assets.Scripts
     [Serializable]
     public class RunnerFSM
     {
+        private readonly Runner _parent;
+
         public class RunnerFSMContext
         {
             private readonly RunnerFSM _fsm;
@@ -59,13 +61,15 @@ namespace Assets.Scripts
         public string lastTransition;
         public float lastUseTime;
         public TransitionInfo[] allTransitions;
+        public bool reportState;
         public Queue<RunnerState> StateProcessQueue = new Queue<RunnerState>();
 
         private readonly Dictionary<RunnerState, Dictionary<InputState, List<TransitionInfo>>> _availableTransitions =
             new Dictionary<RunnerState, Dictionary<InputState, List<TransitionInfo>>>();
         private readonly Queue<TransitionInfo> _rechargingStates = new Queue<TransitionInfo>(); 
-        public RunnerFSM()
+        public RunnerFSM(Runner parent)
         {
+            _parent = parent;
             foreach (var runnerState in StateMaster.AllRunnerStates)
             {
                 var runnersActions = new Dictionary<InputState, List<TransitionInfo>>();
@@ -390,13 +394,11 @@ namespace Assets.Scripts
             }
         }
 
-        private readonly RunnerEventMessage _message = new RunnerEventMessage();
         private void TrySendEventMessage(string effect)
         {
             if (!string.IsNullOrEmpty(effect))
             {
-                _message.Effect = effect;
-                Messenger.Default.Send(_message);
+                _parent.runnerEffectEngine.PlayEffect(effect);
             }
         }
 
@@ -436,7 +438,8 @@ namespace Assets.Scripts
             }
 
             StateProcessQueue.Enqueue(currentState);
-            Messenger.Default.Send(new RunnerStatsMessage(currentState, velocity, collisionInfo, inputToTry));
+            if (reportState)
+                Messenger.Default.Send(new RunnerStatsMessage(currentState, velocity, collisionInfo, inputToTry));
             return currentState;
         }
 

@@ -47,8 +47,8 @@ public class LevelRecording : MonoBehaviour {
         {
             LoadLevelRecording();
             CreateReplay();
+            StartCoroutine(SaveLevelRecording());
         }
-        StartCoroutine(SaveLevelRecording());
     }
 
     private void CreateReplay()
@@ -92,13 +92,16 @@ public class LevelRecording : MonoBehaviour {
 
     void OnApplicationQuit()
     {
-        //StopCoroutine("SaveLevelRecording");
-        //PlayerPrefs.Save();
+        if (createReplays)
+        {
+            StopCoroutine("SaveLevelRecording");
+            PlayerPrefs.Save();
+        }
     }
 
     private IEnumerator SaveLevelRecording()
     {
-        while (true)
+        while (gameObject.activeSelf)
         {
             if (currentQueue != null && !replayQueue.Contains(currentQueue))
             {

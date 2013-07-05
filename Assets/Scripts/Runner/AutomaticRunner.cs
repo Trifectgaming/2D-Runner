@@ -6,7 +6,7 @@ public class AutomaticRunner : Runner
     {
         get
         {
-            return () => SetupDependencies(new RunnerMotor(), new AutomaticRunnerInput(), new RunnerFSM(), new RunnerAnimationEngine(), new RunnerEffectEngine());
+            return () => SetupDependencies(new RunnerMotor(), new AutomaticRunnerInput(), new RunnerFSM(this), new RunnerAnimationEngine(), new RunnerEffectEngine());
         }
     }
 }

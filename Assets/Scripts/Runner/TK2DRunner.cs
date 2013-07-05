@@ -27,6 +27,7 @@ public class TK2DRunner : Runner
     {
         base.Start();
         DistanceTraveled = 0f;
+        runnerStateMachine.reportState = true;
     }
 
     protected override void ProcessState()
