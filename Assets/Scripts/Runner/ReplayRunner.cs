@@ -11,7 +11,6 @@ public class ReplayRunner : AutomaticRunner
     {
         _inputQueue = new Queue<InputRecord>(replay);
         SetCurrentRecord();
-        Debug.Log(name + " loaded with " + _inputQueue.Count + " actions.");
     }
 
     private void SetCurrentRecord()
@@ -30,9 +29,7 @@ public class ReplayRunner : AutomaticRunner
     {
         if (_currentRecord.Position.x <= Transform.position.x)
         {
-            Debug.Log(_currentRecord.Position.x + "is <= " + Transform.position.x);
-            ((AutomaticRunnerInput)inputController).ActionQueue.Enqueue(_currentRecord.InputState);
-            Debug.Log(name + " executed " + _currentRecord.InputState + " remaining actions " + _inputQueue.Count);            
+            ((AutomaticRunnerInput)inputController).ActionQueue.Enqueue(_currentRecord.InputState);        
             SetCurrentRecord();
         }
         base.Update();

@@ -96,6 +96,7 @@ public class LevelRecording : MonoBehaviour {
         {
             StopCoroutine("SaveLevelRecording");
             PlayerPrefs.Save();
+            Debug.Log(PlayerPrefs.GetString(GetLevelKeyName()));
         }
     }
 
